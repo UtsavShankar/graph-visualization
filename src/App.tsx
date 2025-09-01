@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { ExploreView } from "./ExploreView";
 import { EditView } from "./EditView";

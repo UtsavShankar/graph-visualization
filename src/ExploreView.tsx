@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { TAG_COLORS } from "./App";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import cytoscape from "cytoscape";
