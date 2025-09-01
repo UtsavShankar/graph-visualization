@@ -35,7 +35,28 @@ export function slugify(text) {
   return (text || "").toString().toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "").replace(/\-+/g, "-").replace(/^-+|-+$/g, "");
 }
 
-//using a local graph to store data in local storage
+import SEED_GRAPH from './seed/book-graph-120.json';
+
+// (Optional) add a type if you’re using TS
+type NodeData = { id: string; title: string; author?: string; year?: number; tags?: string[]; abstract?: string; url?: string; notes?: string };
+type EdgeData = { id?: string; source: string; target: string; relation?: string; weight?: number };
+type GraphData = { nodes: NodeData[]; edges: EdgeData[] };
+
+const STORAGE_KEY = 'bookGraph:v3';
+
+function useGraph() {
+  const [graph, setGraph] = React.useState<GraphData>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : (SEED_GRAPH as GraphData);
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(graph));
+  }, [graph]);
+
+  return [graph, setGraph] as const;
+}
+
 function useLocalGraph() {
   const [graph, setGraph] = useState(() => {
     const stored = localStorage.getItem("bookGraph");
@@ -49,7 +70,7 @@ function useLocalGraph() {
 
 export default function App() {
   const [tab, setTab] = useState("explore"); // "explore" | "edit"
-  const [graph, setGraph] = useLocalGraph();
+  const [graph, setGraph] = useGraph();
   const [query, setQuery] = useState("");
 
   return (

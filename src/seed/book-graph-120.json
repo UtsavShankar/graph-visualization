@@ -1,0 +1,2776 @@
+{
+  "nodes": [
+    {
+      "id": "theory-1-01",
+      "title": "Social Theory: Volume 1",
+      "author": "Taylor Lee",
+      "year": 1995,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-02",
+      "title": "Social Theory: Volume 2",
+      "author": "Jamie Tan",
+      "year": 1977,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-03",
+      "title": "Social Theory: Volume 3",
+      "author": "Taylor O'Connell",
+      "year": 1971,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-04",
+      "title": "Social Theory: Volume 4",
+      "author": "Finley Zhang",
+      "year": 1964,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-05",
+      "title": "Social Theory: Volume 5",
+      "author": "Alex Nguyen",
+      "year": 1987,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-06",
+      "title": "Social Theory: Volume 6",
+      "author": "Jamie Kaur",
+      "year": 1963,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-07",
+      "title": "Social Theory: Volume 7",
+      "author": "Elliot Wong",
+      "year": 2013,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-08",
+      "title": "Social Theory: Volume 8",
+      "author": "Jamie Hassan",
+      "year": 1995,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-09",
+      "title": "Social Theory: Volume 9",
+      "author": "Alex Singh",
+      "year": 2014,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-10",
+      "title": "Social Theory: Volume 10",
+      "author": "Drew Smith",
+      "year": 1979,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-11",
+      "title": "Social Theory: Volume 11",
+      "author": "Riley Chen",
+      "year": 1973,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-12",
+      "title": "Social Theory: Volume 12",
+      "author": "Jordan Lim",
+      "year": 1972,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-13",
+      "title": "Social Theory: Volume 13",
+      "author": "Emerson Nair",
+      "year": 1993,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-14",
+      "title": "Social Theory: Volume 14",
+      "author": "Sam Hassan",
+      "year": 1975,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "theory-1-15",
+      "title": "Social Theory: Volume 15",
+      "author": "Harper Nguyen",
+      "year": 1997,
+      "tags": [
+        "theory"
+      ],
+      "abstract": "Explores social theory with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-01",
+      "title": "Gender & Sexuality: Volume 1",
+      "author": "Reese Nair",
+      "year": 1984,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-02",
+      "title": "Gender & Sexuality: Volume 2",
+      "author": "Jordan Patel",
+      "year": 1989,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-03",
+      "title": "Gender & Sexuality: Volume 3",
+      "author": "Quinn Nguyen",
+      "year": 1989,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-04",
+      "title": "Gender & Sexuality: Volume 4",
+      "author": "Taylor Lim",
+      "year": 1995,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-05",
+      "title": "Gender & Sexuality: Volume 5",
+      "author": "Skyler Nair",
+      "year": 1980,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-06",
+      "title": "Gender & Sexuality: Volume 6",
+      "author": "Emerson Nair",
+      "year": 1986,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-07",
+      "title": "Gender & Sexuality: Volume 7",
+      "author": "Avery Nguyen",
+      "year": 1981,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-08",
+      "title": "Gender & Sexuality: Volume 8",
+      "author": "Elliot Tan",
+      "year": 1980,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-09",
+      "title": "Gender & Sexuality: Volume 9",
+      "author": "Skyler Lim",
+      "year": 1994,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-10",
+      "title": "Gender & Sexuality: Volume 10",
+      "author": "Elliot Tan",
+      "year": 2001,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-11",
+      "title": "Gender & Sexuality: Volume 11",
+      "author": "Sam Tan",
+      "year": 1964,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-12",
+      "title": "Gender & Sexuality: Volume 12",
+      "author": "Drew Lim",
+      "year": 1994,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-13",
+      "title": "Gender & Sexuality: Volume 13",
+      "author": "Jordan Wong",
+      "year": 2000,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-14",
+      "title": "Gender & Sexuality: Volume 14",
+      "author": "Riley Ghosh",
+      "year": 2010,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "gender-2-15",
+      "title": "Gender & Sexuality: Volume 15",
+      "author": "Skyler Kim",
+      "year": 1993,
+      "tags": [
+        "gender"
+      ],
+      "abstract": "Explores gender & sexuality with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-01",
+      "title": "Class & Stratification: Volume 1",
+      "author": "Morgan Tan",
+      "year": 1993,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-02",
+      "title": "Class & Stratification: Volume 2",
+      "author": "Finley Zhang",
+      "year": 2011,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-03",
+      "title": "Class & Stratification: Volume 3",
+      "author": "Emerson Tan",
+      "year": 1977,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-04",
+      "title": "Class & Stratification: Volume 4",
+      "author": "Sage Ghosh",
+      "year": 1971,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-05",
+      "title": "Class & Stratification: Volume 5",
+      "author": "Sam Garcia",
+      "year": 1979,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-06",
+      "title": "Class & Stratification: Volume 6",
+      "author": "Casey Zhang",
+      "year": 1968,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-07",
+      "title": "Class & Stratification: Volume 7",
+      "author": "Harper Lim",
+      "year": 2019,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-08",
+      "title": "Class & Stratification: Volume 8",
+      "author": "Sage Smith",
+      "year": 1961,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-09",
+      "title": "Class & Stratification: Volume 9",
+      "author": "Taylor O'Connell",
+      "year": 1994,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-10",
+      "title": "Class & Stratification: Volume 10",
+      "author": "Drew Garcia",
+      "year": 1997,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-11",
+      "title": "Class & Stratification: Volume 11",
+      "author": "Rowan Singh",
+      "year": 2018,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-12",
+      "title": "Class & Stratification: Volume 12",
+      "author": "Alex Smith",
+      "year": 2024,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-13",
+      "title": "Class & Stratification: Volume 13",
+      "author": "Casey Kaur",
+      "year": 1973,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-14",
+      "title": "Class & Stratification: Volume 14",
+      "author": "Quinn Kaur",
+      "year": 1985,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "class-3-15",
+      "title": "Class & Stratification: Volume 15",
+      "author": "Morgan Nair",
+      "year": 1980,
+      "tags": [
+        "class"
+      ],
+      "abstract": "Explores class & stratification with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-01",
+      "title": "Nation & Identity: Volume 1",
+      "author": "Elliot Kaur",
+      "year": 1960,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-02",
+      "title": "Nation & Identity: Volume 2",
+      "author": "Reese Chen",
+      "year": 2022,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-03",
+      "title": "Nation & Identity: Volume 3",
+      "author": "Alex Garcia",
+      "year": 2006,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-04",
+      "title": "Nation & Identity: Volume 4",
+      "author": "Quinn Tan",
+      "year": 1967,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-05",
+      "title": "Nation & Identity: Volume 5",
+      "author": "Jamie Murphy",
+      "year": 1970,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-06",
+      "title": "Nation & Identity: Volume 6",
+      "author": "Jordan Ghosh",
+      "year": 1968,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-07",
+      "title": "Nation & Identity: Volume 7",
+      "author": "Elliot Kim",
+      "year": 1976,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-08",
+      "title": "Nation & Identity: Volume 8",
+      "author": "Parker O'Connell",
+      "year": 1981,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-09",
+      "title": "Nation & Identity: Volume 9",
+      "author": "Avery Kaur",
+      "year": 2014,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-10",
+      "title": "Nation & Identity: Volume 10",
+      "author": "Riley O'Connell",
+      "year": 1985,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-11",
+      "title": "Nation & Identity: Volume 11",
+      "author": "Quinn Lim",
+      "year": 2007,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-12",
+      "title": "Nation & Identity: Volume 12",
+      "author": "Skyler Kaur",
+      "year": 2017,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-13",
+      "title": "Nation & Identity: Volume 13",
+      "author": "Taylor Tan",
+      "year": 1988,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-14",
+      "title": "Nation & Identity: Volume 14",
+      "author": "Jordan Chen",
+      "year": 1962,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "nationalism-4-15",
+      "title": "Nation & Identity: Volume 15",
+      "author": "Finley O'Connell",
+      "year": 1989,
+      "tags": [
+        "nationalism"
+      ],
+      "abstract": "Explores nation & identity with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-01",
+      "title": "Power & Discipline: Volume 1",
+      "author": "Finley Tan",
+      "year": 1960,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-02",
+      "title": "Power & Discipline: Volume 2",
+      "author": "Jordan Patel",
+      "year": 1989,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-03",
+      "title": "Power & Discipline: Volume 3",
+      "author": "Jordan Patel",
+      "year": 2002,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-04",
+      "title": "Power & Discipline: Volume 4",
+      "author": "Jordan Kaur",
+      "year": 1990,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-05",
+      "title": "Power & Discipline: Volume 5",
+      "author": "Avery Ghosh",
+      "year": 1987,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-06",
+      "title": "Power & Discipline: Volume 6",
+      "author": "Elliot Kim",
+      "year": 2020,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-07",
+      "title": "Power & Discipline: Volume 7",
+      "author": "Jamie Ghosh",
+      "year": 2012,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-08",
+      "title": "Power & Discipline: Volume 8",
+      "author": "Riley Garcia",
+      "year": 1972,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-09",
+      "title": "Power & Discipline: Volume 9",
+      "author": "Rowan Nair",
+      "year": 2014,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-10",
+      "title": "Power & Discipline: Volume 10",
+      "author": "Rowan Hassan",
+      "year": 1966,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-11",
+      "title": "Power & Discipline: Volume 11",
+      "author": "Taylor Patel",
+      "year": 2011,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-12",
+      "title": "Power & Discipline: Volume 12",
+      "author": "Drew Garcia",
+      "year": 1991,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-13",
+      "title": "Power & Discipline: Volume 13",
+      "author": "Riley Wong",
+      "year": 2017,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-14",
+      "title": "Power & Discipline: Volume 14",
+      "author": "Morgan Zhang",
+      "year": 1983,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "power-5-15",
+      "title": "Power & Discipline: Volume 15",
+      "author": "Avery Hassan",
+      "year": 1991,
+      "tags": [
+        "power"
+      ],
+      "abstract": "Explores power & discipline with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-01",
+      "title": "Methods & STS: Volume 1",
+      "author": "Jordan Hassan",
+      "year": 1972,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-02",
+      "title": "Methods & STS: Volume 2",
+      "author": "Sam O'Connell",
+      "year": 1961,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-03",
+      "title": "Methods & STS: Volume 3",
+      "author": "Jordan Tan",
+      "year": 1981,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-04",
+      "title": "Methods & STS: Volume 4",
+      "author": "Rowan Ghosh",
+      "year": 2021,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-05",
+      "title": "Methods & STS: Volume 5",
+      "author": "Riley Lim",
+      "year": 1967,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-06",
+      "title": "Methods & STS: Volume 6",
+      "author": "Casey Lim",
+      "year": 1960,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-07",
+      "title": "Methods & STS: Volume 7",
+      "author": "Harper Smith",
+      "year": 2018,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-08",
+      "title": "Methods & STS: Volume 8",
+      "author": "Quinn Zhang",
+      "year": 2022,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-09",
+      "title": "Methods & STS: Volume 9",
+      "author": "Morgan Wong",
+      "year": 1997,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-10",
+      "title": "Methods & STS: Volume 10",
+      "author": "Riley Patel",
+      "year": 1967,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-11",
+      "title": "Methods & STS: Volume 11",
+      "author": "Drew Patel",
+      "year": 1966,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-12",
+      "title": "Methods & STS: Volume 12",
+      "author": "Finley Ghosh",
+      "year": 2024,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-13",
+      "title": "Methods & STS: Volume 13",
+      "author": "Sage Singh",
+      "year": 1967,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-14",
+      "title": "Methods & STS: Volume 14",
+      "author": "Sage Nguyen",
+      "year": 1983,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "method-6-15",
+      "title": "Methods & STS: Volume 15",
+      "author": "Jordan Lopez",
+      "year": 1968,
+      "tags": [
+        "method"
+      ],
+      "abstract": "Explores methods & sts with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-01",
+      "title": "Ethnography: Volume 1",
+      "author": "Jamie Lim",
+      "year": 1975,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-02",
+      "title": "Ethnography: Volume 2",
+      "author": "Finley Tan",
+      "year": 1965,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-03",
+      "title": "Ethnography: Volume 3",
+      "author": "Reese Nguyen",
+      "year": 2013,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-04",
+      "title": "Ethnography: Volume 4",
+      "author": "Finley Murphy",
+      "year": 2000,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-05",
+      "title": "Ethnography: Volume 5",
+      "author": "Avery Wong",
+      "year": 2000,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-06",
+      "title": "Ethnography: Volume 6",
+      "author": "Jamie Smith",
+      "year": 2010,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-07",
+      "title": "Ethnography: Volume 7",
+      "author": "Morgan Khan",
+      "year": 2018,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-08",
+      "title": "Ethnography: Volume 8",
+      "author": "Drew Nguyen",
+      "year": 1961,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-09",
+      "title": "Ethnography: Volume 9",
+      "author": "Skyler Lopez",
+      "year": 1972,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-10",
+      "title": "Ethnography: Volume 10",
+      "author": "Jordan O'Connell",
+      "year": 1987,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-11",
+      "title": "Ethnography: Volume 11",
+      "author": "Sage Smith",
+      "year": 1976,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-12",
+      "title": "Ethnography: Volume 12",
+      "author": "Emerson Nguyen",
+      "year": 1991,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-13",
+      "title": "Ethnography: Volume 13",
+      "author": "Emerson Khan",
+      "year": 1980,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-14",
+      "title": "Ethnography: Volume 14",
+      "author": "Skyler O'Connell",
+      "year": 1998,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "ethnography-7-15",
+      "title": "Ethnography: Volume 15",
+      "author": "Reese Kaur",
+      "year": 1961,
+      "tags": [
+        "ethnography"
+      ],
+      "abstract": "Explores ethnography with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-01",
+      "title": "Digital Society: Volume 1",
+      "author": "Elliot Khan",
+      "year": 1973,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-02",
+      "title": "Digital Society: Volume 2",
+      "author": "Morgan Smith",
+      "year": 1974,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-03",
+      "title": "Digital Society: Volume 3",
+      "author": "Taylor O'Connell",
+      "year": 1979,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-04",
+      "title": "Digital Society: Volume 4",
+      "author": "Avery Khan",
+      "year": 1986,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-05",
+      "title": "Digital Society: Volume 5",
+      "author": "Drew Wong",
+      "year": 1993,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-06",
+      "title": "Digital Society: Volume 6",
+      "author": "Sage Ghosh",
+      "year": 1992,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-07",
+      "title": "Digital Society: Volume 7",
+      "author": "Sam Nguyen",
+      "year": 2014,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-08",
+      "title": "Digital Society: Volume 8",
+      "author": "Avery Patel",
+      "year": 1960,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-09",
+      "title": "Digital Society: Volume 9",
+      "author": "Drew Kim",
+      "year": 1993,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-10",
+      "title": "Digital Society: Volume 10",
+      "author": "Casey Hassan",
+      "year": 2014,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-11",
+      "title": "Digital Society: Volume 11",
+      "author": "Elliot Lee",
+      "year": 1974,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-12",
+      "title": "Digital Society: Volume 12",
+      "author": "Jordan Kim",
+      "year": 1964,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-13",
+      "title": "Digital Society: Volume 13",
+      "author": "Emerson Murphy",
+      "year": 1978,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-14",
+      "title": "Digital Society: Volume 14",
+      "author": "Rowan Kim",
+      "year": 1965,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    },
+    {
+      "id": "digital-8-15",
+      "title": "Digital Society: Volume 15",
+      "author": "Quinn Nair",
+      "year": 1965,
+      "tags": [
+        "digital"
+      ],
+      "abstract": "Explores digital society with case studies and comparative analysis.",
+      "url": "",
+      "notes": "Demo dataset (synthetic)."
+    }
+  ],
+  "edges": [
+    {
+      "id": "theory-1-01__theory-1-02__1",
+      "source": "theory-1-01",
+      "target": "theory-1-02",
+      "relation": "extends",
+      "weight": 2
+    },
+    {
+      "id": "theory-1-02__theory-1-03__2",
+      "source": "theory-1-02",
+      "target": "theory-1-03",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "theory-1-03__theory-1-04__3",
+      "source": "theory-1-03",
+      "target": "theory-1-04",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "theory-1-04__theory-1-05__4",
+      "source": "theory-1-04",
+      "target": "theory-1-05",
+      "relation": "extends",
+      "weight": 5
+    },
+    {
+      "id": "theory-1-05__theory-1-06__5",
+      "source": "theory-1-05",
+      "target": "theory-1-06",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "theory-1-06__theory-1-07__6",
+      "source": "theory-1-06",
+      "target": "theory-1-07",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "theory-1-07__theory-1-08__7",
+      "source": "theory-1-07",
+      "target": "theory-1-08",
+      "relation": "debates",
+      "weight": 2
+    },
+    {
+      "id": "theory-1-08__theory-1-09__8",
+      "source": "theory-1-08",
+      "target": "theory-1-09",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "theory-1-09__theory-1-10__9",
+      "source": "theory-1-09",
+      "target": "theory-1-10",
+      "relation": "influences",
+      "weight": 2
+    },
+    {
+      "id": "theory-1-10__theory-1-11__10",
+      "source": "theory-1-10",
+      "target": "theory-1-11",
+      "relation": "contrasts with",
+      "weight": 3
+    },
+    {
+      "id": "theory-1-11__theory-1-12__11",
+      "source": "theory-1-11",
+      "target": "theory-1-12",
+      "relation": "shares method with",
+      "weight": 2
+    },
+    {
+      "id": "theory-1-12__theory-1-13__12",
+      "source": "theory-1-12",
+      "target": "theory-1-13",
+      "relation": "extends",
+      "weight": 2
+    },
+    {
+      "id": "theory-1-13__theory-1-14__13",
+      "source": "theory-1-13",
+      "target": "theory-1-14",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "theory-1-14__theory-1-15__14",
+      "source": "theory-1-14",
+      "target": "theory-1-15",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "theory-1-04__theory-1-02__15",
+      "source": "theory-1-04",
+      "target": "theory-1-02",
+      "relation": "debates",
+      "weight": 2
+    },
+    {
+      "id": "theory-1-07__theory-1-04__16",
+      "source": "theory-1-07",
+      "target": "theory-1-04",
+      "relation": "extends",
+      "weight": 3
+    },
+    {
+      "id": "theory-1-10__theory-1-04__17",
+      "source": "theory-1-10",
+      "target": "theory-1-04",
+      "relation": "debates",
+      "weight": 1
+    },
+    {
+      "id": "theory-1-13__theory-1-11__18",
+      "source": "theory-1-13",
+      "target": "theory-1-11",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "gender-2-01__gender-2-02__19",
+      "source": "gender-2-01",
+      "target": "gender-2-02",
+      "relation": "extends",
+      "weight": 3
+    },
+    {
+      "id": "gender-2-02__gender-2-03__20",
+      "source": "gender-2-02",
+      "target": "gender-2-03",
+      "relation": "influences",
+      "weight": 3
+    },
+    {
+      "id": "gender-2-03__gender-2-04__21",
+      "source": "gender-2-03",
+      "target": "gender-2-04",
+      "relation": "extends",
+      "weight": 5
+    },
+    {
+      "id": "gender-2-04__gender-2-05__22",
+      "source": "gender-2-04",
+      "target": "gender-2-05",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "gender-2-05__gender-2-06__23",
+      "source": "gender-2-05",
+      "target": "gender-2-06",
+      "relation": "extends",
+      "weight": 1
+    },
+    {
+      "id": "gender-2-06__gender-2-07__24",
+      "source": "gender-2-06",
+      "target": "gender-2-07",
+      "relation": "influences",
+      "weight": 3
+    },
+    {
+      "id": "gender-2-07__gender-2-08__25",
+      "source": "gender-2-07",
+      "target": "gender-2-08",
+      "relation": "debates",
+      "weight": 5
+    },
+    {
+      "id": "gender-2-08__gender-2-09__26",
+      "source": "gender-2-08",
+      "target": "gender-2-09",
+      "relation": "extends",
+      "weight": 1
+    },
+    {
+      "id": "gender-2-09__gender-2-10__27",
+      "source": "gender-2-09",
+      "target": "gender-2-10",
+      "relation": "influences",
+      "weight": 5
+    },
+    {
+      "id": "gender-2-10__gender-2-11__28",
+      "source": "gender-2-10",
+      "target": "gender-2-11",
+      "relation": "shares method with",
+      "weight": 3
+    },
+    {
+      "id": "gender-2-11__gender-2-12__29",
+      "source": "gender-2-11",
+      "target": "gender-2-12",
+      "relation": "contrasts with",
+      "weight": 3
+    },
+    {
+      "id": "gender-2-12__gender-2-13__30",
+      "source": "gender-2-12",
+      "target": "gender-2-13",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "gender-2-13__gender-2-14__31",
+      "source": "gender-2-13",
+      "target": "gender-2-14",
+      "relation": "cites",
+      "weight": 1
+    },
+    {
+      "id": "gender-2-14__gender-2-15__32",
+      "source": "gender-2-14",
+      "target": "gender-2-15",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "gender-2-04__gender-2-01__33",
+      "source": "gender-2-04",
+      "target": "gender-2-01",
+      "relation": "extends",
+      "weight": 1
+    },
+    {
+      "id": "gender-2-13__gender-2-06__34",
+      "source": "gender-2-13",
+      "target": "gender-2-06",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "class-3-01__class-3-02__35",
+      "source": "class-3-01",
+      "target": "class-3-02",
+      "relation": "contrasts with",
+      "weight": 3
+    },
+    {
+      "id": "class-3-02__class-3-03__36",
+      "source": "class-3-02",
+      "target": "class-3-03",
+      "relation": "cites",
+      "weight": 3
+    },
+    {
+      "id": "class-3-03__class-3-04__37",
+      "source": "class-3-03",
+      "target": "class-3-04",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "class-3-04__class-3-05__38",
+      "source": "class-3-04",
+      "target": "class-3-05",
+      "relation": "contrasts with",
+      "weight": 3
+    },
+    {
+      "id": "class-3-05__class-3-06__39",
+      "source": "class-3-05",
+      "target": "class-3-06",
+      "relation": "cites",
+      "weight": 3
+    },
+    {
+      "id": "class-3-06__class-3-07__40",
+      "source": "class-3-06",
+      "target": "class-3-07",
+      "relation": "contrasts with",
+      "weight": 4
+    },
+    {
+      "id": "class-3-07__class-3-08__41",
+      "source": "class-3-07",
+      "target": "class-3-08",
+      "relation": "extends",
+      "weight": 4
+    },
+    {
+      "id": "class-3-08__class-3-09__42",
+      "source": "class-3-08",
+      "target": "class-3-09",
+      "relation": "contrasts with",
+      "weight": 3
+    },
+    {
+      "id": "class-3-09__class-3-10__43",
+      "source": "class-3-09",
+      "target": "class-3-10",
+      "relation": "cites",
+      "weight": 2
+    },
+    {
+      "id": "class-3-10__class-3-11__44",
+      "source": "class-3-10",
+      "target": "class-3-11",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "class-3-11__class-3-12__45",
+      "source": "class-3-11",
+      "target": "class-3-12",
+      "relation": "contrasts with",
+      "weight": 4
+    },
+    {
+      "id": "class-3-12__class-3-13__46",
+      "source": "class-3-12",
+      "target": "class-3-13",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "class-3-13__class-3-14__47",
+      "source": "class-3-13",
+      "target": "class-3-14",
+      "relation": "cites",
+      "weight": 5
+    },
+    {
+      "id": "class-3-14__class-3-15__48",
+      "source": "class-3-14",
+      "target": "class-3-15",
+      "relation": "extends",
+      "weight": 4
+    },
+    {
+      "id": "class-3-07__class-3-03__49",
+      "source": "class-3-07",
+      "target": "class-3-03",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "class-3-10__class-3-06__50",
+      "source": "class-3-10",
+      "target": "class-3-06",
+      "relation": "shares method with",
+      "weight": 4
+    },
+    {
+      "id": "class-3-13__class-3-08__51",
+      "source": "class-3-13",
+      "target": "class-3-08",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-01__nationalism-4-02__52",
+      "source": "nationalism-4-01",
+      "target": "nationalism-4-02",
+      "relation": "cites",
+      "weight": 4
+    },
+    {
+      "id": "nationalism-4-02__nationalism-4-03__53",
+      "source": "nationalism-4-02",
+      "target": "nationalism-4-03",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-03__nationalism-4-04__54",
+      "source": "nationalism-4-03",
+      "target": "nationalism-4-04",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "nationalism-4-04__nationalism-4-05__55",
+      "source": "nationalism-4-04",
+      "target": "nationalism-4-05",
+      "relation": "extends",
+      "weight": 5
+    },
+    {
+      "id": "nationalism-4-05__nationalism-4-06__56",
+      "source": "nationalism-4-05",
+      "target": "nationalism-4-06",
+      "relation": "contrasts with",
+      "weight": 5
+    },
+    {
+      "id": "nationalism-4-06__nationalism-4-07__57",
+      "source": "nationalism-4-06",
+      "target": "nationalism-4-07",
+      "relation": "extends",
+      "weight": 1
+    },
+    {
+      "id": "nationalism-4-07__nationalism-4-08__58",
+      "source": "nationalism-4-07",
+      "target": "nationalism-4-08",
+      "relation": "debates",
+      "weight": 3
+    },
+    {
+      "id": "nationalism-4-08__nationalism-4-09__59",
+      "source": "nationalism-4-08",
+      "target": "nationalism-4-09",
+      "relation": "debates",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-09__nationalism-4-10__60",
+      "source": "nationalism-4-09",
+      "target": "nationalism-4-10",
+      "relation": "debates",
+      "weight": 1
+    },
+    {
+      "id": "nationalism-4-10__nationalism-4-11__61",
+      "source": "nationalism-4-10",
+      "target": "nationalism-4-11",
+      "relation": "influences",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-11__nationalism-4-12__62",
+      "source": "nationalism-4-11",
+      "target": "nationalism-4-12",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "nationalism-4-12__nationalism-4-13__63",
+      "source": "nationalism-4-12",
+      "target": "nationalism-4-13",
+      "relation": "influences",
+      "weight": 4
+    },
+    {
+      "id": "nationalism-4-13__nationalism-4-14__64",
+      "source": "nationalism-4-13",
+      "target": "nationalism-4-14",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "nationalism-4-14__nationalism-4-15__65",
+      "source": "nationalism-4-14",
+      "target": "nationalism-4-15",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "nationalism-4-04__nationalism-4-02__66",
+      "source": "nationalism-4-04",
+      "target": "nationalism-4-02",
+      "relation": "shares method with",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-07__nationalism-4-02__67",
+      "source": "nationalism-4-07",
+      "target": "nationalism-4-02",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "nationalism-4-10__nationalism-4-02__68",
+      "source": "nationalism-4-10",
+      "target": "nationalism-4-02",
+      "relation": "shares method with",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-13__nationalism-4-03__69",
+      "source": "nationalism-4-13",
+      "target": "nationalism-4-03",
+      "relation": "contrasts with",
+      "weight": 5
+    },
+    {
+      "id": "power-5-01__power-5-02__70",
+      "source": "power-5-01",
+      "target": "power-5-02",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "power-5-02__power-5-03__71",
+      "source": "power-5-02",
+      "target": "power-5-03",
+      "relation": "cites",
+      "weight": 2
+    },
+    {
+      "id": "power-5-03__power-5-04__72",
+      "source": "power-5-03",
+      "target": "power-5-04",
+      "relation": "influences",
+      "weight": 4
+    },
+    {
+      "id": "power-5-04__power-5-05__73",
+      "source": "power-5-04",
+      "target": "power-5-05",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "power-5-05__power-5-06__74",
+      "source": "power-5-05",
+      "target": "power-5-06",
+      "relation": "contrasts with",
+      "weight": 5
+    },
+    {
+      "id": "power-5-06__power-5-07__75",
+      "source": "power-5-06",
+      "target": "power-5-07",
+      "relation": "cites",
+      "weight": 5
+    },
+    {
+      "id": "power-5-07__power-5-08__76",
+      "source": "power-5-07",
+      "target": "power-5-08",
+      "relation": "extends",
+      "weight": 4
+    },
+    {
+      "id": "power-5-08__power-5-09__77",
+      "source": "power-5-08",
+      "target": "power-5-09",
+      "relation": "cites",
+      "weight": 5
+    },
+    {
+      "id": "power-5-09__power-5-10__78",
+      "source": "power-5-09",
+      "target": "power-5-10",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "power-5-10__power-5-11__79",
+      "source": "power-5-10",
+      "target": "power-5-11",
+      "relation": "shares method with",
+      "weight": 2
+    },
+    {
+      "id": "power-5-11__power-5-12__80",
+      "source": "power-5-11",
+      "target": "power-5-12",
+      "relation": "contrasts with",
+      "weight": 4
+    },
+    {
+      "id": "power-5-12__power-5-13__81",
+      "source": "power-5-12",
+      "target": "power-5-13",
+      "relation": "shares method with",
+      "weight": 3
+    },
+    {
+      "id": "power-5-13__power-5-14__82",
+      "source": "power-5-13",
+      "target": "power-5-14",
+      "relation": "debates",
+      "weight": 3
+    },
+    {
+      "id": "power-5-14__power-5-15__83",
+      "source": "power-5-14",
+      "target": "power-5-15",
+      "relation": "cites",
+      "weight": 4
+    },
+    {
+      "id": "power-5-07__power-5-04__84",
+      "source": "power-5-07",
+      "target": "power-5-04",
+      "relation": "influences",
+      "weight": 3
+    },
+    {
+      "id": "power-5-10__power-5-04__85",
+      "source": "power-5-10",
+      "target": "power-5-04",
+      "relation": "extends",
+      "weight": 3
+    },
+    {
+      "id": "power-5-13__power-5-06__86",
+      "source": "power-5-13",
+      "target": "power-5-06",
+      "relation": "cites",
+      "weight": 1
+    },
+    {
+      "id": "method-6-01__method-6-02__87",
+      "source": "method-6-01",
+      "target": "method-6-02",
+      "relation": "debates",
+      "weight": 2
+    },
+    {
+      "id": "method-6-02__method-6-03__88",
+      "source": "method-6-02",
+      "target": "method-6-03",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "method-6-03__method-6-04__89",
+      "source": "method-6-03",
+      "target": "method-6-04",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "method-6-04__method-6-05__90",
+      "source": "method-6-04",
+      "target": "method-6-05",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "method-6-05__method-6-06__91",
+      "source": "method-6-05",
+      "target": "method-6-06",
+      "relation": "influences",
+      "weight": 4
+    },
+    {
+      "id": "method-6-06__method-6-07__92",
+      "source": "method-6-06",
+      "target": "method-6-07",
+      "relation": "shares method with",
+      "weight": 3
+    },
+    {
+      "id": "method-6-07__method-6-08__93",
+      "source": "method-6-07",
+      "target": "method-6-08",
+      "relation": "cites",
+      "weight": 4
+    },
+    {
+      "id": "method-6-08__method-6-09__94",
+      "source": "method-6-08",
+      "target": "method-6-09",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "method-6-09__method-6-10__95",
+      "source": "method-6-09",
+      "target": "method-6-10",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "method-6-10__method-6-11__96",
+      "source": "method-6-10",
+      "target": "method-6-11",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "method-6-11__method-6-12__97",
+      "source": "method-6-11",
+      "target": "method-6-12",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "method-6-12__method-6-13__98",
+      "source": "method-6-12",
+      "target": "method-6-13",
+      "relation": "cites",
+      "weight": 4
+    },
+    {
+      "id": "method-6-13__method-6-14__99",
+      "source": "method-6-13",
+      "target": "method-6-14",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "method-6-14__method-6-15__100",
+      "source": "method-6-14",
+      "target": "method-6-15",
+      "relation": "extends",
+      "weight": 3
+    },
+    {
+      "id": "method-6-04__method-6-02__101",
+      "source": "method-6-04",
+      "target": "method-6-02",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "method-6-10__method-6-04__102",
+      "source": "method-6-10",
+      "target": "method-6-04",
+      "relation": "shares method with",
+      "weight": 2
+    },
+    {
+      "id": "method-6-13__method-6-05__103",
+      "source": "method-6-13",
+      "target": "method-6-05",
+      "relation": "shares method with",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-01__ethnography-7-02__104",
+      "source": "ethnography-7-01",
+      "target": "ethnography-7-02",
+      "relation": "influences",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-02__ethnography-7-03__105",
+      "source": "ethnography-7-02",
+      "target": "ethnography-7-03",
+      "relation": "extends",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-03__ethnography-7-04__106",
+      "source": "ethnography-7-03",
+      "target": "ethnography-7-04",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "ethnography-7-04__ethnography-7-05__107",
+      "source": "ethnography-7-04",
+      "target": "ethnography-7-05",
+      "relation": "shares method with",
+      "weight": 2
+    },
+    {
+      "id": "ethnography-7-05__ethnography-7-06__108",
+      "source": "ethnography-7-05",
+      "target": "ethnography-7-06",
+      "relation": "cites",
+      "weight": 5
+    },
+    {
+      "id": "ethnography-7-06__ethnography-7-07__109",
+      "source": "ethnography-7-06",
+      "target": "ethnography-7-07",
+      "relation": "influences",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-07__ethnography-7-08__110",
+      "source": "ethnography-7-07",
+      "target": "ethnography-7-08",
+      "relation": "cites",
+      "weight": 5
+    },
+    {
+      "id": "ethnography-7-08__ethnography-7-09__111",
+      "source": "ethnography-7-08",
+      "target": "ethnography-7-09",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "ethnography-7-09__ethnography-7-10__112",
+      "source": "ethnography-7-09",
+      "target": "ethnography-7-10",
+      "relation": "influences",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-10__ethnography-7-11__113",
+      "source": "ethnography-7-10",
+      "target": "ethnography-7-11",
+      "relation": "debates",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-11__ethnography-7-12__114",
+      "source": "ethnography-7-11",
+      "target": "ethnography-7-12",
+      "relation": "debates",
+      "weight": 1
+    },
+    {
+      "id": "ethnography-7-12__ethnography-7-13__115",
+      "source": "ethnography-7-12",
+      "target": "ethnography-7-13",
+      "relation": "extends",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-13__ethnography-7-14__116",
+      "source": "ethnography-7-13",
+      "target": "ethnography-7-14",
+      "relation": "extends",
+      "weight": 2
+    },
+    {
+      "id": "ethnography-7-14__ethnography-7-15__117",
+      "source": "ethnography-7-14",
+      "target": "ethnography-7-15",
+      "relation": "shares method with",
+      "weight": 3
+    },
+    {
+      "id": "ethnography-7-04__ethnography-7-02__118",
+      "source": "ethnography-7-04",
+      "target": "ethnography-7-02",
+      "relation": "shares method with",
+      "weight": 3
+    },
+    {
+      "id": "ethnography-7-07__ethnography-7-04__119",
+      "source": "ethnography-7-07",
+      "target": "ethnography-7-04",
+      "relation": "extends",
+      "weight": 1
+    },
+    {
+      "id": "ethnography-7-10__ethnography-7-08__120",
+      "source": "ethnography-7-10",
+      "target": "ethnography-7-08",
+      "relation": "influences",
+      "weight": 5
+    },
+    {
+      "id": "ethnography-7-13__ethnography-7-01__121",
+      "source": "ethnography-7-13",
+      "target": "ethnography-7-01",
+      "relation": "extends",
+      "weight": 2
+    },
+    {
+      "id": "digital-8-01__digital-8-02__122",
+      "source": "digital-8-01",
+      "target": "digital-8-02",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "digital-8-02__digital-8-03__123",
+      "source": "digital-8-02",
+      "target": "digital-8-03",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "digital-8-03__digital-8-04__124",
+      "source": "digital-8-03",
+      "target": "digital-8-04",
+      "relation": "influences",
+      "weight": 2
+    },
+    {
+      "id": "digital-8-04__digital-8-05__125",
+      "source": "digital-8-04",
+      "target": "digital-8-05",
+      "relation": "debates",
+      "weight": 1
+    },
+    {
+      "id": "digital-8-05__digital-8-06__126",
+      "source": "digital-8-05",
+      "target": "digital-8-06",
+      "relation": "cites",
+      "weight": 2
+    },
+    {
+      "id": "digital-8-06__digital-8-07__127",
+      "source": "digital-8-06",
+      "target": "digital-8-07",
+      "relation": "debates",
+      "weight": 2
+    },
+    {
+      "id": "digital-8-07__digital-8-08__128",
+      "source": "digital-8-07",
+      "target": "digital-8-08",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "digital-8-08__digital-8-09__129",
+      "source": "digital-8-08",
+      "target": "digital-8-09",
+      "relation": "cites",
+      "weight": 2
+    },
+    {
+      "id": "digital-8-09__digital-8-10__130",
+      "source": "digital-8-09",
+      "target": "digital-8-10",
+      "relation": "shares method with",
+      "weight": 3
+    },
+    {
+      "id": "digital-8-10__digital-8-11__131",
+      "source": "digital-8-10",
+      "target": "digital-8-11",
+      "relation": "extends",
+      "weight": 2
+    },
+    {
+      "id": "digital-8-11__digital-8-12__132",
+      "source": "digital-8-11",
+      "target": "digital-8-12",
+      "relation": "cites",
+      "weight": 5
+    },
+    {
+      "id": "digital-8-12__digital-8-13__133",
+      "source": "digital-8-12",
+      "target": "digital-8-13",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "digital-8-13__digital-8-14__134",
+      "source": "digital-8-13",
+      "target": "digital-8-14",
+      "relation": "debates",
+      "weight": 3
+    },
+    {
+      "id": "digital-8-14__digital-8-15__135",
+      "source": "digital-8-14",
+      "target": "digital-8-15",
+      "relation": "influences",
+      "weight": 5
+    },
+    {
+      "id": "digital-8-04__digital-8-01__136",
+      "source": "digital-8-04",
+      "target": "digital-8-01",
+      "relation": "extends",
+      "weight": 5
+    },
+    {
+      "id": "digital-8-10__digital-8-04__137",
+      "source": "digital-8-10",
+      "target": "digital-8-04",
+      "relation": "influences",
+      "weight": 5
+    },
+    {
+      "id": "theory-1-01__gender-2-02__138",
+      "source": "theory-1-01",
+      "target": "gender-2-02",
+      "relation": "contrasts with",
+      "weight": 3
+    },
+    {
+      "id": "theory-1-04__gender-2-10__139",
+      "source": "theory-1-04",
+      "target": "gender-2-10",
+      "relation": "influences",
+      "weight": 5
+    },
+    {
+      "id": "theory-1-07__gender-2-06__140",
+      "source": "theory-1-07",
+      "target": "gender-2-06",
+      "relation": "cites",
+      "weight": 4
+    },
+    {
+      "id": "theory-1-10__gender-2-11__141",
+      "source": "theory-1-10",
+      "target": "gender-2-11",
+      "relation": "extends",
+      "weight": 1
+    },
+    {
+      "id": "theory-1-11__gender-2-06__142",
+      "source": "theory-1-11",
+      "target": "gender-2-06",
+      "relation": "influences",
+      "weight": 4
+    },
+    {
+      "id": "theory-1-13__gender-2-14__143",
+      "source": "theory-1-13",
+      "target": "gender-2-14",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "gender-2-01__class-3-07__144",
+      "source": "gender-2-01",
+      "target": "class-3-07",
+      "relation": "extends",
+      "weight": 4
+    },
+    {
+      "id": "gender-2-04__class-3-07__145",
+      "source": "gender-2-04",
+      "target": "class-3-07",
+      "relation": "debates",
+      "weight": 5
+    },
+    {
+      "id": "gender-2-07__class-3-05__146",
+      "source": "gender-2-07",
+      "target": "class-3-05",
+      "relation": "cites",
+      "weight": 5
+    },
+    {
+      "id": "gender-2-10__class-3-13__147",
+      "source": "gender-2-10",
+      "target": "class-3-13",
+      "relation": "shares method with",
+      "weight": 4
+    },
+    {
+      "id": "gender-2-11__class-3-12__148",
+      "source": "gender-2-11",
+      "target": "class-3-12",
+      "relation": "cites",
+      "weight": 3
+    },
+    {
+      "id": "gender-2-13__class-3-06__149",
+      "source": "gender-2-13",
+      "target": "class-3-06",
+      "relation": "debates",
+      "weight": 1
+    },
+    {
+      "id": "class-3-01__nationalism-4-05__150",
+      "source": "class-3-01",
+      "target": "nationalism-4-05",
+      "relation": "shares method with",
+      "weight": 2
+    },
+    {
+      "id": "class-3-04__nationalism-4-10__151",
+      "source": "class-3-04",
+      "target": "nationalism-4-10",
+      "relation": "cites",
+      "weight": 4
+    },
+    {
+      "id": "class-3-06__nationalism-4-08__152",
+      "source": "class-3-06",
+      "target": "nationalism-4-08",
+      "relation": "extends",
+      "weight": 2
+    },
+    {
+      "id": "class-3-07__nationalism-4-08__153",
+      "source": "class-3-07",
+      "target": "nationalism-4-08",
+      "relation": "debates",
+      "weight": 3
+    },
+    {
+      "id": "class-3-10__nationalism-4-13__154",
+      "source": "class-3-10",
+      "target": "nationalism-4-13",
+      "relation": "extends",
+      "weight": 3
+    },
+    {
+      "id": "class-3-11__nationalism-4-10__155",
+      "source": "class-3-11",
+      "target": "nationalism-4-10",
+      "relation": "contrasts with",
+      "weight": 3
+    },
+    {
+      "id": "class-3-13__nationalism-4-09__156",
+      "source": "class-3-13",
+      "target": "nationalism-4-09",
+      "relation": "influences",
+      "weight": 5
+    },
+    {
+      "id": "nationalism-4-01__power-5-04__157",
+      "source": "nationalism-4-01",
+      "target": "power-5-04",
+      "relation": "influences",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-04__power-5-08__158",
+      "source": "nationalism-4-04",
+      "target": "power-5-08",
+      "relation": "cites",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-07__power-5-11__159",
+      "source": "nationalism-4-07",
+      "target": "power-5-11",
+      "relation": "contrasts with",
+      "weight": 4
+    },
+    {
+      "id": "nationalism-4-10__power-5-08__160",
+      "source": "nationalism-4-10",
+      "target": "power-5-08",
+      "relation": "influences",
+      "weight": 1
+    },
+    {
+      "id": "nationalism-4-11__power-5-07__161",
+      "source": "nationalism-4-11",
+      "target": "power-5-07",
+      "relation": "contrasts with",
+      "weight": 2
+    },
+    {
+      "id": "nationalism-4-13__power-5-05__162",
+      "source": "nationalism-4-13",
+      "target": "power-5-05",
+      "relation": "contrasts with",
+      "weight": 5
+    },
+    {
+      "id": "power-5-01__method-6-06__163",
+      "source": "power-5-01",
+      "target": "method-6-06",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "power-5-01__method-6-07__164",
+      "source": "power-5-01",
+      "target": "method-6-07",
+      "relation": "contrasts with",
+      "weight": 5
+    },
+    {
+      "id": "power-5-04__method-6-06__165",
+      "source": "power-5-04",
+      "target": "method-6-06",
+      "relation": "extends",
+      "weight": 4
+    },
+    {
+      "id": "power-5-06__method-6-05__166",
+      "source": "power-5-06",
+      "target": "method-6-05",
+      "relation": "debates",
+      "weight": 1
+    },
+    {
+      "id": "power-5-07__method-6-12__167",
+      "source": "power-5-07",
+      "target": "method-6-12",
+      "relation": "debates",
+      "weight": 3
+    },
+    {
+      "id": "power-5-10__method-6-02__168",
+      "source": "power-5-10",
+      "target": "method-6-02",
+      "relation": "contrasts with",
+      "weight": 5
+    },
+    {
+      "id": "power-5-13__method-6-12__169",
+      "source": "power-5-13",
+      "target": "method-6-12",
+      "relation": "debates",
+      "weight": 2
+    },
+    {
+      "id": "method-6-01__ethnography-7-04__170",
+      "source": "method-6-01",
+      "target": "ethnography-7-04",
+      "relation": "contrasts with",
+      "weight": 4
+    },
+    {
+      "id": "method-6-01__ethnography-7-10__171",
+      "source": "method-6-01",
+      "target": "ethnography-7-10",
+      "relation": "cites",
+      "weight": 5
+    },
+    {
+      "id": "method-6-04__ethnography-7-05__172",
+      "source": "method-6-04",
+      "target": "ethnography-7-05",
+      "relation": "influences",
+      "weight": 2
+    },
+    {
+      "id": "method-6-06__ethnography-7-06__173",
+      "source": "method-6-06",
+      "target": "ethnography-7-06",
+      "relation": "debates",
+      "weight": 3
+    },
+    {
+      "id": "method-6-07__ethnography-7-01__174",
+      "source": "method-6-07",
+      "target": "ethnography-7-01",
+      "relation": "contrasts with",
+      "weight": 5
+    },
+    {
+      "id": "method-6-10__ethnography-7-03__175",
+      "source": "method-6-10",
+      "target": "ethnography-7-03",
+      "relation": "extends",
+      "weight": 1
+    },
+    {
+      "id": "method-6-13__ethnography-7-09__176",
+      "source": "method-6-13",
+      "target": "ethnography-7-09",
+      "relation": "extends",
+      "weight": 2
+    },
+    {
+      "id": "ethnography-7-01__digital-8-11__177",
+      "source": "ethnography-7-01",
+      "target": "digital-8-11",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "ethnography-7-04__digital-8-10__178",
+      "source": "ethnography-7-04",
+      "target": "digital-8-10",
+      "relation": "extends",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-06__digital-8-06__179",
+      "source": "ethnography-7-06",
+      "target": "digital-8-06",
+      "relation": "debates",
+      "weight": 1
+    },
+    {
+      "id": "ethnography-7-07__digital-8-05__180",
+      "source": "ethnography-7-07",
+      "target": "digital-8-05",
+      "relation": "shares method with",
+      "weight": 1
+    },
+    {
+      "id": "ethnography-7-10__digital-8-14__181",
+      "source": "ethnography-7-10",
+      "target": "digital-8-14",
+      "relation": "influences",
+      "weight": 4
+    },
+    {
+      "id": "ethnography-7-11__digital-8-10__182",
+      "source": "ethnography-7-11",
+      "target": "digital-8-10",
+      "relation": "contrasts with",
+      "weight": 1
+    },
+    {
+      "id": "ethnography-7-13__digital-8-03__183",
+      "source": "ethnography-7-13",
+      "target": "digital-8-03",
+      "relation": "debates",
+      "weight": 5
+    },
+    {
+      "id": "digital-8-01__theory-1-05__184",
+      "source": "digital-8-01",
+      "target": "theory-1-05",
+      "relation": "influences",
+      "weight": 2
+    },
+    {
+      "id": "digital-8-01__theory-1-13__185",
+      "source": "digital-8-01",
+      "target": "theory-1-13",
+      "relation": "shares method with",
+      "weight": 5
+    },
+    {
+      "id": "digital-8-04__theory-1-10__186",
+      "source": "digital-8-04",
+      "target": "theory-1-10",
+      "relation": "cites",
+      "weight": 2
+    },
+    {
+      "id": "digital-8-07__theory-1-07__187",
+      "source": "digital-8-07",
+      "target": "theory-1-07",
+      "relation": "shares method with",
+      "weight": 4
+    },
+    {
+      "id": "digital-8-10__theory-1-05__188",
+      "source": "digital-8-10",
+      "target": "theory-1-05",
+      "relation": "cites",
+      "weight": 4
+    },
+    {
+      "id": "digital-8-11__theory-1-10__189",
+      "source": "digital-8-11",
+      "target": "theory-1-10",
+      "relation": "influences",
+      "weight": 5
+    },
+    {
+      "id": "digital-8-13__theory-1-12__190",
+      "source": "digital-8-13",
+      "target": "theory-1-12",
+      "relation": "influences",
+      "weight": 2
+    }
+  ]
+}
