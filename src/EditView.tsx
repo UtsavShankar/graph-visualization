@@ -68,19 +68,27 @@ export function EditView({ graph, setGraph }) {
     a.remove();
   };
 
-  const importJSON = (file) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if (!parsed || !Array.isArray(parsed.nodes) || !Array.isArray(parsed.edges)) throw new Error("Bad schema");
-        setGraph(parsed);
-      } catch (e) {
-        alert("Invalid JSON file. Expected { nodes: [], edges: [] }.");
+// EditView.tsx
+const importJSON = (file: File) => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const raw = reader.result; // string | ArrayBuffer
+    const text = typeof raw === 'string' ? raw : new TextDecoder().decode(raw as ArrayBuffer);
+
+    try {
+      const parsed = JSON.parse(text);
+      if (!parsed || !Array.isArray(parsed.nodes) || !Array.isArray(parsed.edges)) {
+        throw new Error('Invalid schema');
       }
-    };
-    reader.readAsText(file);
+      setGraph(parsed);
+    } catch (e) {
+      alert('Invalid JSON file. Expected { nodes: [], edges: [] }.');
+      console.error(e);
+    }
   };
+  reader.readAsText(file);
+};
+
 
   const removeNode = (id) => {
     if (!confirm("Delete this node and its connected edges?")) return;
@@ -140,7 +148,15 @@ export function EditView({ graph, setGraph }) {
               <label className="text-sm text-slate-300">Relation (edge label)</label>
               <input value={relation} onChange={e => setRelation(e.target.value)} className="w-full px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500" placeholder="e.g., influences, debates" />
               <label className="text-sm text-slate-300 block mt-3">Weight (edge thickness)</label>
-              <input type="number" min={1} max={8} value={weight} onChange={e => setWeight(e.target.value)} className="w-24 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500" />
+             // input
+<input
+  type="number"
+  min={1}
+  max={8}
+  value={weight}
+  onChange={(e) => setWeight(Number(e.target.value) || 1)}
+  className="w-24 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500"
+/>
             </div>
           </div>
         </div>
