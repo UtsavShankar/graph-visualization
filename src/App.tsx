@@ -42,7 +42,7 @@ type NodeData = { id: string; title: string; author?: string; year?: number; tag
 type EdgeData = { id?: string; source: string; target: string; relation?: string; weight?: number };
 type GraphData = { nodes: NodeData[]; edges: EdgeData[] };
 
-const STORAGE_KEY = 'bookGraph:v3';
+const STORAGE_KEY = 'bookGraph:v4';
 
 function useGraph() {
   const [graph, setGraph] = React.useState<GraphData>(() => {

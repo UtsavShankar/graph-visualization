@@ -55,6 +55,8 @@ export function ExploreView({ graph, query, setQuery }) {
           selector: "node",
           style: {
             "background-color": (ele) => {
+              const dataColor = ele.data("color");
+              if (dataColor) return dataColor; // ← use per-node color from JSON
               const tags = ele.data("tags") || [];
               const first = tags[0];
               return first ? tagColorMap.get(first) || "#93c5fd" : "#93c5fd";
