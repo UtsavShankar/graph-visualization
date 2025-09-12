@@ -1,215 +1,425 @@
 {
   "nodes": [
     {
-      "id": "an1101-cultural-anthropology-global-forces-local-lives",
-      "title": "Cultural Anthropology: Global Forces, Local Lives",
-      "url": "https://www.routledge.com/Cultural-Anthropology-Global-Forces-Local-Lives/Eller/p/book/9780367186982",
-      "course": "AN1101",
-      "tags": ["AN1101"],
-      "color": "#a855f7"
-    },
-    {
-      "id": "an1101-how-to-think-like-an-anthropologist",
+      "id": "how-to-think-like-an-anthropologist",
       "title": "How to Think Like an Anthropologist",
-      "url": "https://www.penguin.co.uk/books/294678/think-like-an-anthropologist-by-engelke-matthew/9780141983226",
-      "course": "AN1101",
-      "tags": ["AN1101"],
-      "color": "#a855f7"
+      "url": "https://go.exlibris.link/XbP1JLJZ",
+      "author": "Matthew Engelke",
+      "year": 2018,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
     },
     {
-      "id": "an1101-what-is-anthropology",
+      "id": "anthroplogy-why-it-matters",
+      "title": "Anthroplogy: Why It matters",
+      "url": "https://go.exlibris.link/J7bFK2Q8",
+      "author": "Tim Ingold",
+      "year": 2018,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "cultural-anthroppology-global-forces-local-lives",
+      "title": "Cultural Anthroppology: Global Forces, Local Lives",
+      "url": "https://go.exlibris.link/dRbr6HLz",
+      "author": "Jack Eller",
+      "year": 2009,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "thick-resistance-death-and-the-cultural-construction-of-agency-in-himalayan-mountaineering",
+      "title": "Thick Resistance: Death and the Cultural Construction of Agency in Himalayan Mountaineering",
+      "url": "http://tinyurl.com/y6zuyano",
+      "author": "Sherry Ortner",
+      "year": 1997,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "what-is-anthropology",
       "title": "What is Anthropology?",
-      "url": "https://www.plutobooks.com/9780745399652/what-is-anthropology/",
-      "course": "AN1101",
-      "tags": ["AN1101"],
-      "color": "#a855f7"
+      "url": "https://go.exlibris.link/CcFxN13X",
+      "author": "Thomas Eriksen",
+      "year": 2017,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
     },
     {
-      "id": "an1101-anthropology-why-it-matters",
-      "title": "Anthropology: Why It Matters",
-      "url": "https://www.politybooks.com/bookdetail/?isbn=9781509519798",
-      "course": "AN1101",
-      "tags": ["AN1101"],
-      "color": "#a855f7"
+      "id": "punching-back-gender-religion-and-belonging-in-women-only-kickboxing",
+      "title": "Punching Back: Gender, Religion and Belonging in Women-only Kickboxing",
+      "url": "https://go.exlibris.link/LGXD3gCS",
+      "author": "jasmijn Rana",
+      "year": 2023,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
     },
     {
-      "id": "an1101-writing-anthropology-essays-on-craft-and-commitment",
+      "id": "writing-anthropology-essays-on-craft-and-commitment",
       "title": "Writing Anthropology: Essays on Craft and Commitment",
-      "url": "https://www.dukeupress.edu/writing-anthropology",
-      "course": "AN1101",
-      "tags": ["AN1101"],
-      "color": "#a855f7"
+      "url": "https://go.exlibris.link/LFtJsX4F",
+      "author": "Carole McGranahan",
+      "year": 2020,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
     },
     {
-      "id": "an1101-perspectives-an-open-invitation-to-cultural-anthropology",
+      "id": "in-the-art-of-being-human-a-textbook-for-cultural-anthropology-manhattan-new-prairie-press",
+      "title": "In The Art of Being Human: A Textbook for Cultural Anthropology. Manhattan: New Prairie Press.",
+      "url": "https://courses.lumenlearning.com/sunyartofbeinghuman/chapter/becoming-our-selves/",
+      "author": "Wesch, Michael",
+      "year": 2018,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "being-a-good-rojin-senility-power-and-self-actualization-in-japan",
+      "title": "Being a Good Rojin: Senility, Power, and Self-Actualization in Japan.",
+      "url": "https://go.exlibris.link/y8v3Fltd",
+      "author": "John Traphagan",
+      "year": 2006,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "a-companion-to-the-anthropology-of-religion",
+      "title": "A companion to the Anthropology of Religion",
+      "url": "https://go.exlibris.link/4msY7yR7",
+      "author": "Paul Stoller",
+      "year": 2013,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "asking-questions-about-cultural-anthropology-a-concise-introduction",
+      "title": "Asking Questions about Cultural Anthropology: A Concise Introduction.",
+      "url": "https://go.exlibris.link/b23ZcZhN",
+      "author": "Welsch, Robert L",
+      "year": 2016,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "anthropology-of-religion-the-basics",
+      "title": "Anthropology of Religion: The Basics",
+      "url": "https://go.exlibris.link/6D2KX8tN",
+      "author": "James S Bielo",
+      "year": 2015,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "in-the-shadow-of-the-palms-more-than-human-becomings-in-west-papua",
+      "title": "In the Shadow of the Palms: More-Than-Human Becomings in West Papua",
+      "url": "https://go.exlibris.link/6zKq4tdf",
+      "author": "Sophie Chao",
+      "year": 2022,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
+    },
+    {
+      "id": "perspectives-an-open-invitation-to-cultural-anthropology",
       "title": "Perspectives: An Open Invitation to Cultural Anthropology",
-      "url": "https://perspectives.americananthro.org/",
-      "course": "AN1101",
-      "tags": ["AN1101"],
-      "color": "#a855f7"
+      "url": "https://perspectives.americananthro.org/ebook.html",
+      "author": "Brown, Nina; de González, Laura T.; McIlwraith, Thomas",
+      "year": 2017,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
     },
     {
-      "id": "an1101-the-art-of-being-human-a-textbook-for-cultural-anthropology",
-      "title": "The Art of Being Human: A Textbook for Cultural Anthropology",
-      "url": "https://anth101.com/book/",
-      "course": "AN1101",
-      "tags": ["AN1101"],
-      "color": "#a855f7"
-    },
-
-    {
-      "id": "an2101-the-ethnographic-interview",
-      "title": "The Ethnographic Interview",
-      "url": "https://www.waveland.com/browse.php?t=688",
-      "course": "AN2101",
-      "tags": ["AN2101"],
-      "color": "#ef4444"
+      "id": "naked-science-anthropological-inquiry-into-boundaries-power-and-knowledge",
+      "title": "Naked Science: Anthropological Inquiry into Boundaries, Power and Knowledge",
+      "url": "https://go.exlibris.link/qRgRvYR9",
+      "author": "Laura Nader",
+      "year": 1996,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
     },
     {
-      "id": "an2101-writing-ethnographic-fieldnotes",
-      "title": "Writing Ethnographic Fieldnotes",
-      "url": "https://press.uchicago.edu/ucp/books/book/chicago/W/bo12182616.html",
-      "course": "AN2101",
-      "tags": ["AN2101"],
-      "color": "#ef4444"
+      "id": "anthropology-and-the-politics-of-representation",
+      "title": "Anthropology and the Politics of Representation",
+      "url": "https://muse.jhu.edu/book/22364",
+      "author": "Beth Conklin",
+      "year": 2013,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
     },
     {
-      "id": "an2101-research-methods-in-anthropology-6th-ed",
-      "title": "Research Methods in Anthropology (6th ed.)",
-      "url": "https://www.bloomsbury.com/us/research-methods-in-anthropology-9781442268883/",
-      "course": "AN2101",
-      "tags": ["AN2101"],
-      "color": "#ef4444"
+      "id": "wisdom-from-the-edge-of-the-village",
+      "title": "Wisdom from the Edge of the Village",
+      "url": "https://go.exlibris.link/nvf7ZHp8",
+      "author": "Paul Stroller",
+      "year": 2023,
+      "color": "#22c55e",
+      "tags": ["AN1101"]
     },
     {
-      "id": "an2101-doing-ethnographic-and-observational-research",
-      "title": "Doing Ethnographic and Observational Research",
-      "url": "https://methods.sagepub.com/book/mono/doing-ethnographic-and-observational-research/toc",
-      "course": "AN2101",
-      "tags": ["AN2101"],
-      "color": "#ef4444"
+      "id": "asia-as-method-toward-deimperialization",
+      "title": "Asia as Method: Toward Deimperialization",
+      "url": "https://go.exlibris.link/GK9n4Dwr",
+      "author": "Kuan-Hsing Chen",
+      "year": 2010,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2101-fieldwork-in-educational-settings",
-      "title": "Fieldwork in Educational Settings",
-      "url": "https://www.routledge.com/Fieldwork-in-Educational-Settings-Methods-pitfalls-and-perspectives/Delamont/p/book/9781138794962",
-      "course": "AN2101",
-      "tags": ["AN2101"],
-      "color": "#ef4444"
+      "id": "spectre-of-comparisons-nationalism-southeast-asia-and-the-world",
+      "title": "Spectre of Comparisons: Nationalism, Southeast Asia, and the World",
+      "url": "https://go.exlibris.link/TVkTHgMM",
+      "author": "Benedict Anderson",
+      "year": 1998,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2101-ethnographic-fieldwork-an-anthropological-reader-2nd-ed",
-      "title": "Ethnographic Fieldwork: An Anthropological Reader (2nd ed.)",
-      "url": "https://www.wiley.com/en-us/Ethnographic%2BFieldwork%3A%2BAn%2BAnthropological%2BReader%2C%2B2nd%2BEdition-p-9780470657157",
-      "course": "AN2101",
-      "tags": ["AN2101"],
-      "color": "#ef4444"
+      "id": "southeast-asia-an-introductory-history",
+      "title": "Southeast Asia: An Introductory History",
+      "url": "https://go.exlibris.link/yzr0PxGS",
+      "author": "Million E Osborne",
+      "year": 2004,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2101-veiled-sentiments-honor-and-poetry-in-a-bedouin-society",
-      "title": "Veiled Sentiments: Honor and Poetry in a Bedouin Society",
-      "url": "https://www.ucpress.edu/books/veiled-sentiments/paper",
-      "course": "AN2101",
-      "tags": ["AN2101"],
-      "color": "#ef4444"
+      "id": "crossing-the-bay-of-bengal",
+      "title": "Crossing the Bay of Bengal",
+      "url": "https://go.exlibris.link/fB97fvsQ",
+      "author": "Sunil Amrith",
+      "year": 2013,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2101-a-space-on-the-side-of-the-road-cultural-poetics-in-an-other-america",
-      "title": "A Space on the Side of the Road: Cultural Poetics in an \"Other\" America",
-      "url": "https://www.jstor.org/stable/j.ctvzxx9cn",
-      "course": "AN2101",
-      "tags": ["AN2101"],
-      "color": "#ef4444"
-    },
-
-    {
-      "id": "an2203-southeast-asia-in-the-age-of-commerce-1450-1680",
-      "title": "Southeast Asia in the Age of Commerce, 1450–1680 (Vol. 1 or 2)",
-      "url": "https://yalebooks.yale.edu/book/9780300047509/southeast-asia-in-the-age-of-commerce-1450-1680/",
-      "course": "AN2203",
-      "tags": ["AN2203"],
-      "color": "#3b82f6"
+      "id": "southeast-asia-a-region-in-transition",
+      "title": "Southeast Asia: A Region in Transition",
+      "url": "https://go.exlibris.link/KrmsT79m",
+      "author": "Jonathan Rigg",
+      "year": 1991,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2203-weapons-of-the-weak-everyday-forms-of-peasant-resistance",
+      "id": "an-anarchist-history-of-upland-southeast-asia",
+      "title": "An Anarchist History of Upland Southeast Asia",
+      "url": "https://go.exlibris.link/S3pc0dtD",
+      "author": "James C Scott",
+      "year": 2009,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "negara-the-theatre-state-in-nineteenth-century-bali",
+      "title": "Negara: The Theatre State in Nineteenth-Century Bali",
+      "url": "https://go.exlibris.link/L60Y19WS",
+      "author": "Clifford Geertz",
+      "year": 1980,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "history-culture-and-region-in-southeast-asian-perspective",
+      "title": "History, Culture, and Region in Southeast Asian Perspective",
+      "url": "https://go.exlibris.link/KX4Zm0KD",
+      "author": "Wolters, O.W",
+      "year": 1982,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "against-the-grain-a-deep-history-of-the-earliest-states",
+      "title": "Against the Grain: A Deep History of the Earliest States",
+      "url": "https://go.exlibris.link/DZP44QGK",
+      "author": "James C Scott",
+      "year": 2017,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "world-conqueror-and-world-renouncer-a-study-of-buddhism-and-polity-in-thailand-against-a-historical-background",
+      "title": "World Conqueror and World Renouncer",
+      "url": "https://go.exlibris.link/TRYMtXzW",
+      "author": "Stanley Tambiah",
+      "year": 1976,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "the-indianized-states-of-southeast-asia",
+      "title": "The Indianized States of Southeast Asia",
+      "url": "https://go.exlibris.link/lVnPrCcL",
+      "author": "George Coedes",
+      "year": 1968,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "the-myth-of-the-lazy-native-a-study-of-the-image-of-the-malays-filipinos-and-javanese-from-the-16th-to-the-20th-century-and-its-function-in-the-ideology-of-colonial-capitalism",
+      "title": "The Myth of the Lazy Native",
+      "url": "https://go.exlibris.link/QS5PxYqs",
+      "author": "Syed Hussein Alatas",
+      "year": 1977,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "elementary-aspects-of-peasant-insurgency-in-colonial-india",
+      "title": "Elementary Aspects of Peasant Insurgency in Colonial India",
+      "url": "https://go.exlibris.link/T183Lwx2",
+      "author": "Ranajit Guha",
+      "year": 1983,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "imagined-communities-reflections-on-the-origin-and-spread-of-nationalism",
+      "title": "Imagined Communities",
+      "url": "https://go.exlibris.link/bk1GMNHK",
+      "author": "Benedict Anderson",
+      "year": 2006,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    },
+    {
+      "id": "weapons-of-the-weak-everyday-forms-of-peasant-resistance",
       "title": "Weapons of the Weak: Everyday Forms of Peasant Resistance",
-      "url": "https://yalebooks.yale.edu/book/9780300036411/weapons-of-the-weak/",
-      "course": "AN2203",
-      "tags": ["AN2203"],
-      "color": "#3b82f6"
+      "url": "https://go.exlibris.link/gF76g5d6",
+      "author": "James C Scott",
+      "year": 1985,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2203-negara-the-theatre-state-in-19th-century-bali",
-      "title": "Negara: The Theatre State in 19th-Century Bali",
-      "url": "https://www.jstor.org/stable/j.ctv1fkgcrh",
-      "course": "AN2203",
-      "tags": ["AN2203"],
-      "color": "#3b82f6"
+      "id": "spirits-of-resistance-and-capitalist-discipline-factory-women-in-malaysia",
+      "title": "Spirits of Resistance and Capitalist Discipline: Factory Women in Malaysia",
+      "url": "https://go.exlibris.link/Qy82L4wD",
+      "author": "Aihwa Ong",
+      "year": 2010,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2203-siam-mapped-a-history-of-the-geo-body-of-a-nation",
-      "title": "Siam Mapped: A History of the Geo-Body of a Nation",
-      "url": "https://uhpress.hawaii.edu/title/siam-mapped-a-history-of-the-geo-body-of-a-nation/",
-      "course": "AN2203",
-      "tags": ["AN2203"],
-      "color": "#3b82f6"
+      "id": "global-transformations-anthropology-and-the-modern-world",
+      "title": "Global Transformations: Anthropology and the Modern World",
+      "url": "https://go.exlibris.link/ZklRhGx5",
+      "author": "Michel-Rolph Trouillot",
+      "year": 2003,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2203-imagined-communities-reflections-on-the-origin-and-spread-of-nationalism",
-      "title": "Imagined Communities: Reflections on the Origin and Spread of Nationalism",
-      "url": "https://www.versobooks.com/products/1126-imagined-communities",
-      "course": "AN2203",
-      "tags": ["AN2203"],
-      "color": "#3b82f6"
+      "id": "the-interpretation-of-cultures",
+      "title": "The Interpretation of Cultures",
+      "url": "https://go.exlibris.link/HHGZYj7m",
+      "author": "Clifford Geertz",
+      "year": 1973,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2203-a-history-of-malaysia-andaya-and-andaya",
-      "title": "A History of Malaysia (Andaya & Andaya)",
-      "url": "https://link.springer.com/book/10.1007/978-1-349-16927-6",
-      "course": "AN2203",
-      "tags": ["AN2203"],
-      "color": "#3b82f6"
+      "id": "friction-an-ethnography-of-global-connection",
+      "title": "Friction: An Ethnography of Global Connection",
+      "url": "https://go.exlibris.link/kBvSQv5F",
+      "author": "Anna Tsing",
+      "year": 2005,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2203-the-making-of-a-bureaucratic-elite",
-      "title": "The Making of a Bureaucratic Elite: The Colonial Transformation of the Javanese Priyayi",
-      "url": "https://books.google.com/books/about/The_Making_of_a_Bureaucratic_Elite.html?id=HUsLAQAAIAAJ",
-      "course": "AN2203",
-      "tags": ["AN2203"],
-      "color": "#3b82f6"
+      "id": "tourism-in-southeast-asia-challenges-and-new-directions",
+      "title": "Tourism in Southeast Asia: Challenges and New Directions",
+      "url": "https://go.exlibris.link/t4twYFgg",
+      "author": "Michael Hitchcock; Victor T; Mike Parnwell",
+      "year": 2009,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "an2203-the-art-of-charlie-chan-hock-chye",
-      "title": "The Art of Charlie Chan Hock Chye",
-      "url": "https://epigrambookshop.sg/products/charlie-chan-hock-chye",
-      "course": "AN2203",
-      "tags": ["AN2203"],
-      "color": "#3b82f6"
-    },
-
-    {
-      "id": "sc2209-the-social-meaning-of-money",
-      "title": "The Social Meaning of Money: Pin Money, Paychecks, Poor Relief, and Other Currencies",
-      "url": "https://books.google.com/books/about/The_Social_Meaning_of_Money.html?id=wdWKG5rGx3oC",
-      "course": "SC2209",
-      "tags": ["SC2209"],
-      "color": "#22c55e"
+      "id": "liberalism-disavowed-communitarianism-and-state-capitalism-in-singapore",
+      "title": "Liberalism Disavowed: Communitarianism and State Capitalism in Singapore",
+      "url": "https://go.exlibris.link/8nHF0GdW",
+      "author": "Beng Huat Chua",
+      "year": 2017,
+      "color": "#f97316",
+      "tags": ["AN2203"]
     },
     {
-      "id": "sc2209-liquidated-an-ethnography-of-wall-street",
-      "title": "Liquidated: An Ethnography of Wall Street",
-      "url": "https://www.dukeupress.edu/liquidated",
-      "course": "SC2209",
-      "tags": ["SC2209"],
-      "color": "#22c55e"
+      "id": "fungible-life-experiment-in-the-asian-city-of-life",
+      "title": "Fungible Life: Experiment in the Asian City of Life",
+      "url": "https://go.exlibris.link/dywmzVh5",
+      "author": "Aihwa Ong",
+      "year": 2016,
+      "color": "#f97316",
+      "tags": ["AN2203"]
+    }, {
+      "id": "the-social-meaning-of-money",
+      "title": "The Social Meaning of Money",
+      "url": "https://go.exlibris.link/l0l3S8gg",
+      "author": "Viviana A Zelizer",
+      "year": 1994,
+      "color": "#a855f7",
+      "tags": ["SC2209"]
     },
     {
-      "id": "sc2209-global-governmentality-governing-international-spaces",
+      "id": "the-face-of-money-currency-crisis-and-remediation-in-postsuharto-indonesia",
+      "title": "The Face of Money: Currency, Crisis, and Remediation in PostSuharto Indonesia",
+      "url": "https://go.exlibris.link/G31MT9Q2",
+      "author": "Karen Strassler",
+      "year": 2009,
+      "color": "#a855f7",
+      "tags": ["SC2209"]
+    },
+    {
+      "id": "debt-the-first-5000-years",
+      "title": "Debt: The First 5,000 Years",
+      "url": "https://go.exlibris.link/ylH8wJvG",
+      "author": "David Graeber",
+      "year": 2014,
+      "color": "#a855f7",
+      "tags": ["SC2209"]
+    },
+    {
+      "id": "liquidated-an-ethnography-of-wall-street",
+      "title": "Liquidated: an ethnography of wall street",
+      "url": "https://go.exlibris.link/BVxxqymc",
+      "author": "Karen Zouwen Ho",
+      "year": 2009,
+      "color": "#a855f7",
+      "tags": ["SC2209"]
+    },
+    {
+      "id": "global-governmentality-governing-international-spaces",
       "title": "Global Governmentality: Governing International Spaces",
-      "url": "https://www.routledge.com/Global-Governmentality-Governing-International-Spaces/Larner-Walters/p/book/9780415311380",
-      "course": "SC2209",
-      "tags": ["SC2209"],
-      "color": "#22c55e"
+      "url": "https://go.exlibris.link/XsRZ1nSw",
+      "author": "Andrew Barry",
+      "year": 2004,
+      "color": "#a855f7",
+      "tags": ["SC2209"]
+    },{
+      "id": "gendered-paradoxes-educating-jordanian-women-in-nation-faith-and-progress",
+      "title": "Gendered Paradoxes: Educating Jordanian Women in Nation, Faith, and Progress",
+      "url": "https://go.exlibris.link/tdk2sYyd",
+      "author": "Fida Adely",
+      "year": 2012,
+      "color": "#ec4899",
+      "tags": ["SC3204"]
+    },
+    {
+      "id": "the-headman-was-a-woman-the-gender-egalitarian-batek-of-malaysia",
+      "title": "The Headman was a Woman: The Gender Egalitarian Batek of Malaysia",
+      "url": "https://go.exlibris.link/jGzthlFY",
+      "author": "Kirt M Endicott, Karen Lampell",
+      "year": 2008,
+      "color": "#ec4899",
+      "tags": ["SC3204"]
+    },
+    {
+      "id": "world-yearbook-of-education-2010",
+      "title": "World yearbook of Education 2010",
+      "url": "https://www-taylorfrancis-com.libproxy1.nus.edu.sg/chapters/edit/10.4324/9780203863596-16/performing-patriotism-rituals-moral-authority-jordanian-high-school",
+      "author": "Finda Adely",
+      "year": 2010,
+      "color": "#ec4899",
+      "tags": ["SC3204"]
     }
   ],
   "edges": []

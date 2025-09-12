@@ -2,9 +2,14 @@
 import { TAG_COLORS } from "./App";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import cytoscape from "cytoscape";
+import fcose from "cytoscape-fcose";
+cytoscape.use(fcose);
 
 // graph display view
 export function ExploreView({ graph, query, setQuery }) {
+  // Tag filter options
+  const TAG_FILTER_OPTIONS = ["SC2209", "AN1101", "AN2203", "SC3204"];
+  const [tagFilter, setTagFilter] = useState("");
   const containerRef = useRef(null);
   const cyRef = useRef(null);
   const [selected, setSelected] = useState(null); // node data
@@ -20,10 +25,58 @@ export function ExploreView({ graph, query, setQuery }) {
     return map;
   }, [graph.nodes]);
 
-  // Build elements
+  // Build elements with manual positions for circular clusters by tag
+  const TAG_CIRCLE_ORDER = ["AN2203", "AN1101", "SC2209", "SC3204"];
   const elements = useMemo(() => {
+    // Group nodes by tag
+    const tagGroups = {};
+    (graph.nodes || []).forEach((n) => {
+      const tag = (n.tags && n.tags[0]) || "other";
+      if (!tagGroups[tag]) tagGroups[tag] = [];
+      tagGroups[tag].push(n);
+    });
+  // Arrange each tag group in a circle, space circles horizontally
+  const circleSpacing = 700;
+  const circleRadius = 300;
+    let colIdx = 0;
+    const nodes = [];
+    TAG_CIRCLE_ORDER.forEach((tag) => {
+      const group = tagGroups[tag] || [];
+      const N = group.length;
+      const centerX = colIdx * circleSpacing;
+      const centerY = 0;
+      group.forEach((n, i) => {
+        const angle = (2 * Math.PI * i) / N;
+        const x = centerX + circleRadius * Math.cos(angle);
+        const y = centerY + circleRadius * Math.sin(angle);
+        nodes.push({
+          data: { ...n },
+          position: { x, y }
+        });
+      });
+      colIdx++;
+    });
+    // Add any other tags not in the order
+    Object.keys(tagGroups).forEach((tag) => {
+      if (!TAG_CIRCLE_ORDER.includes(tag)) {
+        const group = tagGroups[tag];
+        const N = group.length;
+        const centerX = colIdx * circleSpacing;
+        const centerY = 0;
+        group.forEach((n, i) => {
+          const angle = (2 * Math.PI * i) / N;
+          const x = centerX + circleRadius * Math.cos(angle);
+          const y = centerY + circleRadius * Math.sin(angle);
+          nodes.push({
+            data: { ...n },
+            position: { x, y }
+          });
+        });
+        colIdx++;
+      }
+    });
     return {
-      nodes: (graph.nodes || []).map((n) => ({ data: { ...n } })),
+      nodes,
       edges: (graph.edges || []).map((e, i) => ({
         data: { id: e.id || `e-${i}`, ...e },
       })),
@@ -44,8 +97,12 @@ export function ExploreView({ graph, query, setQuery }) {
     const cy = cytoscape({
       container: containerRef.current,
       elements,
-      layout: { name: "cose", animate: false },
-      wheelSensitivity: 0.6,
+      layout: {
+        name: "preset",
+        fit: true,
+        animate: false,
+      },
+      wheelSensitivity: 0.32,
       style: [
         {
           selector: "core",
@@ -55,8 +112,12 @@ export function ExploreView({ graph, query, setQuery }) {
           selector: "node",
           style: {
             "background-color": (ele) => {
+              // If tagFilter is active, only color nodes with that tag, others gray
+              if (tagFilter && !(ele.data("tags") || []).includes(tagFilter)) {
+                return "#64748b"; // faded gray
+              }
               const dataColor = ele.data("color");
-              if (dataColor) return dataColor; // ← use per-node color from JSON
+              if (dataColor) return dataColor;
               const tags = ele.data("tags") || [];
               const first = tags[0];
               return first ? tagColorMap.get(first) || "#93c5fd" : "#93c5fd";
@@ -149,6 +210,11 @@ export function ExploreView({ graph, query, setQuery }) {
       setHoverEdge(null);
     });
 
+    // Set initial zoom and center
+    setTimeout(() => {
+      cy.fit(undefined, 40); // Fit all nodes with 40px padding
+      cy.zoom(1.2); // Set zoom level to 2.5
+    }, 100);
     return () => {
       try {
         cy.destroy();
@@ -160,18 +226,46 @@ export function ExploreView({ graph, query, setQuery }) {
     setMousePos({ x: e.clientX + 16, y: e.clientY + 16 });
   };
 
-  // Simple search: fade non-matching nodes
+  // Combined search and tag filter: fade non-matching nodes
   useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
     cy.nodes().removeClass("dimmed");
-    if (!query.trim()) return;
-    const q = query.toLowerCase();
+    const q = query.trim().toLowerCase();
     cy.nodes().forEach((n) => {
-      const t = (n.data("title") || n.id()).toLowerCase();
-      if (!t.includes(q)) n.addClass("dimmed");
+      const titleMatch = !q || (n.data("title") || n.id()).toLowerCase().includes(q);
+      const tagMatch = !tagFilter || (n.data("tags") || []).includes(tagFilter);
+      if (!(titleMatch && tagMatch)) n.addClass("dimmed");
     });
-  }, [query]);
+  }, [query, tagFilter]);
+
+  // Animate nodes when tagFilter changes
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    if (!tagFilter) return; // Only animate when a tag is selected
+    const centerX = cy.width() / 2;
+    const centerY = cy.height() / 2;
+    const selectedNodes = cy.nodes().filter(n => (n.data("tags") || []).includes(tagFilter));
+    const otherNodes = cy.nodes().filter(n => !(n.data("tags") || []).includes(tagFilter));
+    // Arrange selected nodes in a circle at center
+    const N = selectedNodes.length;
+    const radius = 200;
+    selectedNodes.forEach((n, i) => {
+      const angle = (2 * Math.PI * i) / N;
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+      n.animate({ position: { x, y } }, { duration: 600 });
+    });
+    // Move other nodes to the edges
+    otherNodes.forEach((n, i) => {
+      // Spread out along the border
+      const angle = (2 * Math.PI * i) / otherNodes.length;
+      const x = centerX + (cy.width() / 2 - 80) * Math.cos(angle);
+      const y = centerY + (cy.height() / 2 - 80) * Math.sin(angle);
+      n.animate({ position: { x, y } }, { duration: 600 });
+    });
+  }, [tagFilter]);
 
   return (
     <div className="grid grid-cols-12 gap-0">
@@ -186,7 +280,18 @@ export function ExploreView({ graph, query, setQuery }) {
             placeholder="Search titles…"
             className="w-80 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500"
           />
-          <span className="text-xs text-slate-400">
+          <select
+            value={tagFilter}
+            onChange={e => setTagFilter(e.target.value)}
+            className="w-80 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500 text-slate-300"
+            style={{ minWidth: 100}}
+          >
+            <option value="">All tags</option>
+            {TAG_FILTER_OPTIONS.map(tag => (
+              <option key={tag} value={tag}>{tag}</option>
+            ))}
+          </select>
+          <span className="text-xs text-slate-400 ml-2">
             Hover an edge to see the connection
           </span>
         </div>
