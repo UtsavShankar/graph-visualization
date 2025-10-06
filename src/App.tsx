@@ -2,13 +2,15 @@
 import React, { useEffect, useState } from "react";
 import { ExploreView } from "./ExploreView";
 import { EditView } from "./EditView";
+import { getGraphData, getCourses } from "./lib/database";
+import { Node, Edge, Course } from "./lib/supabase";
 
-// --- Minimal fast prototype with two views: Explore (graph) and Edit (admin) ---
-// - Local-only data (persisted to localStorage)
+// --- BookGraph with Supabase database ---
+// - Database-backed data with courses and nodes
 // - Click nodes to open details
 // - Hover edges to see an overlay with relation + endpoints
 // - Add/update books on Edit tab, including connections and notes
-// - Import/Export JSON for quick demos
+// - Course-based organization with colors
 
 export const TAG_COLORS = ["#93c5fd", "#a7f3d0", "#fca5a5", "#fcd34d", "#c4b5fd", "#f9a8d4", "#86efac", "#fda4af", "#93c5fd"];
 
@@ -17,59 +19,88 @@ export function slugify(text) {
   return (text || "").toString().toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "").replace(/\-+/g, "-").replace(/^-+|-+$/g, "");
 }
 
-import SEED_GRAPH from './seed/book-graph-120.json';
+// Graph data types
+type GraphData = { nodes: Node[]; edges: Edge[] };
 
-// (Optional) add a type if you’re using TS
-type NodeData = { id: string; title: string; author?: string; year?: number; tags?: string[]; abstract?: string; url?: string; notes?: string };
-type EdgeData = { id?: string; source: string; target: string; relation?: string; weight?: number };
-type GraphData = { nodes: NodeData[]; edges: EdgeData[] };
+// Custom hook for Supabase data
+function useSupabaseGraph() {
+  const [graph, setGraph] = useState<GraphData>({ nodes: [], edges: [] });
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-const STORAGE_KEY = 'bookGraph:v4:123';
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const [graphData, coursesData] = await Promise.all([
+        getGraphData(),
+        getCourses()
+      ]);
+      
+      setGraph(graphData);
+      setCourses(coursesData);
+    } catch (err) {
+      console.error('Error loading data:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load data');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-function useGraph() {
-  const [graph, setGraph] = React.useState<GraphData>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : (SEED_GRAPH as GraphData);
-  });
-
-  React.useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(graph));
-  }, [graph]);
-
-  return [graph, setGraph] as const;
-}
-
-function useLocalGraph() {
-  const [graph, setGraph] = useState(() => {
-    const stored = localStorage.getItem("bookGraph");
-    return stored ? JSON.parse(stored) : DEFAULT_GRAPH;
-  });
   useEffect(() => {
-    localStorage.setItem("bookGraph", JSON.stringify(graph));
-  }, [graph]);
-  return [graph, setGraph];
+    loadData();
+  }, []);
+
+  return { graph, setGraph, courses, loading, error, refetch: loadData };
 }
 
 export default function App() {
-  const [tab, setTab] = useState("explore"); // "explore" | "edit"
-  const [graph, setGraph] = useGraph();
+  const { graph, setGraph, courses, loading, error, refetch } = useSupabaseGraph();
   const [query, setQuery] = useState("");
+
+  if (loading) {
+    return (
+      <div className="min-h-screen w-full bg-slate-950 text-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-500 mx-auto mb-4"></div>
+          <p className="text-slate-400">Loading BookGraph...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen w-full bg-slate-950 text-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-400 mb-4">Error loading data</div>
+          <p className="text-slate-400 mb-4">{error}</p>
+          <button 
+            onClick={refetch}
+            className="px-4 py-2 rounded-lg border border-sky-500/50 bg-sky-500/15 hover:bg-sky-500/25"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-slate-950 text-slate-100">
       <header className="flex items-center justify-between px-5 py-3 border-b border-slate-800 sticky top-0 bg-slate-950/80 backdrop-blur z-10">
-        <h1 className="text-xl font-semibold tracking-tight">BookGraph – V1</h1>
-        <nav className="flex gap-2">
-          <button onClick={() => setTab("explore")} className={`px-3 py-1.5 rounded-lg border ${tab === "explore" ? "bg-sky-500/20 border-sky-500/40" : "border-slate-700 hover:border-slate-600"}`}>Explore</button>
-          <button onClick={() => setTab("edit")} className={`px-3 py-1.5 rounded-lg border ${tab === "edit" ? "bg-sky-500/20 border-sky-500/40" : "border-slate-700 hover:border-slate-600"}`}>Edit</button>
-        </nav>
+        <h1 className="text-xl font-semibold tracking-tight">BookGraph – V2 (Supabase)</h1>
       </header>
 
-      {tab === "explore" ? (
-        <ExploreView graph={graph} setQuery={setQuery} query={query} />
-      ) : (
-        <EditView graph={graph} setGraph={setGraph} />
-      )}
+      <ExploreView 
+        graph={graph} 
+        setGraph={setGraph}
+        setQuery={setQuery} 
+        query={query} 
+        courses={courses} 
+      />
     </div>
   );
 }

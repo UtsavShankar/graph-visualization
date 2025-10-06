@@ -1,0 +1,683 @@
+{
+  "nodes": [
+    {
+      "id": "how-to-think-like-an-anthropologist",
+      "title": "How to think like an anthropologist",
+      "url": "https://press.princeton.edu/books/hardcover/9780691178783/how-to-think-like-an-anthropologist",
+      "author": "Matthew Engelke",
+      "year": 2018,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "anthroplogy-why-it-matters",
+      "title": "Anthroplogy: Why It matters",
+      "url": "https://www.politybooks.com/bookdetail?book_slug=anthropology-why-it-matters--9781509519798",
+      "author": "Tim Ingold",
+      "year": 2018,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "cultural-anthroppology-global-forces-local-lives",
+      "title": "Cultural Anthroppology: Global Forces, Local Lives",
+      "url": "https://www.routledge.com/Cultural-Anthropology-Global-Forces-Local-Lives/Eller/p/book/9780367186982",
+      "author": "Jack Eller",
+      "year": 2009,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "thick-resistance-death-and-the-cultural-construction-of-agency-in-himalayan-mountaineering",
+      "title": "Thick Resistance: Death and the Cultural Construction of Agency in Himalayan Mountaineering",
+      "url": "https://online.ucpress.edu/representations/article-abstract/doi/10.2307/2928818/82452/Thick-Resistance-Death-and-the-Cultural?redirectedFrom=fulltext",
+      "author": "Sherry Ortner",
+      "year": 1997,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "what-is-anthropology",
+      "title": "What is Anthropology?",
+      "url": "https://www.plutobooks.com/product/what-is-anthropology/",
+      "author": "Thomas Eriksen",
+      "year": 2017,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "punching-back-gender-religion-and-belonging-in-women-only-kickboxing",
+      "title": "Punching Back: Gender, Religion and Belonging in Women-only Kickboxing",
+      "url": "https://www.berghahnbooks.com/title/RanaPunching",
+      "author": "jasmijn Rana",
+      "year": 2023,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "writing-anthropology-essays-on-craft-and-commitment",
+      "title": "Writing Anthropology: Essays on Craft and Commitment",
+      "url": "https://www.dukeupress.edu/writing-anthropology",
+      "author": "Carole McGranahan",
+      "year": 2020,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "the-art-of-being-human-a-textbook-for-cultural-anthropology-manhattan-new-prairie-press",
+      "title": "The Art of Being Human: A Textbook for Cultural Anthropology. Manhattan: New Prairie Press.",
+      "url": "https://newprairiepress.org/ebooks/20/",
+      "author": "Wesch, Michael",
+      "year": 2018,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "being-a-good-rojin-senility-power-and-self-actualization-in-japan",
+      "title": "Being a Good Rojin: Senility, Power, and Self-Actualization in Japan.",
+      "url": "https://www.rutgersuniversitypress.org/thinking-about-dementia/9780813538037",
+      "author": "John Traphagan",
+      "year": 2006,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "a-companion-to-the-anthropology-of-religion",
+      "title": "A companion to the Anthropology of Religion",
+      "url": "https://www.wiley.com/en-us/A%2BCompanion%2Bto%2Bthe%2BAnthropology%2Bof%2BReligion-p-9781119124993",
+      "author": "Paul Stoller",
+      "year": 2013,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "asking-questions-about-cultural-anthropology-a-concise-introduction",
+      "title": "Asking Questions about Cultural Anthropology: A Concise Introduction.",
+      "url": "https://global.oup.com/ushe/product/asking-questions-about-cultural-anthropology-9780197618875?cc=sg&lang=en&",
+      "author": "Welsch, Robert L",
+      "year": 2016,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "anthropology-of-religion-the-basics",
+      "title": "Anthropology of Religion: The Basics",
+      "url": "https://www.routledge.com/Anthropology-of-Religion-The-Basics/Bielo/p/book/9780415731256",
+      "author": "James S Bielo",
+      "year": 2015,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "in-the-shadow-of-the-palms-more-than-human-becomings-in-west-papua",
+      "title": "In the Shadow of the Palms: More-Than-Human Becomings in West Papua",
+      "url": "https://www.dukeupress.edu/in-the-shadow-of-the-palms",
+      "author": "Sophie Chao",
+      "year": 2022,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "perspectives-an-open-invitation-to-cultural-anthropology",
+      "title": "Perspectives: An Open Invitation to Cultural Anthropology",
+      "url": "https://perspectives.americananthro.org/ebook.html",
+      "author": "Brown, Nina, de González, Laura T. and McIlwraith, Thomas",
+      "year": 2017,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "naked-science-anthropological-inquiry-into-boundaries-power-and-knowledge",
+      "title": "Naked Science: Anthropological Inquiry into Boundaries, Power and Knowledge",
+      "url": "https://www.routledge.com/Naked-Science-Anthropological-Inquiry-into-Boundaries-Power-and-Knowledge/Nader/p/book/9780415914659",
+      "author": "Laura Nader",
+      "year": 1996,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "anthropology-and-the-politics-of-representation",
+      "title": "Anthropology and the Politics of Representation",
+      "url": "https://www.uapress.ua.edu/9780817357177/anthropology-and-the-politics-of-representation/",
+      "author": "Beth Conklin",
+      "year": 2013,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+    {
+      "id": "wisdom-from-the-edge-of-the-village",
+      "title": "Wisdom from the Edge of the Village",
+      "url": "https://www.cornellpress.cornell.edu/book/9781501770661/wisdom-from-the-edge/",
+      "author": "Paul Stroller",
+      "year": 2023,
+      "course": "an1101e",
+      "color": "#22c55e"
+    },
+
+    {
+      "id": "asia-as-method-toward-deimperialization",
+      "title": "Asia as method:toward deimperialization",
+      "url": "https://www.dukeupress.edu/asia-as-method",
+      "author": "Kuan-Hsing Chen",
+      "year": 2010,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "spectre-of-comparisons-nationalism-southeast-asia-and-the-world",
+      "title": "Spectre of Comparisons: Nationalism, Southeast Asia, and the World",
+      "url": "https://www.versobooks.com/products/1634-the-spectre-of-comparisons",
+      "author": "Benedict Anderson",
+      "year": 1998,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "southeast-asia-an-introductory-history",
+      "title": "Southeast Asia: An Introductory History",
+      "url": "https://www.allenandunwin.com/browse/book/Milton-Osborne-Southeast-Asia-9781761470943",
+      "author": "Million E Osborne",
+      "year": 2004,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "crossing-the-bay-of-bengal",
+      "title": "Crossing the Bay of Bengal",
+      "url": "https://www.hup.harvard.edu/books/9780674287242",
+      "author": "Sunil Amrith",
+      "year": 2013,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "southeast-asia-a-region-in-transition",
+      "title": "Southeast Asia: A Region in Transition",
+      "url": "https://www.routledge.com/Southeast-Asia-Routledge-Revivals-A-Region-in-Transition/Rigg/p/book/9780415858281",
+      "author": "Jonathan Rigg",
+      "year": 1991,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "an-anarchist-history-of-upland-southeast-asia",
+      "title": "An Anarchist History of Upland Southeast Asia",
+      "url": "https://yalebooks.yale.edu/book/9780300169171/the-art-of-not-being-governed/",
+      "author": "James C Scott",
+      "year": 2009,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "negara-the-theatre-state-in-nineteenth-century-bali",
+      "title": "Negara: The Theatre State in Nineteenth-Century Bali",
+      "url": "https://press.princeton.edu/books/paperback/9780691007786/negara",
+      "author": "Clifford Geertz",
+      "year": 1980,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "history-culture-and-region-in-southeast-asian-perspective",
+      "title": "History, Culture, and Region in Southeast Asian Perspective",
+      "url": "https://www.cornellpress.cornell.edu/book/9780877277255/history-culture-and-region-in-southeast-asian-perspective/",
+      "author": "Wolters, O.W",
+      "year": 1982,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "against-the-grain-a-deep-history-of-the-earliest-states",
+      "title": "Against the grain: a deep history of the earliest states",
+      "url": "https://yalebooks.yale.edu/book/9780300240214/against-the-grain/",
+      "author": "James C Scott",
+      "year": 2017,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "world-conqueror-and-world-renouncer-a-study-of-buddhism-and-polity-in-thailand-against-a-historical-background",
+      "title": "World Conqueror and World Renouncer: A Study of Buddhism and Polity in Thailand Against a Historical Background",
+      "url": "https://www.cambridge.org/core/books/world-conqueror-and-world-renouncer/234CDB8B861966ABDEAC394C5A8A76A1",
+      "author": "Stanley Tambiah",
+      "year": 1976,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "the-indianized-states-of-southeast-asia",
+      "title": "The indianized states of Southeast Asia",
+      "url": "https://uhpress.hawaii.edu/title/the-indianized-states-of-southeast-asia/",
+      "author": "George Coedes",
+      "year": 1968,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "the-myth-of-the-lazy-native-a-study-of-the-image-of-the-malays-filipinos-and-javanese-from-the-16th-to-the-20th-century-and-its-function-in-the-ideology-of-colonial-capitalism",
+      "title": "The Myth of the Lazy Native: A Study of the Image of the Malays, Filipinos and Javanese from the 16th to the 20th Century and Its Function in the Ideology of Colonial Capitalism",
+      "url": "https://www.gerakbudaya.com/product/the-myth-of-the-lazy-native-syed-hussein-alatas",
+      "author": "Syed Hussein Alatas",
+      "year": 1977,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "elementary-aspects-of-peasant-insurgency-in-colonial-india",
+      "title": "Elementary Aspects of Peasant Insurgency in Colonial India",
+      "url": "https://www.dukeupress.edu/elementary-aspects-of-peasant-insurgency-in-colonial-india",
+      "author": "Ranajit Guha",
+      "year": 1983,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "imagined-communities-reflections-on-the-origin-and-spread-of-nationalism",
+      "title": "Imagined Communities: Reflections on the Origin and Spread of Nationalism",
+      "url": "https://www.versobooks.com/en-gb/products/1126-imagined-communities",
+      "author": "Benedict Anderson",
+      "year": 2006,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "weapons-of-the-weak-everyday-forms-of-peasant-resistance",
+      "title": "Weapons of the Weak: Everyday Forms of Peasant Resistance",
+      "url": "https://yalebooks.yale.edu/book/9780300036411/weapons-of-the-weak/",
+      "author": "James C Scott",
+      "year": 1985,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "spirits-of-resistance-and-capitalist-discipline-factory-women-in-malaysia",
+      "title": "Spirits of Resistance and Capitalist Discipline: Factory Women in Malaysia",
+      "url": "https://sunypress.edu/Books/S/Spirits-of-Resistance-and-Capitalist-Discipline-Second-Edition",
+      "author": "Aihwa Ong",
+      "year": 2010,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "global-transformations-anthropology-and-the-modern-world",
+      "title": "Global Transformations: Anthropology and the Modern World",
+      "url": "https://link.springer.com/book/10.1007/978-1-137-04144-9",
+      "author": "Michel-Rolph Trouillot",
+      "year": 2003,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "the-interpretation-of-cultures",
+      "title": "The Interpretation of Cultures",
+      "url": "https://www.basicbooks.com/titles/clifford-geertz/the-interpretation-of-cultures/9780465093564/",
+      "author": "Clifford Geertz",
+      "year": 1973,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "friction-an-ethnography-of-global-connection",
+      "title": "Friction: An Ethnography of Global Connection",
+      "url": "https://press.princeton.edu/books/paperback/9780691263519/friction",
+      "author": "Anna Tsing",
+      "year": 2005,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "tourism-in-southeast-asia-challenges-and-new-directions",
+      "title": "Tourism in Southeast Asia: challenges and new directions",
+      "url": "https://uhpress.hawaii.edu/title/tourism-in-southeast-asia-challenges-and-new-directions/",
+      "author": "Michael Hitchcock, Victor T, Mike Parnwell",
+      "year": 2009,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "liberalism-disavowed-communitarianism-and-state-capitalism-in-singapore",
+      "title": "Liberalism Disavowed: Communitarianism and State Capitalism in Singapore",
+      "url": "https://nuspress.nus.edu.sg/products/liberalism-disavowed-communitarianism-and-state-capitalism-in-singapore",
+      "author": "Beng Huat Chua",
+      "year": 2017,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+    {
+      "id": "fungible-life-experiment-in-the-asian-city-of-life",
+      "title": "Fungible life: experiment in the Asian city of life",
+      "url": "https://www.dukeupress.edu/fungible-life",
+      "author": "Aihwa Ong",
+      "year": 2016,
+      "course": "an2203",
+      "color": "#f97316"
+    },
+
+    {
+      "id": "the-social-meaning-of-money-pin-money-pay-checks-poor-relief-and-other-currencies",
+      "title": "The Social Meaning of Money: Pin Money, Pay Checks, Poor Relief, and Other Currencies",
+      "url": "https://press.princeton.edu/books/paperback/9780691176031/the-social-meaning-of-money",
+      "author": "Viviana Zelizer",
+      "year": 1997,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "the-face-of-money-currency-crisis-and-remediation-in-post-suharto-indonesia",
+      "title": "The Face of Money: Currency, Crisis, and Remediation in Post-Suharto Indonesia",
+      "url": "https://doi.org/10.1111/j.1548-1360.2009.00027.x",
+      "author": "Karen Strassler",
+      "year": 2009,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "the-rise-and-fall-of-electra-emergence-and-transformation-of-a-global-cryptocurrency-community",
+      "title": "The Rise and Fall of Electra: Emergence and Transformation of a Global Cryptocurrency Community",
+      "url": "https://doi.org/10.1080/00346764.2022.2039404",
+      "author": "Koray Caliskan",
+      "year": 2022,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "debt-the-first-5000-years",
+      "title": "Debt: The First 5,000 Years",
+      "url": "https://mhpbooks.com/books/debt/",
+      "author": "David Graeber",
+      "year": 2014,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "finance-is-just-another-word-for-other-peoples-debts-an-interview-with-david-graeber",
+      "title": "Finance Is Just Another Word for Other People’s Debts: An Interview with David Graeber",
+      "url": "https://read.dukeupress.edu/radical-history-review/article/2014/118/159/88498/Finance-Is-Just-Another-Word-for-Other-People-s",
+      "author": "David Graeber and Hannah Appel",
+      "year": 2014,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "deeper-into-a-hole-borrowing-and-lending-in-south-africa",
+      "title": "“Deeper into a Hole?” Borrowing and Lending in South Africa",
+      "url": "https://doi.org/10.1086/676123",
+      "author": "Deborah James",
+      "year": 2014,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "indebted-disciplining-the-moral-valence-of-mortgage-debt-online",
+      "title": "#Indebted: Disciplining the Moral Valence of Mortgage Debt Online",
+      "url": "https://doi.org/10.14506/ca31.1.05",
+      "author": "Noelle Stout",
+      "year": 2016,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "juggling-with-debt-social-ties-and-values-the-everyday-use-of-microcredit-in-rural-south-india",
+      "title": "Juggling with Debt, Social Ties, and Values: The Everyday Use of Microcredit in Rural South India",
+      "url": "https://doi.org/10.1086/675929",
+      "author": "Isabelle Guérin",
+      "year": 2014,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "articulating-islamic-knowledge-to-an-american-dream-islamic-home-financing-alternatives-after-september-11-2001",
+      "title": "Articulating Islamic Knowledge to an American Dream: Islamic Home Financing Alternatives after September 11, 2001",
+      "url": "https://doi.org/10.1525/pol.2003.26.2.196",
+      "author": "Bill Maurer",
+      "year": 2003,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "liquidated-an-ethnography-of-wall-street",
+      "title": "Liquidated: An Ethnography of Wall Street",
+      "url": "https://www.dukeupress.edu/liquidated",
+      "author": "Karen Ho",
+      "year": 2009,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "global-governmentality-governing-international-spaces-ethical-capitalism",
+      "title": "Global Governmentality: Governing International Spaces (chapter: “Ethical Capitalism”)",
+      "url": "https://www.routledge.com/Global-Governmentality-Governing-International-Spaces/Larner-Walters/p/book/9780415406802",
+      "author": "Andrew Barry",
+      "year": 2004,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "activist-capitalism-and-supply-chain-citizenship-producing-ethical-regimes-and-ready-to-wear-clothes",
+      "title": "Activist Capitalism and Supply-Chain Citizenship: Producing Ethical Regimes and Ready-to-Wear Clothes",
+      "url": "https://www.journals.uchicago.edu/doi/full/10.1086/657256",
+      "author": "Damani James Partridge",
+      "year": 2011,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "engendering-the-company-corporate-personhood-and-the-face-of-an-oil-company-in-metropolitan-buenos-aires",
+      "title": "Engendering the Company: Corporate Personhood and the “Face” of an Oil Company in Metropolitan Buenos Aires",
+      "url": "https://doi.org/10.1111/j.1555-2934.2010.01091.x",
+      "author": "Elana Shever",
+      "year": 2010,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "shareholder-activism-and-alienation",
+      "title": "Shareholder Activism and Alienation",
+      "url": "https://doi.org/10.1086/656796",
+      "author": "Marina Welker and David Wood",
+      "year": 2011,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "infuriated-with-the-infuriated-blaming-tactics-and-discontent-about-the-greek-financial-crisis",
+      "title": "Infuriated with the Infuriated? Blaming Tactics and Discontent about the Greek Financial Crisis",
+      "url": "https://doi.org/10.1086/669855",
+      "author": "Dimitrios Theodossopoulos",
+      "year": 2013,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "crisis-effects",
+      "title": "Crisis Effects",
+      "url": "https://doi.org/10.14506/ca33.4.04",
+      "author": "Daromir Rudnyckyj",
+      "year": 2018,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+    {
+      "id": "occupy-wall-street-and-the-economic-imagination",
+      "title": "Occupy Wall Street and the Economic Imagination",
+      "url": "https://doi.org/10.14506/ca29.4.02",
+      "author": "Hannah Appel",
+      "year": 2014,
+      "course": "sc2209",
+      "color": "#a855f7"
+    },
+
+    {
+      "id": "gendered-paradoxes-educating-jordanian-women-in-nation-faith-and-progress",
+      "title": "Gendered Paradoxes: Educating Jordanian Women in Nation, Faith, and Progress",
+      "url": "https://press.uchicago.edu/ucp/books/book/chicago/G/bo13358904.html",
+      "author": "Fida Adely",
+      "year": 2012,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "the-headman-was-a-woman-the-gender-egalitarian-batek-of-malaysia",
+      "title": "The Headman Was a Woman: The Gender Egalitarian Batek of Malaysia",
+      "url": "https://www.waveland.com/browse.php?t=32",
+      "author": "Kirk Endicott; Karen Endicott",
+      "year": 2008,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "schooling-knowledge-and-power-social-transformation-in-the-solomon-islands",
+      "title": "Schooling, Knowledge, and Power: Social Transformation in the Solomon Islands",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/10.1525/aeq.1992.23.1.05x1101i",
+      "author": "Karen Watson-Gegeo; David Gegeo",
+      "year": 1992,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "performing-patriotism-rituals-and-moral-authority-in-a-jordanian-high-school",
+      "title": "Performing Patriotism: Rituals and Moral Authority in a Jordanian High School",
+      "url": "https://www.taylorfrancis.com/chapters/edit/10.4324/9780203878775-8/performing-patriotism-fida-adely",
+      "author": "Fida Adely",
+      "year": 2010,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "experiences-of-disunity-students-negotiation-of-ethnic-and-national-identities-in-botswana-schools",
+      "title": "Experiences of (Dis)Unity: Students’ Negotiation of Ethnic and National Identities in Botswana Schools",
+      "url": "https://www.journals.uchicago.edu/doi/10.1086/701930",
+      "author": "Bethany Mulimbi; Sarah Dryden-Peterson",
+      "year": 2019,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "civic-disparities-exploring-students-perceptions-of-citizenship-within-singapores-academic-tracks",
+      "title": "Civic Disparities: Exploring Students’ Perceptions of Citizenship within Singapore’s Academic Tracks",
+      "url": "https://www.tandfonline.com/doi/full/10.1080/00933104.2011.10473454",
+      "author": "Li-Ching Ho; Theresa Alviar-Martin; Jasmine B-Y Sim; Pui San Yap",
+      "year": 2011,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "learning-the-party-line-the-paradox-of-politics-and-cambodian-schools",
+      "title": "Learning the Party Line: The Paradox of Politics and Cambodian Schools",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/10.1111/aeq.12466",
+      "author": "Jennifer Estes",
+      "year": 2025,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "majorism-neoliberalism-in-student-culture",
+      "title": "Majorism: Neoliberalism in Student Culture",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/10.1111/aman.12420",
+      "author": "Coleen Carrigan; Michelle Bardini",
+      "year": 2015,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "learning-in-neoliberal-times-private-degree-students-and-the-politics-of-value-coding-in-singapore",
+      "title": "Learning in Neoliberal Times: Private Degree Students and the Politics of Value Coding in Singapore",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0016718515000241",
+      "author": "Yi’En Cheng",
+      "year": 2015,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "at-school-we-dont-pay-attention-anyway-the-informal-market-of-education-in-egypt-and-its-implications",
+      "title": "‘At School We Don’t Pay Attention Anyway’ – The Informal Market of Education in Egypt and Its Implications",
+      "url": "https://www.jstor.org/stable/41498159",
+      "author": "Sarah Hartmann",
+      "year": 2008,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "from-good-credit-to-bad-debt-comparative-reflections-on-the-student-debt-experience-of-young-professionals-in-santiago-chile-and-montreal-canada",
+      "title": "From ‘Good Credit’ to ‘Bad Debt’: Comparative Reflections on the Student Debt Experience of Young Professionals in Santiago, Chile, and Montreal, Canada",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/10.1111/aeq.12109",
+      "author": "Lorena Pérez-Roa",
+      "year": 2016,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "bad-students-go-to-vocational-schools-education-social-reproduction-and-migrant-youth-in-urban-china",
+      "title": "‘Bad Students Go to Vocational Schools!’ Education, Social Reproduction, and Migrant Youth in Urban China",
+      "url": "https://www.journals.uchicago.edu/doi/10.1086/678460",
+      "author": "Minhua Ling",
+      "year": 2015,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "english-medium-schooling-social-mobility-and-inequality-in-bangalore-india",
+      "title": "English-Medium: Schooling, Social Mobility, and Inequality in Bangalore, India",
+      "url": "https://www.cambridge.org/core/journals/modern-asian-studies/article/englishmedium-schooling-social-mobility-and-inequality-in-bangalore-india/8D3E9C89B1B2F3C7E5F14E50F5A3F0D8",
+      "author": "Sazana Jayadeva",
+      "year": 2019,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "does-education-empower-women-the-regulated-empowerment-of-parhi-likhi-women-in-pakistan",
+      "title": "Does Education Empower Women? The Regulated Empowerment of Parhi Likhi Women in Pakistan",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/10.1111/aeq.12198",
+      "author": "Ayesha Khurshid",
+      "year": 2017,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "masculinity-lockdown-the-formation-of-black-masculinity-in-a-california-public-high-school",
+      "title": "Masculinity Lockdown: The Formation of Black Masculinity in a California Public High School",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/10.1111/j.1548-7466.2011.01142.x",
+      "author": "Damien M. Schnyder",
+      "year": 2012,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "the-social-funding-of-race-the-role-of-schooling",
+      "title": "The Social Funding of Race: The Role of Schooling",
+      "url": "https://www.tandfonline.com/doi/full/10.1080/0161956X.2017.1403182",
+      "author": "Gloria Ladson-Billings",
+      "year": 2018,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "tracking-identity-academic-performance-and-ethnic-identity-among-ecuadorian-immigrant-teenagers-in-madrid",
+      "title": "Tracking Identity: Academic Performance and Ethnic Identity among Ecuadorian Immigrant Teenagers in Madrid",
+      "url": "https://anthrosource.onlinelibrary.wiley.com/doi/10.1111/j.1548-1492.2011.01128.x",
+      "author": "Jennifer Lucko",
+      "year": 2011,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "too-good-to-teach-bhutanese-students-and-a-hierarchy-of-aspirations",
+      "title": "‘Too Good to Teach’: Bhutanese Students and a Hierarchy of Aspirations",
+      "url": "https://link.springer.com/chapter/10.1057/978-1-137-54786-6_3",
+      "author": "Dolma Roder",
+      "year": 2016,
+      "course": "sc3204",
+      "color": "#ec4899"
+    },
+    {
+      "id": "paradise-redefined-transnational-chinese-students-and-the-quest-for-flexible-citizenship-in-the-developed-world",
+      "title": "Paradise Redefined: Transnational Chinese Students and the Quest for Flexible Citizenship in the Developed World",
+      "url": "https://www.sup.org/books/asian-studies/paradise-redefined",
+      "author": "Vanessa L. Fong",
+      "year": 2011,
+      "course": "sc3204",
+      "color": "#ec4899"
+    }
+  ],
+  "edges": []
+}
