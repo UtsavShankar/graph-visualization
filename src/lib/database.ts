@@ -99,11 +99,18 @@ export const updateNodePosition = async (id: string, pos: { x: number; y: number
 }
 
 export const deleteNode = async (id: string): Promise<void> => {
+  const { error: edgeError } = await supabase
+    .from('edges')
+    .delete()
+    .or(`source.eq.${id},target.eq.${id}`)
+
+  if (edgeError) throw edgeError
+
   const { error } = await supabase
     .from('nodes')
     .delete()
     .eq('id', id)
-  
+
   if (error) throw error
 }
 
@@ -158,7 +165,3 @@ export const getGraphData = async () => {
   
   return { nodes, edges }
 }
-
-
-
-

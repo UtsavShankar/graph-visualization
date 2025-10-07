@@ -1,15 +1,22 @@
 // @ts-nocheck
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import cytoscape from "cytoscape";
+import cytoscape, { EdgeSingular, NodeSingular } from "cytoscape";
 import fcose from "cytoscape-fcose";
-import { Course } from "./lib/supabase";
+import {
+  createEdge,
+  createNode,
+  deleteEdge,
+  deleteNode,
+  updateEdge,
+  updateNode,
+  updateNodePosition,
+} from "./lib/database";
 import { NodePositionManager } from "./lib/positioning";
-import { createEdge, createNode, deleteEdge, updateEdge, updateNode, updateNodePosition } from "./lib/database";
-import { NodeForm } from "./components/NodeForm";
 import { ContextMenu } from "./components/ContextMenu";
 import { EdgeContextMenu } from "./components/EdgeContextMenu";
 import { EdgeNoteForm } from "./components/EdgeNoteForm";
 import { JsonMigrationButton } from "./components/JsonMigrationButton";
+import { NodeForm } from "./components/NodeForm";
 cytoscape.use(fcose);
 
 const PREVIEW_NODE_ID = "__edge-preview-node";
@@ -19,78 +26,86 @@ const normalizeNote = (value?: string | null) => (value ? value.trim() : "");
 
 export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
   const TAG_FILTER_OPTIONS = courses?.map((course) => course.name) || [];
-  const [tagFilter, setTagFilter] = useState("");
-  const containerRef = useRef(null);
-  const cyRef = useRef(null);
 
-  const [selected, setSelected] = useState(null);
-  const [hoverEdge, setHoverEdge] = useState(null);
-  const [showMigration, setShowMigration] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const cyRef = useRef<cytoscape.Core | null>(null);
 
-  const [showNodeForm, setShowNodeForm] = useState(false);
-  const [editingNode, setEditingNode] = useState(null);
-  const [contextMenu, setContextMenu] = useState(null);
-
-  const [edgeContextMenu, setEdgeContextMenu] = useState(null);
-  const [editingEdge, setEditingEdge] = useState(null);
-  const [showEdgeForm, setShowEdgeForm] = useState(false);
-
-  const [edgeCreation, setEdgeCreation] = useState({ active: false, sourceId: null });
-  const [edgeError, setEdgeError] = useState("");
-  const previewRef = useRef({ node: null, edge: null });
-
+  const tagFilterRef = useRef<string>("");
+  const tagColorMapRef = useRef<Map<string, string>>(new Map());
   const graphRef = useRef(graph);
+  const edgeCreationRef = useRef({ active: false, sourceId: null as string | null });
+  const nodeDeletionModeRef = useRef(false);
+  const previewRef = useRef<{ node: NodeSingular | null; edge: EdgeSingular | null }>({ node: null, edge: null });
+
+  const [tagFilter, setTagFilter] = useState("");
+  const [showMigration, setShowMigration] = useState(false);
+  const [selected, setSelected] = useState<any>(null);
+  const [showNodeForm, setShowNodeForm] = useState(false);
+  const [editingNode, setEditingNode] = useState<any>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; nodeId: string } | null>(null);
+  const [edgeContextMenu, setEdgeContextMenu] = useState<{ x: number; y: number; edgeId: string } | null>(null);
+  const [editingEdge, setEditingEdge] = useState<{ id: string; note: string } | null>(null);
+  const [showEdgeForm, setShowEdgeForm] = useState(false);
+  const [hoverEdge, setHoverEdge] = useState<{ id: string; src: string; tgt: string; note: string; weight?: number } | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [edgeCreation, setEdgeCreation] = useState({ active: false, sourceId: null as string | null });
+  const [edgeError, setEdgeError] = useState("");
+  const [nodeDeletionMode, setNodeDeletionMode] = useState(false);
+
+  useEffect(() => {
+    tagFilterRef.current = tagFilter;
+  }, [tagFilter]);
+
+  const tagColorMap = useMemo(() => {
+    const map = new Map<string, string>();
+    courses?.forEach((course) => {
+      map.set(course.name, course.color);
+    });
+    tagColorMapRef.current = map;
+    return map;
+  }, [courses]);
+
   useEffect(() => {
     graphRef.current = graph;
   }, [graph]);
 
-  const edgeCreationRef = useRef(edgeCreation);
   useEffect(() => {
     edgeCreationRef.current = edgeCreation;
   }, [edgeCreation]);
 
-  const tagColorMap = useMemo(() => {
-    const map = new Map();
-    courses?.forEach((course) => {
-      map.set(course.name, course.color);
-    });
-    return map;
-  }, [courses]);
+  useEffect(() => {
+    nodeDeletionModeRef.current = nodeDeletionMode;
+  }, [nodeDeletionMode]);
 
   const elements = useMemo(() => {
     const nodes = (graph.nodes || []).map((node) => {
+      const courseName = (node.tags && node.tags[0]) || "other";
       let position = node.pos;
       if (!position) {
-        const courseName = (node.tags && node.tags[0]) || "other";
         position = NodePositionManager.findNonOverlappingPosition(
-          (graph.nodes || []).filter((other) => other.id !== node.id).map((other) => ({ ...other, pos: other.pos })),
+          (graph.nodes || [])
+            .filter((other) => other.id !== node.id)
+            .map((other) => ({ ...other, pos: other.pos })),
           courseName
         );
       }
+      const fallbackColor = tagColorMap.get(courseName);
       return {
-        data: { ...node },
+        data: { ...node, color: node.color ?? fallbackColor ?? undefined },
         position,
       };
     });
 
-    const edges = (graph.edges || []).map((edge, index) => {
-      const note = normalizeNote(edge.note ?? edge.relation);
-      return {
-        data: {
-          id: edge.id || `e-${index}`,
-          ...edge,
-          note,
-        },
-      };
-    });
+    const edges = (graph.edges || []).map((edge, index) => ({
+      data: {
+        id: edge.id || `e-${index}`,
+        ...edge,
+        note: normalizeNote(edge.note ?? edge.relation),
+      },
+    }));
 
     return { nodes, edges };
-  }, [graph]);
-
-  const onMouseMove = useCallback((event) => {
-    setMousePos({ x: event.clientX + 16, y: event.clientY + 16 });
-  }, []);
+  }, [graph, tagColorMap]);
 
   const removePreview = useCallback(() => {
     const cy = cyRef.current;
@@ -106,13 +121,16 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       } catch (error) {}
     }
     previewRef.current = { node: null, edge: null };
-    if (cy) {
-      cy.nodes().removeClass("edge-creation-source edge-creation-target");
-    }
+    cy?.nodes().removeClass("edge-creation-source edge-creation-target");
+  }, []);
+
+  const closeEdgeContextMenu = useCallback(() => {
+    setEdgeContextMenu(null);
+    setHoverEdge(null);
   }, []);
 
   const ensurePreview = useCallback(
-    (sourceId) => {
+    (sourceId: string) => {
       const cy = cyRef.current;
       if (!cy) return;
       removePreview();
@@ -140,6 +158,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           source: sourceId,
           target: PREVIEW_NODE_ID,
         },
+        selectable: false,
         classes: "edge-preview-edge",
       });
 
@@ -156,32 +175,22 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
   }, [removePreview]);
 
   const enterEdgeMode = useCallback(
-    (sourceId = null) => {
+    (sourceId: string | null = null) => {
       setEdgeCreation({ active: true, sourceId });
       edgeCreationRef.current = { active: true, sourceId };
       setEdgeError("");
-      setEdgeContextMenu(null);
+      setContextMenu(null);
+      closeEdgeContextMenu();
       if (sourceId) {
         ensurePreview(sourceId);
       } else {
         removePreview();
       }
     },
-    [ensurePreview, removePreview]
+    [closeEdgeContextMenu, ensurePreview, removePreview]
   );
 
-  useEffect(() => {
-    if (!edgeCreation.active) return;
-    const handleKey = (event) => {
-      if (event.key === "Escape") {
-        exitEdgeMode();
-      }
-    };
-    document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [edgeCreation.active, exitEdgeMode]);
-
-  const isDuplicateEdge = useCallback((sourceId, targetId) => {
+  const isDuplicateEdge = useCallback((sourceId: string, targetId: string) => {
     const edges = graphRef.current?.edges || [];
     return edges.some(
       (edge) =>
@@ -190,8 +199,31 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     );
   }, []);
 
+  const handleNodeDeletion = useCallback(
+    async (nodeId: string) => {
+      if (!window.confirm("Delete this node and its connections?")) {
+        return;
+      }
+      try {
+        await deleteNode(nodeId);
+        setGraph((prev) => ({
+          ...prev,
+          nodes: prev.nodes.filter((node) => node.id !== nodeId),
+          edges: prev.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId),
+        }));
+        setSelected((prev) => (prev?.id === nodeId ? null : prev));
+      } catch (error) {
+        console.error("Failed to delete node:", error);
+      } finally {
+        setNodeDeletionMode(false);
+        nodeDeletionModeRef.current = false;
+      }
+    },
+    [setGraph]
+  );
+
   const handleEdgeNodeSelection = useCallback(
-    async (nodeId) => {
+    async (nodeId: string) => {
       setEdgeError("");
       const cy = cyRef.current;
       if (!cy) return;
@@ -242,17 +274,11 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     [ensurePreview, exitEdgeMode, isDuplicateEdge, setGraph]
   );
 
-  useEffect(() => {
-    if (!containerRef.current) return;
+  const applyStyles = useCallback(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
 
-    if (cyRef.current) {
-      try {
-        cyRef.current.destroy();
-      } catch (error) {}
-      cyRef.current = null;
-    }
-
-    const style = [
+    cy.style([
       {
         selector: "core",
         style: { "selection-box-color": "#60a5fa", "active-bg-opacity": 0 },
@@ -261,14 +287,16 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         selector: "node",
         style: {
           "background-color": (ele) => {
-            if (tagFilter && !(ele.data("tags") || []).includes(tagFilter)) {
+            const activeFilter = tagFilterRef.current;
+            const colorMap = tagColorMapRef.current;
+            if (activeFilter && !(ele.data("tags") || []).includes(activeFilter)) {
               return "#64748b";
             }
             const dataColor = ele.data("color");
             if (dataColor) return dataColor;
             const tags = ele.data("tags") || [];
             const first = tags[0];
-            return first ? tagColorMap.get(first) || "#93c5fd" : "#93c5fd";
+            return first ? colorMap.get(first) || "#93c5fd" : "#93c5fd";
           },
           label: (ele) => ele.data("title") || ele.id(),
           "font-size": 11,
@@ -343,21 +371,25 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         },
       },
       { selector: ".faded", style: { opacity: 0.12 } },
-    ];
+    ]);
+  }, []);
+  useEffect(() => {
+    applyStyles();
+  }, [applyStyles, tagColorMap, tagFilter]);
+
+
+  useEffect(() => {
+    if (!containerRef.current || cyRef.current) return;
 
     const cy = cytoscape({
       container: containerRef.current,
-      elements,
+      elements: [],
       layout: { name: "preset", fit: true, animate: false },
       wheelSensitivity: 0.32,
-      style,
     });
 
     cyRef.current = cy;
-
-    if (edgeCreationRef.current.active && edgeCreationRef.current.sourceId) {
-      ensurePreview(edgeCreationRef.current.sourceId);
-    }
+    applyStyles();
 
     const clearFocus = () => {
       cy.elements().removeClass("faded hovered");
@@ -368,6 +400,8 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       if (event.target === cy) {
         if (edgeCreationRef.current.active) {
           exitEdgeMode();
+        } else if (nodeDeletionModeRef.current) {
+          setNodeDeletionMode(false);
         } else {
           clearFocus();
         }
@@ -376,11 +410,18 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
 
     cy.on("tap", "node", (event) => {
       const node = event.target;
-      if (node.id() === PREVIEW_NODE_ID) return;
+      const nodeId = node.id();
+      if (nodeId === PREVIEW_NODE_ID) return;
+
+      if (nodeDeletionModeRef.current) {
+        event.preventDefault();
+        void handleNodeDeletion(nodeId);
+        return;
+      }
 
       if (edgeCreationRef.current.active) {
         event.preventDefault();
-        handleEdgeNodeSelection(node.id());
+        void handleEdgeNodeSelection(nodeId);
         return;
       }
 
@@ -391,18 +432,18 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     });
 
     cy.on("cxttap", "node", (event) => {
+      if (edgeCreationRef.current.active || nodeDeletionModeRef.current) return;
       event.preventDefault();
-      if (edgeCreationRef.current.active) return;
       const node = event.target;
-      const renderedPosition = node.renderedPosition();
+      const rendered = node.renderedPosition();
       const rect = containerRef.current?.getBoundingClientRect();
       if (!rect) return;
       setContextMenu({
-        x: rect.left + renderedPosition.x,
-        y: rect.top + renderedPosition.y,
+        x: rect.left + rendered.x,
+        y: rect.top + rendered.y,
         nodeId: node.id(),
       });
-      setEdgeContextMenu(null);
+      closeEdgeContextMenu();
     });
 
     cy.on("cxttap", "edge", (event) => {
@@ -420,7 +461,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       setContextMenu(null);
     });
 
-    cy.on("grab", "node", (event) => {
+    cy.on("grab", "node", () => {
       setSelected((prev) => prev);
     });
 
@@ -458,8 +499,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     });
 
     cy.on("mouseout", "edge", (event) => {
-      const edge = event.target;
-      edge.removeClass("hovered");
+      event.target.removeClass("hovered");
       setHoverEdge(null);
     });
 
@@ -471,8 +511,14 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       }
     });
 
+    cy.on("remove", "edge", (event) => {
+      const removedId = event.target.id();
+      if (removedId === PREVIEW_EDGE_ID) return;
+      setHoverEdge((current) => (current?.id === removedId ? null : current));
+    });
+
     const timeoutId = setTimeout(() => {
-      if (cy && !cy.destroyed()) {
+      if (!cy.destroyed()) {
         cy.fit(undefined, 40);
         cy.zoom(1.2);
       }
@@ -486,30 +532,117 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       } catch (error) {}
       cyRef.current = null;
     };
-  }, [elements, tagFilter, tagColorMap, ensurePreview, exitEdgeMode, handleEdgeNodeSelection, removePreview]);
+  }, [applyStyles, closeEdgeContextMenu, ensurePreview, exitEdgeMode, handleEdgeNodeSelection, handleNodeDeletion, removePreview]);
 
   useEffect(() => {
-    const handleClickOutside = () => {
-      setContextMenu(null);
-      setEdgeContextMenu(null);
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+    const cy = cyRef.current;
+    if (!cy) return;
+
+    cy.batch(() => {
+      const desiredNodes = new Map(elements.nodes.map((node) => [node.data.id, node]));
+      const desiredEdges = new Map(elements.edges.map((edge) => [edge.data.id, edge]));
+
+      cy.nodes().forEach((node) => {
+        const id = node.id();
+        if (id === PREVIEW_NODE_ID) return;
+        const desired = desiredNodes.get(id);
+        if (!desired) {
+          node.remove();
+          return;
+        }
+        node.data({ ...desired.data });
+        if (desired.position) {
+          const { x, y } = desired.position;
+          const current = node.position();
+          if (current.x !== x || current.y !== y) {
+            node.position(desired.position);
+          }
+        }
+        desiredNodes.delete(id);
+      });
+
+      desiredNodes.forEach((node) => {
+        cy.add({
+          group: "nodes",
+          data: { ...node.data },
+          position: node.position,
+        });
+      });
+
+      cy.edges().forEach((edge) => {
+        const id = edge.id();
+        if (id === PREVIEW_EDGE_ID) return;
+        const desired = desiredEdges.get(id);
+        if (!desired) {
+          edge.remove();
+          return;
+        }
+        edge.data({ ...desired.data });
+        desiredEdges.delete(id);
+      });
+
+      desiredEdges.forEach((edge) => {
+        cy.add({
+          group: "edges",
+          data: { ...edge.data },
+        });
+      });
+    });
+
+    if (edgeCreationRef.current.active && edgeCreationRef.current.sourceId) {
+      const source = cy.getElementById(edgeCreationRef.current.sourceId);
+      if (!source || source.empty()) {
+        exitEdgeMode();
+      } else {
+        ensurePreview(edgeCreationRef.current.sourceId);
+      }
+    }
+  }, [elements, ensurePreview, exitEdgeMode]);
 
   useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
     cy.nodes().removeClass("dimmed");
-    const q = query.trim().toLowerCase();
+    const trimmed = query.trim().toLowerCase();
     cy.nodes().forEach((node) => {
-      const titleMatch = !q || (node.data("title") || node.id()).toLowerCase().includes(q);
+      const titleMatch = !trimmed || (node.data("title") || node.id()).toLowerCase().includes(trimmed);
       const tagMatch = !tagFilter || (node.data("tags") || []).includes(tagFilter);
       if (!(titleMatch && tagMatch)) {
         node.addClass("dimmed");
       }
     });
   }, [query, tagFilter]);
+
+  useEffect(() => {
+    if (!edgeCreation.active) return;
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        exitEdgeMode();
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [edgeCreation.active, exitEdgeMode]);
+
+  useEffect(() => {
+    if (!nodeDeletionMode) return;
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setNodeDeletionMode(false);
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [nodeDeletionMode]);
+
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setContextMenu(null);
+      closeEdgeContextMenu();
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [closeEdgeContextMenu]);
 
   const handleAddNode = useCallback(() => {
     setEditingNode(null);
@@ -526,11 +659,15 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
 
   const handleAddEdgeFromContext = useCallback(() => {
     if (!contextMenu) return;
+    setNodeDeletionMode(false);
+    nodeDeletionModeRef.current = false;
     enterEdgeMode(contextMenu.nodeId);
     setContextMenu(null);
   }, [contextMenu, enterEdgeMode]);
 
   const handleAddEdgeButton = useCallback(() => {
+    setNodeDeletionMode(false);
+    nodeDeletionModeRef.current = false;
     if (edgeCreation.active) {
       exitEdgeMode();
     } else {
@@ -538,10 +675,21 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     }
   }, [edgeCreation.active, enterEdgeMode, exitEdgeMode]);
 
+  const handleDeleteNodeButton = useCallback(() => {
+    const next = !nodeDeletionMode;
+    setNodeDeletionMode(next);
+    nodeDeletionModeRef.current = next;
+    if (next) {
+      exitEdgeMode();
+      setContextMenu(null);
+      closeEdgeContextMenu();
+    }
+  }, [closeEdgeContextMenu, exitEdgeMode, nodeDeletionMode]);
+
   const handleDeleteEdge = useCallback(async () => {
     if (!edgeContextMenu) return;
     if (!window.confirm("Delete this edge?")) {
-      setEdgeContextMenu(null);
+      closeEdgeContextMenu();
       return;
     }
     try {
@@ -550,37 +698,40 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         ...prev,
         edges: prev.edges.filter((edge) => edge.id !== edgeContextMenu.edgeId),
       }));
+      setHoverEdge(null);
     } catch (error) {
       console.error("Failed to delete edge:", error);
     } finally {
-      setEdgeContextMenu(null);
+      closeEdgeContextMenu();
     }
-  }, [edgeContextMenu, setGraph]);
+  }, [closeEdgeContextMenu, edgeContextMenu, setGraph]);
 
   const handleEditEdge = useCallback(() => {
     if (!edgeContextMenu) return;
     const edge = graphRef.current?.edges.find((e) => e.id === edgeContextMenu.edgeId);
     if (!edge) {
-      setEdgeContextMenu(null);
+      closeEdgeContextMenu();
       return;
     }
     const note = normalizeNote(edge.note ?? edge.relation);
     setEditingEdge({ id: edge.id, note });
     setShowEdgeForm(true);
-    setEdgeContextMenu(null);
-  }, [edgeContextMenu]);
+    closeEdgeContextMenu();
+  }, [closeEdgeContextMenu, edgeContextMenu]);
 
   const handleEdgeNoteSubmit = useCallback(
-    async (note) => {
+    async (note: string) => {
       if (!editingEdge) return;
+      const trimmed = note.trim();
       try {
-        const trimmed = note.trim();
         const updated = await updateEdge(editingEdge.id, { relation: trimmed || null });
         const normalized = normalizeNote(updated.note ?? updated.relation);
         setGraph((prev) => ({
           ...prev,
           edges: prev.edges.map((edge) =>
-            edge.id === editingEdge.id ? { ...edge, relation: updated.relation, note: normalized } : edge
+            edge.id === editingEdge.id
+              ? { ...edge, relation: updated.relation, note: normalized }
+              : edge
           ),
         }));
         setShowEdgeForm(false);
@@ -604,7 +755,9 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         const updatedNode = await updateNode(editingNode.id, nodeData);
         setGraph((prev) => ({
           ...prev,
-          nodes: prev.nodes.map((node) => (node.id === editingNode.id ? { ...node, ...updatedNode } : node)),
+          nodes: prev.nodes.map((node) =>
+            node.id === editingNode.id ? { ...node, ...updatedNode } : node
+          ),
         }));
       } else {
         const courseName = nodeData.tags[0];
@@ -624,17 +777,22 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     [editingNode, graph.nodes, setGraph]
   );
 
+  const closeNodeForm = useCallback(() => {
+    setShowNodeForm(false);
+    setEditingNode(null);
+  }, []);
+
   return (
     <div className={`grid gap-0 ${selected ? "grid-cols-12" : "grid-cols-1"}`}>
       <div
         className={`${selected ? "col-span-9 border-r border-slate-800" : "col-span-1"} relative`}
-        onMouseMove={onMouseMove}
+        onMouseMove={(event) => setMousePos({ x: event.clientX + 16, y: event.clientY + 16 })}
       >
         <div className="p-3 flex items-center gap-2 border-b border-slate-800">
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search titles�"
+            placeholder="Search titles..."
             className="w-80 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500"
           />
           <select
@@ -661,10 +819,20 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
             className={`px-4 py-2 rounded-lg border ${
               edgeCreation.active
                 ? "border-sky-500/60 bg-sky-500/20 text-sky-100"
-                : "border-slate-700 hover:border-slate-600"
+                : "border-slate-700 hover:border-sky-500/60"
             }`}
           >
             {edgeCreation.active ? "Cancel Add Edge" : "Add Edge"}
+          </button>
+          <button
+            onClick={handleDeleteNodeButton}
+            className={`px-4 py-2 rounded-lg border ${
+              nodeDeletionMode
+                ? "border-red-500/60 bg-red-500/15 text-red-200"
+                : "border-slate-700 hover:border-red-500/50"
+            }`}
+          >
+            {nodeDeletionMode ? "Cancel Delete" : "Delete Node"}
           </button>
           <button
             onClick={() => setShowMigration(!showMigration)}
@@ -690,17 +858,22 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           </div>
         )}
 
+        {nodeDeletionMode && (
+          <div className="px-3 pt-2">
+            <div className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-100">
+              Delete mode: click a node to remove it. Press Esc to cancel.
+            </div>
+          </div>
+        )}
+
         {showMigration && (
           <div className="border-t border-slate-800 p-4">
-            <JsonMigrationButton
-              onComplete={() => {
-                window.location.reload();
-              }}
-            />
+            <JsonMigrationButton onComplete={() => window.location.reload()} />
           </div>
         )}
 
         <div ref={containerRef} className="h-[calc(100vh-8rem)]" />
+
         {hoverEdge && (
           <div
             style={{ position: "fixed", left: mousePos.x, top: mousePos.y }}
@@ -708,11 +881,9 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           >
             <div className="mb-1 font-medium text-slate-300">Connection</div>
             <div>
-              <strong>{hoverEdge.src}</strong>  <strong>{hoverEdge.tgt}</strong>
+              <strong>{hoverEdge.src}</strong> <strong>{hoverEdge.tgt}</strong>
             </div>
-            {hoverEdge.note && (
-              <div className="mt-1 italic text-slate-300">{hoverEdge.note}</div>
-            )}
+            {hoverEdge.note && <div className="mt-1 italic text-slate-300">{hoverEdge.note}</div>}
             {hoverEdge.weight != null && (
               <div className="mt-1 text-slate-400">Weight: {hoverEdge.weight}</div>
             )}
@@ -752,7 +923,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
                   rel="noreferrer"
                   className="mt-2 inline-block text-sky-400 hover:underline"
                 >
-                  Open link 
+                  Open link
                 </a>
               )}
             </div>
@@ -776,7 +947,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           y={edgeContextMenu.y}
           onEdit={handleEditEdge}
           onDelete={handleDeleteEdge}
-          onClose={() => setEdgeContextMenu(null)}
+          onClose={closeEdgeContextMenu}
         />
       )}
 
@@ -791,20 +962,12 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         node={editingNode}
         courses={courses}
         onSubmit={handleNodeSubmit}
-        onCancel={() => {
-          setShowNodeForm(false);
-          setEditingNode(null);
-        }}
+        onCancel={closeNodeForm}
         isOpen={showNodeForm}
       />
     </div>
   );
 }
-
-
-
-
-
 
 
 
