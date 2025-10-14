@@ -17,6 +17,8 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
   const [tags, setTags] = useState("");
   const [abstract, setAbstract] = useState("");
   const [url, setUrl] = useState("");
+  const [url2, setUrl2] = useState("");
+  const [keywords, setKeywords] = useState("");
   const [notes, setNotes] = useState("");
   const [color, setColor] = useState("");
   const [error, setError] = useState("");
@@ -28,8 +30,10 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       setAuthor(node.author || "");
       setYear(node.year ? node.year.toString() : "");
       setTags(node.tags ? node.tags.join(", ") : "");
+      setKeywords(node.keywords ? node.keywords.join(", ") : "");
       setAbstract(node.abstract || "");
       setUrl(node.url || "");
+      setUrl2(node.url2 || "");
       setNotes(node.notes || "");
       setColor(node.color || "");
     } else {
@@ -37,8 +41,10 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       setAuthor("");
       setYear("");
       setTags("");
+      setKeywords("");
       setAbstract("");
       setUrl("");
+      setUrl2("");
       setNotes("");
       setColor("");
     }
@@ -72,8 +78,10 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
         author: author.trim() || undefined,
         year: year ? Number(year) : undefined,
         tags: tags ? tags.split(",").map((tag) => tag.trim()).filter(Boolean) : [],
+        keywords: keywords ? keywords.split(",").map((kw) => kw.trim().toLowerCase()).filter(Boolean) : [],
         abstract: abstract.trim() || undefined,
         url: url.trim() || undefined,
+        url2: url2.trim() || undefined,
         notes: notes.trim() || undefined,
         course_id: course.id,
         color: colorValue,
@@ -142,6 +150,16 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
             </div>
 
             <div className="col-span-2">
+              <label className="block text-sm text-slate-300 mb-1">Keywords (comma-separated)</label>
+              <input
+                value={keywords}
+                onChange={(event) => setKeywords(event.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
+                placeholder="e.g., capitalism, spectacle, situationism"
+              />
+            </div>
+
+            <div className="col-span-2">
               <label className="block text-sm text-slate-300 mb-1">Color</label>
               <div className="flex items-center gap-3">
                 <input
@@ -177,6 +195,17 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
               <input
                 value={url}
                 onChange={(event) => setUrl(event.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
+                placeholder="https://..."
+                type="url"
+              />
+            </div>
+
+            <div className="col-span-2">
+              <label className="block text-sm text-slate-300 mb-1">Second Link (Optional)</label>
+              <input
+                value={url2}
+                onChange={(event) => setUrl2(event.target.value)}
                 className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
                 placeholder="https://..."
                 type="url"

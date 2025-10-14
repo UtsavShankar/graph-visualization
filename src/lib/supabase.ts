@@ -21,10 +21,12 @@ export interface Node {
   id: string
   title: string
   url?: string
+  url2?: string | null
   author?: string
   year?: number
   color?: string
   tags: string[]
+  keywords?: string[] | null
   course_id: string
   abstract?: string
   notes?: string

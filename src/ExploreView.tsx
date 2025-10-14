@@ -27,6 +27,19 @@ const normalizeNote = (value?: string | null) => (value ? value.trim() : "");
 export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
   const TAG_FILTER_OPTIONS = courses?.map((course) => course.name) || [];
 
+  const throttle = (func, limit) => {
+    let inThrottle;
+    return function() {
+      const args = arguments;
+      const context = this;
+      if (!inThrottle) {
+        func.apply(context, args);
+        inThrottle = true;
+        setTimeout(() => inThrottle = false, limit);
+      }
+    }
+  }
+
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cyRef = useRef<cytoscape.Core | null>(null);
 
@@ -51,6 +64,45 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
   const [edgeCreation, setEdgeCreation] = useState({ active: false, sourceId: null as string | null });
   const [edgeError, setEdgeError] = useState("");
   const [nodeDeletionMode, setNodeDeletionMode] = useState(false);
+  const [searchScope, setSearchScope] = useState("both");
+  const [hoveredNode, setHoveredNode] = useState<{ title: string; x: number; y: number } | null>(null);
+  const [nodeSize, setNodeSize] = useState(() => Number(localStorage.getItem("node-size") || 26));
+  const [labelSize, setLabelSize] = useState(() => Number(localStorage.getItem("label-size") || 11));
+
+  useEffect(() => {
+    localStorage.setItem("node-size", String(nodeSize));
+    localStorage.setItem("label-size", String(labelSize));
+    applyStyles();
+  }, [nodeSize, labelSize]);
+
+  const zoom = (factor: number) => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    cy.zoom(cy.zoom() * factor);
+  };
+
+  const resetView = useCallback(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    cy.fit(undefined, 40);
+  }, []);
+
+  const saveView = useCallback(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    const view = { pan: cy.pan(), zoom: cy.zoom() };
+    localStorage.setItem("cytoscape-view", JSON.stringify(view));
+  }, []);
+
+  const restoreView = useCallback(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
+    const savedView = localStorage.getItem("cytoscape-view");
+    if (savedView) {
+      const view = JSON.parse(savedView);
+      cy.viewport(view);
+    }
+  }, []);
 
   useEffect(() => {
     tagFilterRef.current = tagFilter;
@@ -206,12 +258,14 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       }
       try {
         await deleteNode(nodeId);
+        if (selected?.id === nodeId) {
+          setSelected(null);
+        }
         setGraph((prev) => ({
           ...prev,
           nodes: prev.nodes.filter((node) => node.id !== nodeId),
           edges: prev.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId),
         }));
-        setSelected((prev) => (prev?.id === nodeId ? null : prev));
       } catch (error) {
         console.error("Failed to delete node:", error);
       } finally {
@@ -299,7 +353,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
             return first ? colorMap.get(first) || "#93c5fd" : "#93c5fd";
           },
           label: (ele) => ele.data("title") || ele.id(),
-          "font-size": 11,
+          "font-size": labelSize,
           "text-wrap": "wrap",
           "text-max-width": 140,
           "text-valign": "center",
@@ -308,14 +362,14 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           "border-width": 2,
           "border-color": "#0ea5e9",
           "border-opacity": 0.35,
-          width: 26,
-          height: 26,
+          width: nodeSize,
+          height: nodeSize,
           shape: "ellipse",
           "transition-property": "background-color opacity width height border-width",
           "transition-duration": 150,
         },
       },
-      { selector: "node.hovered", style: { width: 34, height: 34, "border-width": 3 } },
+      { selector: "node.hovered", style: { width: (ele) => ele.width() * 1.2, height: (ele) => ele.height() * 1.2, "border-width": 3 } },
       { selector: "node.dimmed", style: { opacity: 0.15 } },
       {
         selector: "node.edge-creation-source",
@@ -371,11 +425,25 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         },
       },
       { selector: ".faded", style: { opacity: 0.12 } },
+      {
+        selector: ".zoom-low node",
+        style: {
+          "font-size": Math.max(8, labelSize * 0.7),
+          "text-opacity": 0.6,
+        },
+      },
+      {
+        selector: ".zoom-high node",
+        style: {
+          "font-size": Math.min(20, labelSize * 1.4),
+          "text-max-width": 200,
+        },
+      },
     ]);
   }, []);
   useEffect(() => {
     applyStyles();
-  }, [applyStyles, tagColorMap, tagFilter]);
+  }, [applyStyles, tagColorMap, tagFilter, nodeSize, labelSize]);
 
 
   useEffect(() => {
@@ -498,6 +566,24 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       setHoverEdge({ id: edge.id(), src, tgt, note, weight });
     });
 
+    cy.on("mouseover", "node", (event) => {
+      const node = event.target;
+      node.addClass("hovered");
+      const title = node.data("title");
+      if (title) {
+        const { x, y } = node.renderedPosition();
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (rect) {
+          setHoveredNode({ title, x: rect.left + x, y: rect.top + y });
+        }
+      }
+    });
+
+    cy.on("mouseout", "node", (event) => {
+      event.target.removeClass("hovered");
+      setHoveredNode(null);
+    });
+
     cy.on("mouseout", "edge", (event) => {
       event.target.removeClass("hovered");
       setHoverEdge(null);
@@ -517,15 +603,26 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       setHoverEdge((current) => (current?.id === removedId ? null : current));
     });
 
-    const timeoutId = setTimeout(() => {
-      if (!cy.destroyed()) {
-        cy.fit(undefined, 40);
-        cy.zoom(1.2);
+    const handleViewport = () => {
+      const zoom = cy.zoom();
+      const container = containerRef.current;
+      if (!container) return;
+      if (zoom < 0.6) {
+        container.classList.add("zoom-low");
+        container.classList.remove("zoom-high");
+      } else if (zoom > 1.4) {
+        container.classList.add("zoom-high");
+        container.classList.remove("zoom-low");
+      } else {
+        container.classList.remove("zoom-low", "zoom-high");
       }
-    }, 100);
+    };
+
+    cy.on("viewport", throttle(handleViewport, 100));
+
+    restoreView();
 
     return () => {
-      clearTimeout(timeoutId);
       removePreview();
       try {
         cy.destroy();
@@ -604,14 +701,32 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     if (!cy) return;
     cy.nodes().removeClass("dimmed");
     const trimmed = query.trim().toLowerCase();
+    if (!trimmed && !tagFilter) {
+      return;
+    }
+
     cy.nodes().forEach((node) => {
-      const titleMatch = !trimmed || (node.data("title") || node.id()).toLowerCase().includes(trimmed);
+      const title = (node.data("title") || node.id() || "").toLowerCase();
+      const keywords = (node.data("keywords") || []).join(" ").toLowerCase();
+
+      let searchMatch = true;
+      if (trimmed) {
+        if (searchScope === "title") {
+          searchMatch = title.includes(trimmed);
+        } else if (searchScope === "keywords") {
+          searchMatch = keywords.includes(trimmed);
+        } else {
+          searchMatch = title.includes(trimmed) || keywords.includes(trimmed);
+        }
+      }
+
       const tagMatch = !tagFilter || (node.data("tags") || []).includes(tagFilter);
-      if (!(titleMatch && tagMatch)) {
+
+      if (!(searchMatch && tagMatch)) {
         node.addClass("dimmed");
       }
     });
-  }, [query, tagFilter]);
+  }, [query, tagFilter, searchScope]);
 
   useEffect(() => {
     if (!edgeCreation.active) return;
@@ -693,12 +808,13 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       return;
     }
     try {
-      await deleteEdge(edgeContextMenu.edgeId);
+      const idToDelete = edgeContextMenu.edgeId;
+      await deleteEdge(idToDelete);
       setGraph((prev) => ({
         ...prev,
-        edges: prev.edges.filter((edge) => edge.id !== edgeContextMenu.edgeId),
+        edges: prev.edges.filter((edge) => edge.id !== idToDelete),
       }));
-      setHoverEdge(null);
+      setHoverEdge((prev) => (prev?.id === idToDelete ? null : prev));
     } catch (error) {
       console.error("Failed to delete edge:", error);
     } finally {
@@ -793,8 +909,23 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search titles..."
-            className="w-80 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500"
+            className="w-64 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500"
           />
+          <div className="flex items-center rounded-md border border-slate-700">
+            {(["Both", "Title", "Keywords"] as const).map((scope) => (
+              <button
+                key={scope}
+                onClick={() => setSearchScope(scope.toLowerCase())}
+                className={`px-3 py-1.5 text-sm first:rounded-l-md last:rounded-r-md border-r border-slate-700 last:border-r-0 ${
+                  searchScope === scope.toLowerCase()
+                    ? "bg-sky-500/20 text-sky-200"
+                    : "hover:bg-slate-800"
+                }`}
+              >
+                {scope}
+              </button>
+            ))}
+          </div>
           <select
             value={tagFilter}
             onChange={(event) => setTagFilter(event.target.value)}
@@ -840,6 +971,22 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           >
             Migrate JSON
           </button>
+
+          <div className="flex items-center gap-4 ml-auto">
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-slate-400">Node</label>
+              <input type="range" min="18" max="42" value={nodeSize} onChange={(e) => setNodeSize(Number(e.target.value))} className="w-24" />
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-slate-400">Label</label>
+              <input type="range" min="9" max="16" value={labelSize} onChange={(e) => setLabelSize(Number(e.target.value))} className="w-24" />
+            </div>
+            <button onClick={() => zoom(1.25)} className="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800">Zoom In</button>
+            <button onClick={() => zoom(0.8)} className="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800">Zoom Out</button>
+            <button onClick={resetView} className="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800">Reset View</button>
+            <button onClick={saveView} className="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800">Save View</button>
+            <button onClick={restoreView} className="px-3 py-1 rounded-md border border-slate-700 hover:bg-slate-800">Restore View</button>
+          </div>
           <span className="text-xs text-slate-400 ml-2">Right-click nodes to edit | Drag to move</span>
         </div>
 
@@ -873,6 +1020,15 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         )}
 
         <div ref={containerRef} className="h-[calc(100vh-8rem)]" />
+
+        {hoveredNode && (
+          <div
+            style={{ position: 'fixed', left: hoveredNode.x, top: hoveredNode.y, transform: 'translate(10px, -100%)' }}
+            className="max-w-xs rounded-md border border-slate-700 bg-slate-900/95 px-3 py-2 text-sm shadow-lg pointer-events-none"
+          >
+            {hoveredNode.title}
+          </div>
+        )}
 
         {hoverEdge && (
           <div
@@ -916,15 +1072,30 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
                   <p className="whitespace-pre-wrap text-sm text-slate-200">{selected.notes}</p>
                 </div>
               )}
-              {selected.url && (
-                <a
-                  href={selected.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 inline-block text-sky-400 hover:underline"
-                >
-                  Open link
-                </a>
+              {(selected.url || selected.url2) && (
+                <div className="mt-3">
+                  <div className="text-sm font-medium text-slate-300">Links</div>
+                  {selected.url && (
+                    <a
+                      href={selected.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 block text-sky-400 hover:underline"
+                    >
+                      Link 1
+                    </a>
+                  )}
+                  {selected.url2 && (
+                    <a
+                      href={selected.url2}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 block text-sky-400 hover:underline"
+                    >
+                      Link 2
+                    </a>
+                  )}
+                </div>
               )}
             </div>
           </div>
