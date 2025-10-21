@@ -31,7 +31,7 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       setTags(node.tags ? node.tags.join(", ") : "");
       setAbstract(node.abstract || "");
       setLinks(node.links || (node.url ? [node.url] : []));
-      setDetails(node.details ? Object.entries(node.details).map(([key, value]) => ({ key, value })) : []);
+      setDetails(node.details ? Object.entries(node.details).map(([key, value]) => ({ key, value: String(value) })) : []);
       setNotes(node.notes || "");
       setColor(node.color || "");
     } else {
@@ -66,7 +66,13 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
         return;
       }
 
-      const colorValue = color?.trim() || undefined;
+      const course = courses.find(c => c.name.toLowerCase() === courseName.toLowerCase());
+      if (!course) {
+        setError(`Course not found for tag: ${courseName}`);
+        return;
+      }
+
+      const colorValue = color?.trim() || course.color;
 
       const detailsObject = details.reduce((obj, { key, value }) => {
         if (key && value) {
@@ -85,6 +91,7 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
         details: detailsObject,
         notes: notes.trim() || undefined,
         color: colorValue,
+        course_id: course.id,
       };
 
       // @ts-expect-error

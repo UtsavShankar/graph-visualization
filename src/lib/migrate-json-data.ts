@@ -66,8 +66,8 @@ export async function migrateJsonData(jsonData: JsonData) {
           // Prepare update data (only update fields that have changed)
           const updateData: any = {};
           
-          if (jsonNode.url && jsonNode.url !== existingNode.url) {
-            updateData.url = jsonNode.url;
+          if (jsonNode.url && (!existingNode.links || existingNode.links.length === 0)) {
+            updateData.links = [jsonNode.url];
           }
           if (jsonNode.author && jsonNode.author !== existingNode.author) {
             updateData.author = jsonNode.author;
@@ -125,6 +125,8 @@ export async function migrateJsonData(jsonData: JsonData) {
             tags: jsonNode.tags,
             abstract: jsonNode.abstract,
             notes: jsonNode.notes,
+            links: jsonNode.url ? [jsonNode.url] : [],
+            details: {},
             course_id: course.id,
             color: course.color
           };
