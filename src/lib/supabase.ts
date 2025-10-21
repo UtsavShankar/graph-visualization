@@ -21,11 +21,13 @@ export interface Node {
   id: string
   title: string
   url?: string
+  links: string[]
+  details: Record<string, any>
   author?: string
   year?: number
   color?: string
   tags: string[]
-  course_id: string
+  course_id?: string
   abstract?: string
   notes?: string
   pos?: { x: number; y: number }

@@ -16,7 +16,8 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
   const [year, setYear] = useState("");
   const [tags, setTags] = useState("");
   const [abstract, setAbstract] = useState("");
-  const [url, setUrl] = useState("");
+  const [links, setLinks] = useState<string[]>([]);
+  const [details, setDetails] = useState<{ key: string; value: string }[]>([]);
   const [notes, setNotes] = useState("");
   const [color, setColor] = useState("");
   const [error, setError] = useState("");
@@ -29,7 +30,8 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       setYear(node.year ? node.year.toString() : "");
       setTags(node.tags ? node.tags.join(", ") : "");
       setAbstract(node.abstract || "");
-      setUrl(node.url || "");
+      setLinks(node.links || (node.url ? [node.url] : []));
+      setDetails(node.details ? Object.entries(node.details).map(([key, value]) => ({ key, value })) : []);
       setNotes(node.notes || "");
       setColor(node.color || "");
     } else {
@@ -38,7 +40,8 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       setYear("");
       setTags("");
       setAbstract("");
-      setUrl("");
+      setLinks([""]);
+      setDetails([{ key: "", value: "" }]);
       setNotes("");
       setColor("");
     }
@@ -51,33 +54,41 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
     setLoading(true);
 
     try {
-      const id = slugify(title);
-      if (!id) {
+      if (!title) {
         setError("Please enter a title.");
         return;
       }
 
       const courseName = tags ? tags.split(",")[0].trim() : "";
-      const course = courses?.find((c) => c.name === courseName);
-      if (!course) {
-        setError("Please enter a valid course tag (e.g., AN1101).");
+      const courseRegex = /^[A-Z]{2}\d{4}$/i;
+      if (!courseName || !courseRegex.test(courseName)) {
+        setError("Please ensure the first tag is a valid course code (e.g., AN1101).");
         return;
       }
 
       const colorValue = color?.trim() || undefined;
 
+      const detailsObject = details.reduce((obj, { key, value }) => {
+        if (key && value) {
+          obj[key.trim()] = value.trim();
+        }
+        return obj;
+      }, {} as Record<string, string>);
+
       const nodeData = {
-        id,
         title: title.trim(),
         author: author.trim() || undefined,
         year: year ? Number(year) : undefined,
         tags: tags ? tags.split(",").map((tag) => tag.trim()).filter(Boolean) : [],
         abstract: abstract.trim() || undefined,
-        url: url.trim() || undefined,
+        links: links.map(link => link.trim()).filter(Boolean),
+        details: detailsObject,
         notes: notes.trim() || undefined,
-        course_id: course.id,
         color: colorValue,
       };
+
+      // @ts-expect-error
+      delete nodeData.url;
 
       await onSubmit(nodeData);
     } catch (err) {
@@ -85,6 +96,34 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleLinkChange = (index: number, value: string) => {
+    const newLinks = [...links];
+    newLinks[index] = value;
+    setLinks(newLinks);
+  };
+
+  const addLink = () => {
+    setLinks([...links, ""]);
+  };
+
+  const removeLink = (index: number) => {
+    setLinks(links.filter((_, i) => i !== index));
+  };
+
+  const handleDetailChange = (index: number, field: "key" | "value", value: string) => {
+    const newDetails = [...details];
+    newDetails[index][field] = value;
+    setDetails(newDetails);
+  };
+
+  const addDetail = () => {
+    setDetails([...details, { key: "", value: "" }]);
+  };
+
+  const removeDetail = (index: number) => {
+    setDetails(details.filter((_, i) => i !== index));
   };
 
   if (!isOpen) return null;
@@ -100,8 +139,9 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2">
-              <label className="block text-sm text-slate-300 mb-1">Title *</label>
+              <label htmlFor="node-title" className="block text-sm text-slate-300 mb-1">Title *</label>
               <input
+                id="node-title"
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
                 className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
@@ -111,8 +151,9 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Author</label>
+              <label htmlFor="node-author" className="block text-sm text-slate-300 mb-1">Author</label>
               <input
+                id="node-author"
                 value={author}
                 onChange={(event) => setAuthor(event.target.value)}
                 className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
@@ -120,8 +161,9 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
             </div>
 
             <div>
-              <label className="block text-sm text-slate-300 mb-1">Year</label>
+              <label htmlFor="node-year" className="block text-sm text-slate-300 mb-1">Year</label>
               <input
+                id="node-year"
                 value={year}
                 onChange={(event) => setYear(event.target.value)}
                 className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
@@ -131,8 +173,9 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm text-slate-300 mb-1">Tags (comma-separated) *</label>
+              <label htmlFor="node-tags" className="block text-sm text-slate-300 mb-1">Tags (comma-separated) *</label>
               <input
+                id="node-tags"
                 value={tags}
                 onChange={(event) => setTags(event.target.value)}
                 className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
@@ -172,15 +215,51 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
               />
             </div>
 
-            <div className="col-span-2">
-              <label className="block text-sm text-slate-300 mb-1">URL</label>
-              <input
-                value={url}
-                onChange={(event) => setUrl(event.target.value)}
-                className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
-                placeholder="https://..."
-                type="url"
-              />
+            <div className="col-span-2 space-y-2">
+              <label className="block text-sm text-slate-300">Links</label>
+              {links.map((link, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    value={link}
+                    onChange={(e) => handleLinkChange(index, e.target.value)}
+                    className="flex-grow px-3 py-2 rounded-md bg-slate-800 border border-slate-700"
+                    placeholder="https://..."
+                    type="url"
+                  />
+                  <button type="button" onClick={() => removeLink(index)} className="px-3 py-1 text-sm rounded-md bg-red-500/20 hover:bg-red-500/30 text-red-200">
+                    &times;
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={addLink} className="text-sm text-sky-400 hover:underline">
+                + Add Link
+              </button>
+            </div>
+
+            <div className="col-span-2 space-y-2">
+              <label className="block text-sm text-slate-300">Details</label>
+              {details.map((detail, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    value={detail.key}
+                    onChange={(e) => handleDetailChange(index, "key", e.target.value)}
+                    className="w-1/3 px-3 py-2 rounded-md bg-slate-800 border border-slate-700"
+                    placeholder="Key (e.g., ISBN)"
+                  />
+                  <input
+                    value={detail.value}
+                    onChange={(e) => handleDetailChange(index, "value", e.target.value)}
+                    className="flex-grow px-3 py-2 rounded-md bg-slate-800 border border-slate-700"
+                    placeholder="Value"
+                  />
+                  <button type="button" onClick={() => removeDetail(index)} className="px-3 py-1 text-sm rounded-md bg-red-500/20 hover:bg-red-500/30 text-red-200">
+                    &times;
+                  </button>
+                </div>
+              ))}
+              <button type="button" onClick={addDetail} className="text-sm text-sky-400 hover:underline">
+                + Add Detail
+              </button>
             </div>
 
             <div className="col-span-2">

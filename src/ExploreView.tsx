@@ -16,6 +16,7 @@ import { ContextMenu } from "./components/ContextMenu";
 import { EdgeContextMenu } from "./components/EdgeContextMenu";
 import { EdgeNoteForm } from "./components/EdgeNoteForm";
 import { JsonMigrationButton } from "./components/JsonMigrationButton";
+import { mergeDuplicateNodesBySlug } from "./lib/merger";
 import { NodeForm } from "./components/NodeForm";
 cytoscape.use(fcose);
 
@@ -51,6 +52,8 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
   const [edgeCreation, setEdgeCreation] = useState({ active: false, sourceId: null as string | null });
   const [edgeError, setEdgeError] = useState("");
   const [nodeDeletionMode, setNodeDeletionMode] = useState(false);
+  const [nodeError, setNodeError] = useState("");
+  const [mergeSlug, setMergeSlug] = useState("");
 
   useEffect(() => {
     tagFilterRef.current = tagFilter;
@@ -205,21 +208,25 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         return;
       }
       try {
+        setNodeError("");
         await deleteNode(nodeId);
         setGraph((prev) => ({
           ...prev,
           nodes: prev.nodes.filter((node) => node.id !== nodeId),
           edges: prev.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId),
         }));
-        setSelected((prev) => (prev?.id === nodeId ? null : prev));
+        if (selected?.id === nodeId) {
+          setSelected(null);
+        }
       } catch (error) {
         console.error("Failed to delete node:", error);
+        setNodeError("Failed to delete node. Please try again.");
       } finally {
         setNodeDeletionMode(false);
         nodeDeletionModeRef.current = false;
       }
     },
-    [setGraph]
+    [setGraph, selected?.id]
   );
 
   const handleEdgeNodeSelection = useCallback(
@@ -679,6 +686,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     const next = !nodeDeletionMode;
     setNodeDeletionMode(next);
     nodeDeletionModeRef.current = next;
+    setNodeError("");
     if (next) {
       exitEdgeMode();
       setContextMenu(null);
@@ -782,6 +790,26 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     setEditingNode(null);
   }, []);
 
+  const handleMergeNodes = useCallback(async () => {
+    if (!mergeSlug) return;
+    try {
+      const { keptNode, removedIds } = await mergeDuplicateNodesBySlug(mergeSlug);
+      setGraph((prev) => {
+        const remainingNodes = prev.nodes.filter(n => !removedIds.includes(n.id));
+        const finalNodes = remainingNodes.map(n => n.id === keptNode.id ? keptNode : n);
+        const repointedEdges = prev.edges.map(e => {
+          if (removedIds.includes(e.source)) e.source = keptNode.id;
+          if (removedIds.includes(e.target)) e.target = keptNode.id;
+          return e;
+        });
+        return { nodes: finalNodes, edges: repointedEdges };
+      });
+      setMergeSlug("");
+    } catch (error) {
+      console.error("Failed to merge nodes:", error);
+    }
+  }, [mergeSlug, setGraph]);
+
   return (
     <div className={`grid gap-0 ${selected ? "grid-cols-12" : "grid-cols-1"}`}>
       <div
@@ -866,11 +894,28 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           </div>
         )}
 
+        {nodeError && <div className="px-3 pt-1 text-xs text-red-300">{nodeError}</div>}
+
         {showMigration && (
           <div className="border-t border-slate-800 p-4">
             <JsonMigrationButton onComplete={() => window.location.reload()} />
           </div>
         )}
+
+        <div className="p-3 border-b border-slate-800">
+          <input
+            value={mergeSlug}
+            onChange={(event) => setMergeSlug(event.target.value)}
+            placeholder="Enter slug to merge..."
+            className="w-80 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500"
+          />
+          <button
+            onClick={handleMergeNodes}
+            className="px-4 py-2 rounded-lg border border-sky-500/50 bg-sky-500/15 hover:bg-sky-500/25"
+          >
+            Merge Duplicates
+          </button>
+        </div>
 
         <div ref={containerRef} className="h-[calc(100vh-8rem)]" />
 
@@ -916,15 +961,36 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
                   <p className="whitespace-pre-wrap text-sm text-slate-200">{selected.notes}</p>
                 </div>
               )}
-              {selected.url && (
-                <a
-                  href={selected.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 inline-block text-sky-400 hover:underline"
-                >
-                  Open link
-                </a>
+
+              {(selected.links?.length > 0 || selected.url) && (
+                <div className="mt-3">
+                  <div className="text-sm font-medium text-slate-300">Links</div>
+                  {(selected.links || [selected.url]).map((link, i) => (
+                    <a
+                      key={i}
+                      href={link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block text-sky-400 hover:underline truncate"
+                    >
+                      {link}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {selected.details && Object.keys(selected.details).length > 0 && (
+                <div className="mt-3">
+                  <div className="text-sm font-medium text-slate-300">More Details</div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                    {Object.entries(selected.details).sort(([a], [b]) => a.localeCompare(b)).map(([key, value]) => (
+                      <React.Fragment key={key}>
+                        <div className="font-medium text-slate-400 truncate">{key}</div>
+                        <div className="text-slate-200">{String(value)}</div>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           </div>
