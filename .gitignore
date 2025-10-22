@@ -12,6 +12,17 @@ dist
 dist-ssr
 *.local
 
+# TypeScript build artifacts
+tsconfig.tsbuildinfo
+src/**/*.js
+src/**/*.jsx
+
+# SQL migration scripts (kept locally)
+*-migration.sql
+add-*.sql
+migrate-*.sql
+detect-*.sql
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

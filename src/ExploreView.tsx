@@ -1,42 +1,41 @@
-// @ts-nocheck
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import cytoscape, { EdgeSingular, NodeSingular } from "cytoscape";
+import cytoscape from "cytoscape";
 import fcose from "cytoscape-fcose";
-import {
-  createEdge,
-  createNode,
-  deleteEdge,
-  deleteNode,
-  updateEdge,
-  updateNode,
-  updateNodePosition,
-} from "./lib/database";
+import { updateEdge, updateNode, createNode, deleteEdge } from "./lib/database";
 import { NodePositionManager } from "./lib/positioning";
+import { normalizeNote } from "./lib/utils";
+import { getCytoscapeStyles } from "./lib/cytoscape-styles";
+import { PREVIEW_EDGE_ID } from "./lib/constants";
 import { ContextMenu } from "./components/ContextMenu";
 import { EdgeContextMenu } from "./components/EdgeContextMenu";
 import { EdgeNoteForm } from "./components/EdgeNoteForm";
 import { JsonMigrationButton } from "./components/JsonMigrationButton";
 import { NodeForm } from "./components/NodeForm";
+import { useEdgeCreation } from "./hooks/useEdgeCreation";
+import { useNodeDeletion } from "./hooks/useNodeDeletion";
+import { useCytoscapeGraph } from "./hooks/useCytoscapeGraph";
+
 cytoscape.use(fcose);
 
-const PREVIEW_NODE_ID = "__edge-preview-node";
-const PREVIEW_EDGE_ID = "__edge-preview-edge";
+interface ExploreViewProps {
+  graph: { nodes: any[]; edges: any[] };
+  setGraph: React.Dispatch<React.SetStateAction<{ nodes: any[]; edges: any[] }>>;
+  query: string;
+  setQuery: (query: string) => void;
+  courses: any[];
+}
 
-const normalizeNote = (value?: string | null) => (value ? value.trim() : "");
-
-export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
+export function ExploreView({ graph, setGraph, query, setQuery, courses }: ExploreViewProps) {
   const TAG_FILTER_OPTIONS = courses?.map((course) => course.name) || [];
 
+  // Refs
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cyRef = useRef<cytoscape.Core | null>(null);
-
   const tagFilterRef = useRef<string>("");
   const tagColorMapRef = useRef<Map<string, string>>(new Map());
   const graphRef = useRef(graph);
-  const edgeCreationRef = useRef({ active: false, sourceId: null as string | null });
-  const nodeDeletionModeRef = useRef(false);
-  const previewRef = useRef<{ node: NodeSingular | null; edge: EdgeSingular | null }>({ node: null, edge: null });
 
+  // State
   const [tagFilter, setTagFilter] = useState("");
   const [showMigration, setShowMigration] = useState(false);
   const [selected, setSelected] = useState<any>(null);
@@ -48,14 +47,37 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
   const [showEdgeForm, setShowEdgeForm] = useState(false);
   const [hoverEdge, setHoverEdge] = useState<{ id: string; src: string; tgt: string; note: string; weight?: number } | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [edgeCreation, setEdgeCreation] = useState({ active: false, sourceId: null as string | null });
-  const [edgeError, setEdgeError] = useState("");
-  const [nodeDeletionMode, setNodeDeletionMode] = useState(false);
 
+  // Custom hooks
+  const {
+    edgeCreation,
+    edgeCreationRef,
+    edgeError,
+    enterEdgeMode,
+    exitEdgeMode,
+    ensurePreview,
+    removePreview,
+    handleEdgeNodeSelection,
+    updatePreviewPosition,
+  } = useEdgeCreation({ cyRef, graphRef, setGraph });
+
+  const {
+    nodeDeletionMode,
+    nodeDeletionModeRef,
+    updateNodeDeletionMode,
+    handleNodeDeletion,
+  } = useNodeDeletion({ setGraph, setSelected });
+
+  // Sync refs with state
   useEffect(() => {
     tagFilterRef.current = tagFilter;
   }, [tagFilter]);
 
+  useEffect(() => {
+    graphRef.current = graph;
+  }, [graph]);
+
+  // Build tag color map
   const tagColorMap = useMemo(() => {
     const map = new Map<string, string>();
     courses?.forEach((course) => {
@@ -65,22 +87,12 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     return map;
   }, [courses]);
 
-  useEffect(() => {
-    graphRef.current = graph;
-  }, [graph]);
-
-  useEffect(() => {
-    edgeCreationRef.current = edgeCreation;
-  }, [edgeCreation]);
-
-  useEffect(() => {
-    nodeDeletionModeRef.current = nodeDeletionMode;
-  }, [nodeDeletionMode]);
-
+  // Build graph elements for Cytoscape
   const elements = useMemo(() => {
     const nodes = (graph.nodes || []).map((node) => {
       const courseName = (node.tags && node.tags[0]) || "other";
       let position = node.pos;
+
       if (!position) {
         position = NodePositionManager.findNonOverlappingPosition(
           (graph.nodes || [])
@@ -89,6 +101,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           courseName
         );
       }
+
       const fallbackColor = tagColorMap.get(courseName);
       return {
         data: { ...node, color: node.color ?? fallbackColor ?? undefined },
@@ -107,433 +120,42 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     return { nodes, edges };
   }, [graph, tagColorMap]);
 
-  const removePreview = useCallback(() => {
-    const cy = cyRef.current;
-    const { node, edge } = previewRef.current;
-    if (edge && edge.length) {
-      try {
-        edge.remove();
-      } catch (error) {}
-    }
-    if (node && node.length) {
-      try {
-        node.remove();
-      } catch (error) {}
-    }
-    previewRef.current = { node: null, edge: null };
-    cy?.nodes().removeClass("edge-creation-source edge-creation-target");
-  }, []);
-
   const closeEdgeContextMenu = useCallback(() => {
     setEdgeContextMenu(null);
     setHoverEdge(null);
   }, []);
 
-  const ensurePreview = useCallback(
-    (sourceId: string) => {
-      const cy = cyRef.current;
-      if (!cy) return;
-      removePreview();
-      const source = cy.getElementById(sourceId);
-      if (!source || source.empty()) return;
+  // Initialize Cytoscape graph
+  useCytoscapeGraph({
+    containerRef,
+    cyRef,
+    tagFilterRef,
+    tagColorMapRef,
+    edgeCreationRef,
+    nodeDeletionModeRef,
+    setSelected,
+    setContextMenu,
+    setEdgeContextMenu,
+    setHoverEdge,
+    setGraph,
+    handleEdgeNodeSelection,
+    handleNodeDeletion,
+    updateNodeDeletionMode,
+    exitEdgeMode,
+    closeEdgeContextMenu,
+    updatePreviewPosition,
+  });
 
-      source.addClass("edge-creation-source");
-
-      const previewNode = cy.add({
-        group: "nodes",
-        data: { id: PREVIEW_NODE_ID },
-        position: source.position(),
-        selectable: false,
-        pannable: false,
-        grabbable: false,
-        classes: "edge-preview-node",
-      });
-
-      previewNode.lock();
-
-      const previewEdge = cy.add({
-        group: "edges",
-        data: {
-          id: PREVIEW_EDGE_ID,
-          source: sourceId,
-          target: PREVIEW_NODE_ID,
-        },
-        selectable: false,
-        classes: "edge-preview-edge",
-      });
-
-      previewRef.current = { node: previewNode, edge: previewEdge };
-    },
-    [removePreview]
-  );
-
-  const exitEdgeMode = useCallback(() => {
-    setEdgeCreation({ active: false, sourceId: null });
-    edgeCreationRef.current = { active: false, sourceId: null };
-    setEdgeError("");
-    removePreview();
-  }, [removePreview]);
-
-  const enterEdgeMode = useCallback(
-    (sourceId: string | null = null) => {
-      setEdgeCreation({ active: true, sourceId });
-      edgeCreationRef.current = { active: true, sourceId };
-      setEdgeError("");
-      setContextMenu(null);
-      closeEdgeContextMenu();
-      if (sourceId) {
-        ensurePreview(sourceId);
-      } else {
-        removePreview();
-      }
-    },
-    [closeEdgeContextMenu, ensurePreview, removePreview]
-  );
-
-  const isDuplicateEdge = useCallback((sourceId: string, targetId: string) => {
-    const edges = graphRef.current?.edges || [];
-    return edges.some(
-      (edge) =>
-        (edge.source === sourceId && edge.target === targetId) ||
-        (edge.source === targetId && edge.target === sourceId)
-    );
-  }, []);
-
-  const handleNodeDeletion = useCallback(
-    async (nodeId: string) => {
-      if (!window.confirm("Delete this node and its connections?")) {
-        return;
-      }
-      try {
-        await deleteNode(nodeId);
-        setGraph((prev) => ({
-          ...prev,
-          nodes: prev.nodes.filter((node) => node.id !== nodeId),
-          edges: prev.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId),
-        }));
-        setSelected((prev) => (prev?.id === nodeId ? null : prev));
-      } catch (error) {
-        console.error("Failed to delete node:", error);
-      } finally {
-        setNodeDeletionMode(false);
-        nodeDeletionModeRef.current = false;
-      }
-    },
-    [setGraph]
-  );
-
-  const handleEdgeNodeSelection = useCallback(
-    async (nodeId: string) => {
-      setEdgeError("");
-      const cy = cyRef.current;
-      if (!cy) return;
-
-      if (!edgeCreationRef.current.sourceId) {
-        setEdgeCreation({ active: true, sourceId: nodeId });
-        edgeCreationRef.current = { active: true, sourceId: nodeId };
-        ensurePreview(nodeId);
-        return;
-      }
-
-      const sourceId = edgeCreationRef.current.sourceId;
-      if (nodeId === sourceId) {
-        setEdgeError("Select a different node as the target.");
-        return;
-      }
-
-      if (isDuplicateEdge(sourceId, nodeId)) {
-        setEdgeError("An edge between these nodes already exists.");
-        return;
-      }
-
-      try {
-        const edgeId =
-          typeof crypto !== "undefined" && crypto.randomUUID
-            ? crypto.randomUUID()
-            : `edge-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-
-        const newEdge = await createEdge({
-          id: edgeId,
-          source: sourceId,
-          target: nodeId,
-          relation: null,
-          weight: 1,
-        });
-
-        const note = normalizeNote(newEdge.note ?? newEdge.relation);
-        setGraph((prev) => ({
-          ...prev,
-          edges: [...prev.edges, { ...newEdge, note }],
-        }));
-        exitEdgeMode();
-      } catch (error) {
-        console.error("Failed to create edge:", error);
-        setEdgeError("Failed to create edge. Please try again.");
-      }
-    },
-    [ensurePreview, exitEdgeMode, isDuplicateEdge, setGraph]
-  );
-
-  const applyStyles = useCallback(() => {
+  // Apply styles when tag filter or color map changes
+  useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
 
-    cy.style([
-      {
-        selector: "core",
-        style: { "selection-box-color": "#60a5fa", "active-bg-opacity": 0 },
-      },
-      {
-        selector: "node",
-        style: {
-          "background-color": (ele) => {
-            const activeFilter = tagFilterRef.current;
-            const colorMap = tagColorMapRef.current;
-            if (activeFilter && !(ele.data("tags") || []).includes(activeFilter)) {
-              return "#64748b";
-            }
-            const dataColor = ele.data("color");
-            if (dataColor) return dataColor;
-            const tags = ele.data("tags") || [];
-            const first = tags[0];
-            return first ? colorMap.get(first) || "#93c5fd" : "#93c5fd";
-          },
-          label: (ele) => ele.data("title") || ele.id(),
-          "font-size": 11,
-          "text-wrap": "wrap",
-          "text-max-width": 140,
-          "text-valign": "center",
-          "text-halign": "center",
-          color: "#ffffff",
-          "border-width": 2,
-          "border-color": "#0ea5e9",
-          "border-opacity": 0.35,
-          width: 26,
-          height: 26,
-          shape: "ellipse",
-          "transition-property": "background-color opacity width height border-width",
-          "transition-duration": 150,
-        },
-      },
-      { selector: "node.hovered", style: { width: 34, height: 34, "border-width": 3 } },
-      { selector: "node.dimmed", style: { opacity: 0.15 } },
-      {
-        selector: "node.edge-creation-source",
-        style: {
-          "border-color": "#f97316",
-          "border-width": 4,
-          "border-opacity": 0.9,
-          "shadow-blur": 12,
-          "shadow-color": "#f97316",
-        },
-      },
-      {
-        selector: "node.edge-preview-node",
-        style: {
-          opacity: 0,
-          events: "no",
-        },
-      },
-      {
-        selector: "edge",
-        style: {
-          width: (ele) => Math.max(1.5, ((ele.data("weight") || 1) as number) * 1.2),
-          "line-color": "#94a3b8",
-          opacity: 0.7,
-          "curve-style": "bezier",
-          "target-arrow-shape": "none",
-          "source-arrow-shape": "none",
-          "line-cap": "round",
-          "transition-property": "opacity line-color width",
-          "target-arrow-color": "#94a3b8",
-          "arrow-scale": 0.8,
-          "transition-duration": 120,
-        },
-      },
-      {
-        selector: "edge.edge-preview-edge",
-        style: {
-          "line-color": "#38bdf8",
-          "target-arrow-color": "#38bdf8",
-          "line-style": "dashed",
-          "arrow-scale": 0.8,
-          width: 3,
-          opacity: 0.9,
-        },
-      },
-      {
-        selector: "edge.hovered",
-        style: {
-          "line-color": "#0ea5e9",
-          opacity: 1,
-          width: 5,
-          "target-arrow-color": "#0ea5e9",
-        },
-      },
-      { selector: ".faded", style: { opacity: 0.12 } },
-    ]);
-  }, []);
-  useEffect(() => {
-    applyStyles();
-  }, [applyStyles, tagColorMap, tagFilter]);
+    const styles = getCytoscapeStyles(tagFilterRef, tagColorMapRef);
+    cy.style(styles);
+  }, [tagColorMap, tagFilter]);
 
-
-  useEffect(() => {
-    if (!containerRef.current || cyRef.current) return;
-
-    const cy = cytoscape({
-      container: containerRef.current,
-      elements: [],
-      layout: { name: "preset", fit: true, animate: false },
-      wheelSensitivity: 0.32,
-    });
-
-    cyRef.current = cy;
-    applyStyles();
-
-    const clearFocus = () => {
-      cy.elements().removeClass("faded hovered");
-      setSelected(null);
-    };
-
-    cy.on("tap", (event) => {
-      if (event.target === cy) {
-        if (edgeCreationRef.current.active) {
-          exitEdgeMode();
-        } else if (nodeDeletionModeRef.current) {
-          setNodeDeletionMode(false);
-        } else {
-          clearFocus();
-        }
-      }
-    });
-
-    cy.on("tap", "node", (event) => {
-      const node = event.target;
-      const nodeId = node.id();
-      if (nodeId === PREVIEW_NODE_ID) return;
-
-      if (nodeDeletionModeRef.current) {
-        event.preventDefault();
-        void handleNodeDeletion(nodeId);
-        return;
-      }
-
-      if (edgeCreationRef.current.active) {
-        event.preventDefault();
-        void handleEdgeNodeSelection(nodeId);
-        return;
-      }
-
-      const neighborhood = node.closedNeighborhood();
-      cy.elements().addClass("faded");
-      neighborhood.removeClass("faded");
-      setSelected(node.data());
-    });
-
-    cy.on("cxttap", "node", (event) => {
-      if (edgeCreationRef.current.active || nodeDeletionModeRef.current) return;
-      event.preventDefault();
-      const node = event.target;
-      const rendered = node.renderedPosition();
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      setContextMenu({
-        x: rect.left + rendered.x,
-        y: rect.top + rendered.y,
-        nodeId: node.id(),
-      });
-      closeEdgeContextMenu();
-    });
-
-    cy.on("cxttap", "edge", (event) => {
-      event.preventDefault();
-      const edge = event.target;
-      if (edge.id() === PREVIEW_EDGE_ID) return;
-      const rendered = event.renderedPosition || edge.midpoint();
-      const rect = containerRef.current?.getBoundingClientRect();
-      if (!rect) return;
-      setEdgeContextMenu({
-        x: rect.left + rendered.x,
-        y: rect.top + rendered.y,
-        edgeId: edge.id(),
-      });
-      setContextMenu(null);
-    });
-
-    cy.on("grab", "node", () => {
-      setSelected((prev) => prev);
-    });
-
-    cy.on("free", "node", async (event) => {
-      const node = event.target;
-      const nodeId = node.id();
-      if (nodeId === PREVIEW_NODE_ID) return;
-      const position = node.position();
-      try {
-        await updateNodePosition(nodeId, { x: position.x, y: position.y });
-        setGraph((prev) => ({
-          ...prev,
-          nodes: prev.nodes.map((n) =>
-            n.id === nodeId ? { ...n, pos: { x: position.x, y: position.y } } : n
-          ),
-        }));
-      } catch (error) {
-        console.error("Failed to update node position:", error);
-      }
-    });
-
-    cy.on("mouseover", "edge", (event) => {
-      const edge = event.target;
-      if (edge.id() === PREVIEW_EDGE_ID) return;
-      edge.addClass("hovered");
-      const src = edge.source().data("title") || edge.source().id();
-      const tgt = edge.target().data("title") || edge.target().id();
-      const note = normalizeNote(edge.data("note") ?? edge.data("relation"));
-      const weight = edge.data("weight");
-      if (!note) {
-        setHoverEdge(null);
-        return;
-      }
-      setHoverEdge({ id: edge.id(), src, tgt, note, weight });
-    });
-
-    cy.on("mouseout", "edge", (event) => {
-      event.target.removeClass("hovered");
-      setHoverEdge(null);
-    });
-
-    cy.on("mousemove", (event) => {
-      if (!edgeCreationRef.current.active || !edgeCreationRef.current.sourceId) return;
-      const previewNode = previewRef.current.node;
-      if (previewNode && previewNode.length && event.position) {
-        previewNode.position(event.position);
-      }
-    });
-
-    cy.on("remove", "edge", (event) => {
-      const removedId = event.target.id();
-      if (removedId === PREVIEW_EDGE_ID) return;
-      setHoverEdge((current) => (current?.id === removedId ? null : current));
-    });
-
-    const timeoutId = setTimeout(() => {
-      if (!cy.destroyed()) {
-        cy.fit(undefined, 40);
-        cy.zoom(1.2);
-      }
-    }, 100);
-
-    return () => {
-      clearTimeout(timeoutId);
-      removePreview();
-      try {
-        cy.destroy();
-      } catch (error) {}
-      cyRef.current = null;
-    };
-  }, [applyStyles, closeEdgeContextMenu, ensurePreview, exitEdgeMode, handleEdgeNodeSelection, handleNodeDeletion, removePreview]);
-
+  // Sync graph elements with Cytoscape
   useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
@@ -542,14 +164,17 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       const desiredNodes = new Map(elements.nodes.map((node) => [node.data.id, node]));
       const desiredEdges = new Map(elements.edges.map((edge) => [edge.data.id, edge]));
 
+      // Update or remove existing nodes
       cy.nodes().forEach((node) => {
         const id = node.id();
-        if (id === PREVIEW_NODE_ID) return;
+        if (id.startsWith("__")) return; // Skip preview nodes
+
         const desired = desiredNodes.get(id);
         if (!desired) {
           node.remove();
           return;
         }
+
         node.data({ ...desired.data });
         if (desired.position) {
           const { x, y } = desired.position;
@@ -561,6 +186,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         desiredNodes.delete(id);
       });
 
+      // Add new nodes
       desiredNodes.forEach((node) => {
         cy.add({
           group: "nodes",
@@ -569,18 +195,22 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         });
       });
 
+      // Update or remove existing edges
       cy.edges().forEach((edge) => {
         const id = edge.id();
-        if (id === PREVIEW_EDGE_ID) return;
+        if (id === PREVIEW_EDGE_ID) return; // Skip preview edges
+
         const desired = desiredEdges.get(id);
         if (!desired) {
           edge.remove();
           return;
         }
+
         edge.data({ ...desired.data });
         desiredEdges.delete(id);
       });
 
+      // Add new edges
       desiredEdges.forEach((edge) => {
         cy.add({
           group: "edges",
@@ -589,6 +219,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
       });
     });
 
+    // Restore edge creation preview if needed
     if (edgeCreationRef.current.active && edgeCreationRef.current.sourceId) {
       const source = cy.getElementById(edgeCreationRef.current.sourceId);
       if (!source || source.empty()) {
@@ -597,53 +228,66 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         ensurePreview(edgeCreationRef.current.sourceId);
       }
     }
-  }, [elements, ensurePreview, exitEdgeMode]);
+  }, [elements, ensurePreview, exitEdgeMode, edgeCreationRef]);
 
+  // Apply search and tag filters
   useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
+
     cy.nodes().removeClass("dimmed");
     const trimmed = query.trim().toLowerCase();
+
     cy.nodes().forEach((node) => {
       const titleMatch = !trimmed || (node.data("title") || node.id()).toLowerCase().includes(trimmed);
       const tagMatch = !tagFilter || (node.data("tags") || []).includes(tagFilter);
+
       if (!(titleMatch && tagMatch)) {
         node.addClass("dimmed");
       }
     });
   }, [query, tagFilter]);
 
+  // Keyboard shortcuts for edge creation
   useEffect(() => {
     if (!edgeCreation.active) return;
+
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         exitEdgeMode();
       }
     };
+
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
   }, [edgeCreation.active, exitEdgeMode]);
 
+  // Keyboard shortcuts for node deletion
   useEffect(() => {
     if (!nodeDeletionMode) return;
+
     const handleKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setNodeDeletionMode(false);
+        updateNodeDeletionMode(false);
       }
     };
+
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [nodeDeletionMode]);
+  }, [nodeDeletionMode, updateNodeDeletionMode]);
 
+  // Click outside to close context menus
   useEffect(() => {
     const handleClickOutside = () => {
       setContextMenu(null);
       closeEdgeContextMenu();
     };
+
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, [closeEdgeContextMenu]);
 
+  // UI Event Handlers
   const handleAddNode = useCallback(() => {
     setEditingNode(null);
     setShowNodeForm(true);
@@ -651,6 +295,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
 
   const handleEditNode = useCallback(() => {
     if (!contextMenu) return;
+
     const node = graph.nodes.find((n) => n.id === contextMenu.nodeId);
     setEditingNode(node || null);
     setShowNodeForm(true);
@@ -659,39 +304,41 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
 
   const handleAddEdgeFromContext = useCallback(() => {
     if (!contextMenu) return;
-    setNodeDeletionMode(false);
-    nodeDeletionModeRef.current = false;
+
+    updateNodeDeletionMode(false);
     enterEdgeMode(contextMenu.nodeId);
     setContextMenu(null);
-  }, [contextMenu, enterEdgeMode]);
+  }, [contextMenu, enterEdgeMode, updateNodeDeletionMode]);
 
   const handleAddEdgeButton = useCallback(() => {
-    setNodeDeletionMode(false);
-    nodeDeletionModeRef.current = false;
+    updateNodeDeletionMode(false);
+
     if (edgeCreation.active) {
       exitEdgeMode();
     } else {
       enterEdgeMode();
     }
-  }, [edgeCreation.active, enterEdgeMode, exitEdgeMode]);
+  }, [edgeCreation.active, enterEdgeMode, exitEdgeMode, updateNodeDeletionMode]);
 
   const handleDeleteNodeButton = useCallback(() => {
     const next = !nodeDeletionMode;
-    setNodeDeletionMode(next);
-    nodeDeletionModeRef.current = next;
+    updateNodeDeletionMode(next);
+
     if (next) {
       exitEdgeMode();
       setContextMenu(null);
       closeEdgeContextMenu();
     }
-  }, [closeEdgeContextMenu, exitEdgeMode, nodeDeletionMode]);
+  }, [closeEdgeContextMenu, exitEdgeMode, nodeDeletionMode, updateNodeDeletionMode]);
 
   const handleDeleteEdge = useCallback(async () => {
     if (!edgeContextMenu) return;
+
     if (!window.confirm("Delete this edge?")) {
       closeEdgeContextMenu();
       return;
     }
+
     try {
       await deleteEdge(edgeContextMenu.edgeId);
       setGraph((prev) => ({
@@ -708,11 +355,13 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
 
   const handleEditEdge = useCallback(() => {
     if (!edgeContextMenu) return;
+
     const edge = graphRef.current?.edges.find((e) => e.id === edgeContextMenu.edgeId);
     if (!edge) {
       closeEdgeContextMenu();
       return;
     }
+
     const note = normalizeNote(edge.note ?? edge.relation);
     setEditingEdge({ id: edge.id, note });
     setShowEdgeForm(true);
@@ -722,10 +371,13 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
   const handleEdgeNoteSubmit = useCallback(
     async (note: string) => {
       if (!editingEdge) return;
+
       const trimmed = note.trim();
+
       try {
         const updated = await updateEdge(editingEdge.id, { relation: trimmed || null });
         const normalized = normalizeNote(updated.note ?? updated.relation);
+
         setGraph((prev) => ({
           ...prev,
           edges: prev.edges.map((edge) =>
@@ -734,6 +386,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
               : edge
           ),
         }));
+
         setShowEdgeForm(false);
         setEditingEdge(null);
       } catch (error) {
@@ -750,7 +403,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
   }, []);
 
   const handleNodeSubmit = useCallback(
-    async (nodeData) => {
+    async (nodeData: any) => {
       if (editingNode) {
         const updatedNode = await updateNode(editingNode.id, nodeData);
         setGraph((prev) => ({
@@ -771,6 +424,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           nodes: [...prev.nodes, { ...newNode, pos: position }],
         }));
       }
+
       setShowNodeForm(false);
       setEditingNode(null);
     },
@@ -788,6 +442,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         className={`${selected ? "col-span-9 border-r border-slate-800" : "col-span-1"} relative`}
         onMouseMove={(event) => setMousePos({ x: event.clientX + 16, y: event.clientY + 16 })}
       >
+        {/* Toolbar */}
         <div className="p-3 flex items-center gap-2 border-b border-slate-800">
           <input
             value={query}
@@ -843,6 +498,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           <span className="text-xs text-slate-400 ml-2">Right-click nodes to edit | Drag to move</span>
         </div>
 
+        {/* Edge creation banner */}
         {edgeCreation.active && (
           <div className="px-3 pt-2">
             <div className="flex items-center justify-between gap-3 rounded-md border border-sky-500/40 bg-sky-500/10 px-3 py-2 text-sm text-sky-100">
@@ -858,6 +514,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           </div>
         )}
 
+        {/* Node deletion banner */}
         {nodeDeletionMode && (
           <div className="px-3 pt-2">
             <div className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-100">
@@ -866,14 +523,17 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           </div>
         )}
 
+        {/* Migration tool */}
         {showMigration && (
           <div className="border-t border-slate-800 p-4">
             <JsonMigrationButton onComplete={() => window.location.reload()} />
           </div>
         )}
 
+        {/* Cytoscape container */}
         <div ref={containerRef} className="h-[calc(100vh-8rem)]" />
 
+        {/* Edge hover tooltip */}
         {hoverEdge && (
           <div
             style={{ position: "fixed", left: mousePos.x, top: mousePos.y }}
@@ -881,7 +541,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
           >
             <div className="mb-1 font-medium text-slate-300">Connection</div>
             <div>
-              <strong>{hoverEdge.src}</strong> <strong>{hoverEdge.tgt}</strong>
+              <strong>{hoverEdge.src}</strong> → <strong>{hoverEdge.tgt}</strong>
             </div>
             {hoverEdge.note && <div className="mt-1 italic text-slate-300">{hoverEdge.note}</div>}
             {hoverEdge.weight != null && (
@@ -891,6 +551,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
         )}
       </div>
 
+      {/* Details sidebar */}
       {selected && (
         <aside className="col-span-3 h-[calc(100vh-3.25rem)] overflow-auto">
           <div className="p-4">
@@ -902,7 +563,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
               </div>
               {selected.tags?.length ? (
                 <div className="flex flex-wrap gap-1">
-                  {selected.tags.map((tag) => (
+                  {selected.tags.map((tag: string) => (
                     <span key={tag} className="text-xs px-2 py-0.5 rounded-full border border-slate-700">
                       {tag}
                     </span>
@@ -916,21 +577,57 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
                   <p className="whitespace-pre-wrap text-sm text-slate-200">{selected.notes}</p>
                 </div>
               )}
-              {selected.url && (
-                <a
-                  href={selected.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 inline-block text-sky-400 hover:underline"
-                >
-                  Open link
-                </a>
+              {selected.metadata && Object.keys(selected.metadata).length > 0 && (
+                <div className="mt-3">
+                  <div className="text-sm font-medium text-slate-300 mb-2">Custom Information</div>
+                  <div className="space-y-1">
+                    {Object.entries(selected.metadata as Record<string, string>).map(([key, value]) => (
+                      <div key={key} className="text-sm">
+                        <span className="text-slate-400">{key}:</span>{" "}
+                        <span className="text-slate-200">{value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* Display URLs - handle both legacy url and new urls array */}
+              {((selected.urls && selected.urls.length > 0) || selected.url) && (
+                <div className="mt-3">
+                  <div className="text-sm font-medium text-slate-300 mb-2">Links</div>
+                  <div className="space-y-1">
+                    {selected.urls && selected.urls.length > 0 ? (
+                      selected.urls.map((url: string, index: number) => (
+                        <a
+                          key={index}
+                          href={url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="block text-sky-400 hover:underline text-sm truncate"
+                          title={url}
+                        >
+                          {url}
+                        </a>
+                      ))
+                    ) : selected.url ? (
+                      <a
+                        href={selected.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block text-sky-400 hover:underline text-sm truncate"
+                        title={selected.url}
+                      >
+                        {selected.url}
+                      </a>
+                    ) : null}
+                  </div>
+                </div>
               )}
             </div>
           </div>
         </aside>
       )}
 
+      {/* Context menus and modals */}
       {contextMenu && (
         <ContextMenu
           x={contextMenu.x}
@@ -968,6 +665,3 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }) {
     </div>
   );
 }
-
-
-

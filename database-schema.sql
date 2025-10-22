@@ -19,6 +19,7 @@ CREATE TABLE nodes (
   abstract TEXT,
   notes TEXT,
   pos JSONB, -- Store position as {x: number, y: number}
+  metadata JSONB, -- Store custom key-value pairs
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

@@ -119,7 +119,7 @@ export async function migrateJsonData(jsonData: JsonData) {
           const newNodeData = {
             id: jsonNode.id,
             title: jsonNode.title,
-            url: jsonNode.url,
+            urls: jsonNode.url ? [jsonNode.url] : [],
             author: jsonNode.author,
             year: jsonNode.year,
             tags: jsonNode.tags,

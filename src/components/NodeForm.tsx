@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Course } from '../lib/supabase';
-import { slugify } from '../App';
+import { slugify } from '../lib/utils';
 
 interface NodeFormProps {
   node?: any;
@@ -16,9 +16,13 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
   const [year, setYear] = useState("");
   const [tags, setTags] = useState("");
   const [abstract, setAbstract] = useState("");
-  const [url, setUrl] = useState("");
+  const [urls, setUrls] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [color, setColor] = useState("");
+  const [metadata, setMetadata] = useState<Record<string, string>>({});
+  const [newFieldKey, setNewFieldKey] = useState("");
+  const [newFieldValue, setNewFieldValue] = useState("");
+  const [showNewFieldForm, setShowNewFieldForm] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -29,19 +33,31 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       setYear(node.year ? node.year.toString() : "");
       setTags(node.tags ? node.tags.join(", ") : "");
       setAbstract(node.abstract || "");
-      setUrl(node.url || "");
+      // Handle both legacy url and new urls array
+      if (node.urls && node.urls.length > 0) {
+        setUrls(node.urls);
+      } else if (node.url) {
+        setUrls([node.url]);
+      } else {
+        setUrls([]);
+      }
       setNotes(node.notes || "");
       setColor(node.color || "");
+      setMetadata(node.metadata || {});
     } else {
       setTitle("");
       setAuthor("");
       setYear("");
       setTags("");
       setAbstract("");
-      setUrl("");
+      setUrls([]);
       setNotes("");
       setColor("");
+      setMetadata({});
     }
+    setNewFieldKey("");
+    setNewFieldValue("");
+    setShowNewFieldForm(false);
     setError("");
   }, [node, isOpen]);
 
@@ -73,10 +89,11 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
         year: year ? Number(year) : undefined,
         tags: tags ? tags.split(",").map((tag) => tag.trim()).filter(Boolean) : [],
         abstract: abstract.trim() || undefined,
-        url: url.trim() || undefined,
+        urls: urls.filter(url => url.trim() !== ""),
         notes: notes.trim() || undefined,
         course_id: course.id,
         color: colorValue,
+        metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
       };
 
       await onSubmit(nodeData);
@@ -173,14 +190,53 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm text-slate-300 mb-1">URL</label>
-              <input
-                value={url}
-                onChange={(event) => setUrl(event.target.value)}
-                className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
-                placeholder="https://..."
-                type="url"
-              />
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm text-slate-300">Links</label>
+                <button
+                  type="button"
+                  onClick={() => setUrls([...urls, ""])}
+                  className="px-3 py-1 text-sm rounded-md border border-sky-500/50 bg-sky-500/15 hover:bg-sky-500/25"
+                >
+                  + Add Link
+                </button>
+              </div>
+              {urls.length === 0 ? (
+                <button
+                  type="button"
+                  onClick={() => setUrls([""])}
+                  className="w-full px-3 py-2 rounded-md border border-slate-700 hover:border-sky-500/50 text-slate-400 text-sm"
+                >
+                  Click to add a link
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  {urls.map((url, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input
+                        value={url}
+                        onChange={(e) => {
+                          const newUrls = [...urls];
+                          newUrls[index] = e.target.value;
+                          setUrls(newUrls);
+                        }}
+                        className="flex-1 px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
+                        placeholder="https://..."
+                        type="url"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newUrls = urls.filter((_, i) => i !== index);
+                          setUrls(newUrls);
+                        }}
+                        className="px-3 py-2 rounded-md border border-red-500/50 bg-red-500/15 hover:bg-red-500/25 text-red-400"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="col-span-2">
@@ -192,6 +248,121 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
                 className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
                 placeholder="Private or public notes about this book"
               />
+            </div>
+
+            <div className="col-span-2">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-sm text-slate-300">Custom Information</label>
+                <button
+                  type="button"
+                  onClick={() => setShowNewFieldForm(true)}
+                  className="px-3 py-1 text-sm rounded-md border border-sky-500/50 bg-sky-500/15 hover:bg-sky-500/25"
+                >
+                  + Add New Info
+                </button>
+              </div>
+
+              {/* New field form */}
+              {showNewFieldForm && (
+                <div className="mb-3 p-3 rounded-md border border-sky-500/40 bg-sky-500/5">
+                  <div className="flex items-center gap-2">
+                    <input
+                      value={newFieldKey}
+                      onChange={(e) => setNewFieldKey(e.target.value)}
+                      placeholder="Field name (e.g., region, important page)"
+                      className="flex-1 px-2 py-1.5 text-sm rounded bg-slate-700 border border-slate-600 outline-none focus:border-sky-500"
+                      autoFocus
+                    />
+                    <span className="text-slate-500">:</span>
+                    <input
+                      value={newFieldValue}
+                      onChange={(e) => setNewFieldValue(e.target.value)}
+                      placeholder="Value (e.g., Cambodia, page 9)"
+                      className="flex-1 px-2 py-1.5 text-sm rounded bg-slate-700 border border-slate-600 outline-none focus:border-sky-500"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && newFieldKey.trim()) {
+                          setMetadata({ ...metadata, [newFieldKey.trim()]: newFieldValue.trim() });
+                          setNewFieldKey("");
+                          setNewFieldValue("");
+                          setShowNewFieldForm(false);
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="flex gap-2 mt-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (newFieldKey.trim()) {
+                          setMetadata({ ...metadata, [newFieldKey.trim()]: newFieldValue.trim() });
+                          setNewFieldKey("");
+                          setNewFieldValue("");
+                          setShowNewFieldForm(false);
+                        }
+                      }}
+                      className="px-3 py-1 text-xs rounded border border-sky-500/50 bg-sky-500/15 hover:bg-sky-500/25"
+                    >
+                      Add
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNewFieldKey("");
+                        setNewFieldValue("");
+                        setShowNewFieldForm(false);
+                      }}
+                      className="px-3 py-1 text-xs rounded border border-slate-600 hover:border-slate-500"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Existing fields */}
+              {Object.keys(metadata).length > 0 && (
+                <div className="space-y-2 bg-slate-800/50 p-3 rounded-md border border-slate-700">
+                  {Object.entries(metadata).map(([key, value]) => (
+                    <div key={key} className="flex items-center gap-2">
+                      <input
+                        value={key}
+                        onChange={(e) => {
+                          const newKey = e.target.value;
+                          const newMetadata = { ...metadata };
+                          delete newMetadata[key];
+                          newMetadata[newKey] = value;
+                          setMetadata(newMetadata);
+                        }}
+                        placeholder="Field name"
+                        className="flex-1 px-2 py-1 text-sm rounded bg-slate-700 border border-slate-600 outline-none focus:border-sky-500"
+                      />
+                      <span className="text-slate-500">:</span>
+                      <input
+                        value={value}
+                        onChange={(e) => {
+                          setMetadata({ ...metadata, [key]: e.target.value });
+                        }}
+                        placeholder="Value"
+                        className="flex-1 px-2 py-1 text-sm rounded bg-slate-700 border border-slate-600 outline-none focus:border-sky-500"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newMetadata = { ...metadata };
+                          delete newMetadata[key];
+                          setMetadata(newMetadata);
+                        }}
+                        className="px-2 py-1 text-sm rounded border border-red-500/50 bg-red-500/15 hover:bg-red-500/25 text-red-400"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <p className="mt-1 text-xs text-slate-500">
+                Add custom fields like region, important pages, or any other information.
+              </p>
             </div>
           </div>
 

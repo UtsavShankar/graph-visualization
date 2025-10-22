@@ -20,7 +20,8 @@ export interface Course {
 export interface Node {
   id: string
   title: string
-  url?: string
+  url?: string  // Legacy field - deprecated
+  urls: string[]  // New field for multiple URLs
   author?: string
   year?: number
   color?: string
@@ -29,6 +30,7 @@ export interface Node {
   abstract?: string
   notes?: string
   pos?: { x: number; y: number }
+  metadata?: Record<string, string>
   created_at: string
   updated_at: string
 }
@@ -38,6 +40,7 @@ export interface Edge {
   source: string
   target: string
   relation?: string
+  note?: string  // Computed field, normalized from relation
   weight?: number
   created_at: string
 }

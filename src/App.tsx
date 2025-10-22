@@ -1,25 +1,16 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { ExploreView } from "./ExploreView";
-import { EditView } from "./EditView";
 import { getGraphData, getCourses } from "./lib/database";
 import { Node, Edge, Course } from "./lib/supabase";
 
-// --- BookGraph with Supabase database ---
-// - Database-backed data with courses and nodes
-// - Click nodes to open details
-// - Hover edges to see an overlay with relation + endpoints
-// - Add/update books on Edit tab, including connections and notes
-// - Course-based organization with colors
+/**
+ * BookGraph - Supabase-backed knowledge graph application
+ * - Database-backed data with courses and nodes
+ * - Interactive graph visualization with Cytoscape.js
+ * - Click nodes to view details, hover edges to see relationships
+ * - Course-based organization with colors
+ */
 
-export const TAG_COLORS = ["#93c5fd", "#a7f3d0", "#fca5a5", "#fcd34d", "#c4b5fd", "#f9a8d4", "#86efac", "#fda4af", "#93c5fd"];
-
-// Simple slugify for IDs
-export function slugify(text) {
-  return (text || "").toString().toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "").replace(/\-+/g, "-").replace(/^-+|-+$/g, "");
-}
-
-// Graph data types
 type GraphData = { nodes: Node[]; edges: Edge[] };
 
 // Custom hook for Supabase data
