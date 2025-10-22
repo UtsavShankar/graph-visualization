@@ -83,19 +83,15 @@ export const updateNode = async (id: string, updates: Partial<Node>): Promise<No
 }
 
 export const updateNodePosition = async (id: string, pos: { x: number; y: number }): Promise<void> => {
-  console.log('Updating node position in database:', { id, pos });
-  
   const { error } = await supabase
     .from('nodes')
     .update({ pos, updated_at: new Date().toISOString() })
     .eq('id', id)
-  
+
   if (error) {
     console.error('Database error updating position:', error);
     throw error;
   }
-  
-  console.log('Position updated successfully in database');
 }
 
 export const deleteNode = async (id: string): Promise<void> => {

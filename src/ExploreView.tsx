@@ -239,10 +239,19 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     const trimmed = query.trim().toLowerCase();
 
     cy.nodes().forEach((node) => {
-      const titleMatch = !trimmed || (node.data("title") || node.id()).toLowerCase().includes(trimmed);
+      // Search across title, tags, and author
+      const title = (node.data("title") || node.id()).toLowerCase();
+      const tags = (node.data("tags") || []).map((t: string) => t.toLowerCase());
+      const author = (node.data("author") || "").toLowerCase();
+
+      const searchMatch = !trimmed ||
+        title.includes(trimmed) ||
+        tags.some((tag: string) => tag.includes(trimmed)) ||
+        author.includes(trimmed);
+
       const tagMatch = !tagFilter || (node.data("tags") || []).includes(tagFilter);
 
-      if (!(titleMatch && tagMatch)) {
+      if (!(searchMatch && tagMatch)) {
         node.addClass("dimmed");
       }
     });
@@ -447,7 +456,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search titles..."
+            placeholder="Search titles, tags, authors..."
             className="w-80 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 outline-none focus:border-sky-500"
           />
           <select
@@ -553,47 +562,44 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
 
       {/* Details sidebar */}
       {selected && (
-        <aside className="col-span-3 h-[calc(100vh-3.25rem)] overflow-auto">
+        <aside className="col-span-3 h-[calc(100vh-3.25rem)] overflow-auto text-base">
           <div className="p-4">
-            <h2 className="mb-2 text-lg font-semibold">Details</h2>
+            <h2 className="mb-2 text-xl font-semibold">Details</h2>
             <div className="space-y-2">
-              <div className="text-xl font-semibold leading-tight">{selected.title || selected.id}</div>
-              <div className="text-slate-300">
+              <div className="text-2xl font-semibold leading-tight">{selected.title || selected.id}</div>
+              <div className="text-slate-300 text-base">
                 {selected.author} {selected.year ? `- ${selected.year}` : ""}
               </div>
               {selected.tags?.length ? (
                 <div className="flex flex-wrap gap-1">
                   {selected.tags.map((tag: string) => (
-                    <span key={tag} className="text-xs px-2 py-0.5 rounded-full border border-slate-700">
+                    <span key={tag} className="text-sm px-2 py-0.5 rounded-full border border-slate-700">
                       {tag}
                     </span>
                   ))}
                 </div>
               ) : null}
-              {selected.abstract && <p className="mt-2 text-sm text-slate-200">{selected.abstract}</p>}
+              {selected.abstract && <p className="mt-2 text-base text-slate-200">{selected.abstract}</p>}
               {selected.notes && (
                 <div className="mt-3">
-                  <div className="text-sm font-medium text-slate-300">Notes</div>
-                  <p className="whitespace-pre-wrap text-sm text-slate-200">{selected.notes}</p>
+                  <div className="text-base font-medium text-white">Notes</div>
+                  <p className="whitespace-pre-wrap text-base text-slate-200">{selected.notes}</p>
                 </div>
               )}
               {selected.metadata && Object.keys(selected.metadata).length > 0 && (
-                <div className="mt-3">
-                  <div className="text-sm font-medium text-slate-300 mb-2">Custom Information</div>
-                  <div className="space-y-1">
-                    {Object.entries(selected.metadata as Record<string, string>).map(([key, value]) => (
-                      <div key={key} className="text-sm">
-                        <span className="text-slate-400">{key}:</span>{" "}
-                        <span className="text-slate-200">{value}</span>
-                      </div>
-                    ))}
-                  </div>
+                <div className="mt-3 space-y-2">
+                  {Object.entries(selected.metadata as Record<string, string>).map(([key, value]) => (
+                    <div key={key}>
+                      <div className="text-base font-medium text-white">{key}</div>
+                      <div className="text-base text-slate-200">{value}</div>
+                    </div>
+                  ))}
                 </div>
               )}
               {/* Display URLs - handle both legacy url and new urls array */}
               {((selected.urls && selected.urls.length > 0) || selected.url) && (
                 <div className="mt-3">
-                  <div className="text-sm font-medium text-slate-300 mb-2">Links</div>
+                  <div className="text-base font-medium text-white mb-2">Links</div>
                   <div className="space-y-1">
                     {selected.urls && selected.urls.length > 0 ? (
                       selected.urls.map((url: string, index: number) => (
@@ -602,7 +608,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
                           href={url}
                           target="_blank"
                           rel="noreferrer"
-                          className="block text-sky-400 hover:underline text-sm truncate"
+                          className="block text-sky-400 hover:underline text-base truncate"
                           title={url}
                         >
                           {url}
@@ -613,7 +619,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
                         href={selected.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="block text-sky-400 hover:underline text-sm truncate"
+                        className="block text-sky-400 hover:underline text-base truncate"
                         title={selected.url}
                       >
                         {selected.url}

@@ -144,13 +144,12 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
             </div>
 
             <div className="col-span-2">
-              <label className="block text-sm text-slate-300 mb-1">Tags (comma-separated) *</label>
+              <label className="block text-sm text-slate-300 mb-1">Tags (comma-separated)</label>
               <input
                 value={tags}
                 onChange={(event) => setTags(event.target.value)}
                 className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
-                placeholder="AN1101, theory, class"
-                required
+                placeholder="theory, philosophy, optional tags..."
               />
             </div>
 
