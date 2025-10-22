@@ -75,10 +75,6 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
 
       const courseName = tags ? tags.split(",")[0].trim() : "";
       const course = courses?.find((c) => c.name === courseName);
-      if (!course) {
-        setError("Please enter a valid course tag (e.g., AN1101).");
-        return;
-      }
 
       const colorValue = color?.trim() || undefined;
 
@@ -91,7 +87,7 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
         abstract: abstract.trim() || undefined,
         urls: urls.filter(url => url.trim() !== ""),
         notes: notes.trim() || undefined,
-        course_id: course.id,
+        course_id: course?.id,
         color: colorValue,
         metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
       };
