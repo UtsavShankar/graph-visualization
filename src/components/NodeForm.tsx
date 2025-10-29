@@ -14,9 +14,12 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [year, setYear] = useState("");
+  const [publisher, setPublisher] = useState("");
   const [tags, setTags] = useState("");
   const [abstract, setAbstract] = useState("");
-  const [urls, setUrls] = useState<string[]>([]);
+  const [publisherSite, setPublisherSite] = useState("");
+  const [companionWebsite, setCompanionWebsite] = useState("");
+  const [relevantMedia, setRelevantMedia] = useState("");
   const [notes, setNotes] = useState("");
   const [color, setColor] = useState("");
   const [metadata, setMetadata] = useState<Record<string, string>>({});
@@ -31,16 +34,12 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       setTitle(node.title || "");
       setAuthor(node.author || "");
       setYear(node.year ? node.year.toString() : "");
+      setPublisher(node.publisher || "");
       setTags(node.tags ? node.tags.join(", ") : "");
       setAbstract(node.abstract || "");
-      // Handle both legacy url and new urls array
-      if (node.urls && node.urls.length > 0) {
-        setUrls(node.urls);
-      } else if (node.url) {
-        setUrls([node.url]);
-      } else {
-        setUrls([]);
-      }
+      setPublisherSite(node.publisher_site || "");
+      setCompanionWebsite(node.companion_website || "");
+      setRelevantMedia(node.relevant_media || "");
       setNotes(node.notes || "");
       setColor(node.color || "");
       setMetadata(node.metadata || {});
@@ -48,9 +47,12 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       setTitle("");
       setAuthor("");
       setYear("");
+      setPublisher("");
       setTags("");
       setAbstract("");
-      setUrls([]);
+      setPublisherSite("");
+      setCompanionWebsite("");
+      setRelevantMedia("");
       setNotes("");
       setColor("");
       setMetadata({});
@@ -83,9 +85,12 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
         title: title.trim(),
         author: author.trim() || undefined,
         year: year ? Number(year) : undefined,
+        publisher: publisher.trim() || undefined,
         tags: tags ? tags.split(",").map((tag) => tag.trim()).filter(Boolean) : [],
         abstract: abstract.trim() || undefined,
-        urls: urls.filter(url => url.trim() !== ""),
+        publisher_site: publisherSite.trim() || undefined,
+        companion_website: companionWebsite.trim() || undefined,
+        relevant_media: relevantMedia.trim() || undefined,
         notes: notes.trim() || undefined,
         course_id: course?.id,
         color: colorValue,
@@ -144,6 +149,16 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
             </div>
 
             <div className="col-span-2">
+              <label className="block text-sm text-slate-300 mb-1">Publisher</label>
+              <input
+                value={publisher}
+                onChange={(event) => setPublisher(event.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
+                placeholder="e.g., Penguin Books, Cambridge University Press"
+              />
+            </div>
+
+            <div className="col-span-2">
               <label className="block text-sm text-slate-300 mb-1">Tags (comma-separated)</label>
               <input
                 value={tags}
@@ -185,53 +200,36 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
             </div>
 
             <div className="col-span-2">
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-sm text-slate-300">Links</label>
-                <button
-                  type="button"
-                  onClick={() => setUrls([...urls, ""])}
-                  className="px-3 py-1 text-sm rounded-md border border-sky-500/50 bg-sky-500/15 hover:bg-sky-500/25"
-                >
-                  + Add Link
-                </button>
-              </div>
-              {urls.length === 0 ? (
-                <button
-                  type="button"
-                  onClick={() => setUrls([""])}
-                  className="w-full px-3 py-2 rounded-md border border-slate-700 hover:border-sky-500/50 text-slate-400 text-sm"
-                >
-                  Click to add a link
-                </button>
-              ) : (
-                <div className="space-y-2">
-                  {urls.map((url, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <input
-                        value={url}
-                        onChange={(e) => {
-                          const newUrls = [...urls];
-                          newUrls[index] = e.target.value;
-                          setUrls(newUrls);
-                        }}
-                        className="flex-1 px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
-                        placeholder="https://..."
-                        type="url"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newUrls = urls.filter((_, i) => i !== index);
-                          setUrls(newUrls);
-                        }}
-                        className="px-3 py-2 rounded-md border border-red-500/50 bg-red-500/15 hover:bg-red-500/25 text-red-400"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <label className="block text-sm text-slate-300 mb-1">Publisher's site</label>
+              <input
+                value={publisherSite}
+                onChange={(event) => setPublisherSite(event.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
+                placeholder="https://..."
+                type="url"
+              />
+            </div>
+
+            <div className="col-span-2">
+              <label className="block text-sm text-slate-300 mb-1">Companion website</label>
+              <input
+                value={companionWebsite}
+                onChange={(event) => setCompanionWebsite(event.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
+                placeholder="https://..."
+                type="url"
+              />
+            </div>
+
+            <div className="col-span-2">
+              <label className="block text-sm text-slate-300 mb-1">Relevant media</label>
+              <input
+                value={relevantMedia}
+                onChange={(event) => setRelevantMedia(event.target.value)}
+                className="w-full px-3 py-2 rounded-md bg-slate-800 border border-slate-700 outline-none focus:border-sky-500"
+                placeholder="https://..."
+                type="url"
+              />
             </div>
 
             <div className="col-span-2">

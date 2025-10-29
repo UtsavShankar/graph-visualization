@@ -26,7 +26,7 @@ interface ExploreViewProps {
 }
 
 export function ExploreView({ graph, setGraph, query, setQuery, courses }: ExploreViewProps) {
-  const TAG_FILTER_OPTIONS = courses?.map((course) => course.name) || [];
+  const TAG_FILTER_OPTIONS = courses?.map((course) => course.name).filter((name) => name !== "AN1101") || [];
 
   // Refs
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -47,6 +47,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const [showEdgeForm, setShowEdgeForm] = useState(false);
   const [hoverEdge, setHoverEdge] = useState<{ id: string; src: string; tgt: string; note: string; weight?: number } | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [showWorldMap, setShowWorldMap] = useState(false);
 
   // Custom hooks
   const {
@@ -504,6 +505,16 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
           >
             Migrate JSON
           </button>
+          <button
+            onClick={() => setShowWorldMap(!showWorldMap)}
+            className={`px-4 py-2 rounded-lg border ${
+              showWorldMap
+                ? "border-emerald-500/60 bg-emerald-500/20 text-emerald-100"
+                : "border-slate-700 hover:border-emerald-500/60"
+            }`}
+          >
+            {showWorldMap ? "Hide Map" : "Show Map"}
+          </button>
           <span className="text-xs text-slate-400 ml-2">Right-click nodes to edit | Drag to move</span>
         </div>
 
@@ -540,7 +551,16 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
         )}
 
         {/* Cytoscape container */}
-        <div ref={containerRef} className="h-[calc(100vh-8rem)]" />
+        <div
+          ref={containerRef}
+          className="h-[calc(100vh-8rem)] relative"
+          style={showWorldMap ? {
+            backgroundImage: 'url("public/black-white-map.jpg")',
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          } : {}}
+        />
 
         {/* Edge hover tooltip */}
         {hoverEdge && (
@@ -570,6 +590,11 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
               <div className="text-slate-300 text-base">
                 {selected.author} {selected.year ? `- ${selected.year}` : ""}
               </div>
+              {selected.publisher && (
+                <div className="text-slate-400 text-base italic">
+                  {selected.publisher}
+                </div>
+              )}
               {selected.tags?.length ? (
                 <div className="flex flex-wrap gap-1">
                   {selected.tags.map((tag: string) => (
@@ -596,36 +621,51 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
                   ))}
                 </div>
               )}
-              {/* Display URLs - handle both legacy url and new urls array */}
-              {((selected.urls && selected.urls.length > 0) || selected.url) && (
-                <div className="mt-3">
-                  <div className="text-base font-medium text-white mb-2">Links</div>
-                  <div className="space-y-1">
-                    {selected.urls && selected.urls.length > 0 ? (
-                      selected.urls.map((url: string, index: number) => (
-                        <a
-                          key={index}
-                          href={url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="block text-sky-400 hover:underline text-base truncate"
-                          title={url}
-                        >
-                          {url}
-                        </a>
-                      ))
-                    ) : selected.url ? (
+              {/* Display URLs */}
+              {(selected.publisher_site || selected.companion_website || selected.relevant_media) && (
+                <div className="mt-3 space-y-2">
+                  {selected.publisher_site && (
+                    <div>
+                      <div className="text-base font-medium text-white">Publisher's site</div>
                       <a
-                        href={selected.url}
+                        href={selected.publisher_site}
                         target="_blank"
                         rel="noreferrer"
                         className="block text-sky-400 hover:underline text-base truncate"
-                        title={selected.url}
+                        title={selected.publisher_site}
                       >
-                        {selected.url}
+                        {selected.publisher_site}
                       </a>
-                    ) : null}
-                  </div>
+                    </div>
+                  )}
+                  {selected.companion_website && (
+                    <div>
+                      <div className="text-base font-medium text-white">Companion website</div>
+                      <a
+                        href={selected.companion_website}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block text-sky-400 hover:underline text-base truncate"
+                        title={selected.companion_website}
+                      >
+                        {selected.companion_website}
+                      </a>
+                    </div>
+                  )}
+                  {selected.relevant_media && (
+                    <div>
+                      <div className="text-base font-medium text-white">Relevant media</div>
+                      <a
+                        href={selected.relevant_media}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block text-sky-400 hover:underline text-base truncate"
+                        title={selected.relevant_media}
+                      >
+                        {selected.relevant_media}
+                      </a>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
