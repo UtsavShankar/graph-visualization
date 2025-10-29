@@ -555,7 +555,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
           ref={containerRef}
           className="h-[calc(100vh-8rem)] relative"
           style={showWorldMap ? {
-            backgroundImage: 'url("public/black-white-map.jpg")',
+            backgroundImage: `url("${import.meta.env.BASE_URL}black-white-map.jpg")`,
             backgroundSize: 'contain',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
