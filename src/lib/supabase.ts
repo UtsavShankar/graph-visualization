@@ -21,7 +21,7 @@ export interface Node {
   id: string
   title: string
   url?: string  // Legacy field - deprecated
-  urls: string[]  // New field for multiple URLs
+  urls?: string[]  // New field for multiple URLs (optional, defaults to empty array)
   author?: string
   year?: number
   publisher?: string

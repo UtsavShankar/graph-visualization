@@ -83,6 +83,7 @@ export function NodeForm({ node, courses, onSubmit, onCancel, isOpen }: NodeForm
       const nodeData = {
         id,
         title: title.trim(),
+        urls: [], // Initialize as empty array - satisfies required field
         author: author.trim() || undefined,
         year: year ? Number(year) : undefined,
         publisher: publisher.trim() || undefined,
