@@ -24,6 +24,7 @@ export interface Node {
   urls: string[]  // New field for multiple URLs
   author?: string
   year?: number
+  publisher?: string
   color?: string
   tags: string[]
   course_id: string
@@ -31,6 +32,9 @@ export interface Node {
   notes?: string
   pos?: { x: number; y: number }
   metadata?: Record<string, string>
+  publisher_site?: string
+  companion_website?: string
+  relevant_media?: string
   created_at: string
   updated_at: string
 }
