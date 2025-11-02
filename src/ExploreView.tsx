@@ -10,7 +10,6 @@ import type { Node, Edge, Course } from "./lib/supabase";
 import { ContextMenu } from "./components/ContextMenu";
 import { EdgeContextMenu } from "./components/EdgeContextMenu";
 import { EdgeNoteForm } from "./components/EdgeNoteForm";
-import { JsonMigrationButton } from "./components/JsonMigrationButton";
 import { NodeForm } from "./components/NodeForm";
 import { useEdgeCreation } from "./hooks/useEdgeCreation";
 import { useNodeDeletion } from "./hooks/useNodeDeletion";
@@ -59,7 +58,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
 
   // State
   const [tagFilter, setTagFilter] = useState<string>("");
-  const [showMigration, setShowMigration] = useState<boolean>(false);
   const [selected, setSelected] = useState<Node | null>(null);
   const [showNodeForm, setShowNodeForm] = useState<boolean>(false);
   const [editingNode, setEditingNode] = useState<Node | null>(null);
@@ -529,12 +527,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
             {nodeDeletionMode ? "Cancel Delete" : "Delete Node"}
           </button>
           <button
-            onClick={() => setShowMigration(!showMigration)}
-            className="px-4 py-2 rounded-lg border border-slate-700 hover:border-slate-600"
-          >
-            Migrate JSON
-          </button>
-          <button
             onClick={() => setShowWorldMap(!showWorldMap)}
             className={`px-4 py-2 rounded-lg border ${
               showWorldMap
@@ -569,13 +561,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
             <div className="rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-sm text-red-100">
               Delete mode: click a node to remove it. Press Esc to cancel.
             </div>
-          </div>
-        )}
-
-        {/* Migration tool */}
-        {showMigration && (
-          <div className="border-t border-slate-800 p-4">
-            <JsonMigrationButton onComplete={() => window.location.reload()} />
           </div>
         )}
 
