@@ -33,3 +33,6 @@ detect-*.sql
 *.njsproj
 *.sln
 *.sw?
+
+# Claude Code configuration
+.claude/
