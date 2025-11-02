@@ -46,7 +46,23 @@ WHERE tablename IN ('courses', 'nodes', 'edges')
 ORDER BY tablename, cmd;
 ```
 
-### Step 4: Test Anonymous Access
+### Step 4: Set Up GitHub Secrets (For GitHub Pages Deployment)
+
+**Critical**: Your GitHub Pages site needs access to Supabase credentials during build.
+
+1. Go to your GitHub repository settings
+2. Navigate to **Settings > Secrets and variables > Actions**
+3. Click **New repository secret**
+4. Add both secrets:
+   - Name: `VITE_SUPABASE_URL`
+   - Value: `https://segbdmjlsaubqzyickwk.supabase.co`
+
+   - Name: `VITE_SUPABASE_ANON_KEY`
+   - Value: Your Supabase anon key (from your `.env` file)
+
+5. The deployment workflow will now inject these variables during build
+
+### Step 5: Test Anonymous Access
 
 **Important**: Test as a true anonymous user, not while logged into Supabase!
 
