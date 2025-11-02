@@ -17,6 +17,11 @@ tsconfig.tsbuildinfo
 src/**/*.js
 src/**/*.jsx
 
+# Environment variables
+.env
+.env.local
+.env.*.local
+
 # SQL migration scripts (kept locally)
 *-migration.sql
 add-*.sql

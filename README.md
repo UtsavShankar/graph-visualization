@@ -29,6 +29,8 @@ A modern web application for visualizing and managing academic book collections 
 - **Build Tool**: Vite 7.1.3
 - **Styling**: Tailwind CSS 4.1.12
 - **Graph Visualization**: Cytoscape.js 3.33.1 with fcose layout
+- **Database**: Supabase (PostgreSQL)
+- **Deployment**: GitHub Pages
 - **Development**: ESLint, TypeScript, PostCSS
 
 ## 📁 Project Structure
@@ -126,9 +128,43 @@ cd bookgraph
 # Install dependencies
 npm install
 
+# Set up environment variables
+# Create a .env file in the root directory with:
+# VITE_SUPABASE_URL=your_supabase_project_url
+# VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
 # Start development server
 npm run dev
 ```
+
+### Supabase Setup
+
+This application requires a Supabase database. Follow these steps:
+
+1. **Create a Supabase Project**
+   - Go to [supabase.com](https://supabase.com) and create a new project
+   - Note your project URL and anon/public key
+
+2. **Configure Environment Variables**
+   - Create a `.env` file in the root directory
+   - Add your Supabase credentials:
+     ```
+     VITE_SUPABASE_URL=https://your-project.supabase.co
+     VITE_SUPABASE_ANON_KEY=your-anon-key-here
+     ```
+
+3. **Apply Database Schema and RLS Policies**
+   - Go to your Supabase project's SQL Editor
+   - Copy and paste the contents of `supabase-rls-policies.sql`
+   - Run the SQL to create the necessary RLS policies
+   - This enables anonymous users to read, create, update, and delete data
+
+4. **Verify Policies**
+   - Navigate to Authentication > Policies in your Supabase dashboard
+   - Ensure policies exist for `courses`, `nodes`, and `edges` tables
+   - Each table should have policies for SELECT, INSERT, UPDATE, and DELETE
+
+**Important**: The `.env` file is gitignored and should never be committed to version control. Each developer needs to create their own `.env` file with their Supabase credentials.
 
 ### Available Scripts
 ```bash
@@ -171,8 +207,8 @@ The system includes predefined academic tags:
 - **Tag Categories**: Add new academic categories to `TAG_FILTER_OPTIONS`
 
 ### Data Persistence
-- **Local Storage**: Data automatically saved to browser localStorage
-- **Storage Key**: `bookGraph:v4:123` (configurable in `App.tsx`)
+- **Supabase Database**: All data stored in PostgreSQL via Supabase
+- **Real-time Sync**: Changes are immediately synced across users
 - **Backup**: Use export functionality for data backup
 
 ## 🎯 Use Cases
