@@ -17,37 +17,16 @@ import { useCytoscapeGraph } from "./hooks/useCytoscapeGraph";
 
 cytoscape.use(fcose);
 
-// Local type definitions for UI state
-interface ContextMenuState {
-  x: number;
-  y: number;
-  nodeId: string;
-}
-
-interface EdgeContextMenuState {
-  x: number;
-  y: number;
-  edgeId: string;
-}
-
-interface HoverEdgeState {
-  id: string;
-  src: string;
-  tgt: string;
-  note: string;
-  weight?: number;
-}
-
 interface ExploreViewProps {
-  graph: { nodes: Node[]; edges: Edge[] };
-  setGraph: React.Dispatch<React.SetStateAction<{ nodes: Node[]; edges: Edge[] }>>;
+  graph: { nodes: any[]; edges: any[] };
+  setGraph: React.Dispatch<React.SetStateAction<{ nodes: any[]; edges: any[] }>>;
   query: string;
   setQuery: (query: string) => void;
-  courses: Course[];
+  courses: any[];
 }
 
 export function ExploreView({ graph, setGraph, query, setQuery, courses }: ExploreViewProps) {
-  const TAG_FILTER_OPTIONS = courses?.map((course) => course.name).filter((name) => name !== EXCLUDED_TAG_FILTER) || [];
+  const TAG_FILTER_OPTIONS = courses?.map((course) => course.name).filter((name) => name !== "AN1101") || [];
 
   // Refs
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -57,17 +36,18 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const graphRef = useRef(graph);
 
   // State
-  const [tagFilter, setTagFilter] = useState<string>("");
-  const [selected, setSelected] = useState<Node | null>(null);
-  const [showNodeForm, setShowNodeForm] = useState<boolean>(false);
-  const [editingNode, setEditingNode] = useState<Node | null>(null);
-  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
-  const [edgeContextMenu, setEdgeContextMenu] = useState<EdgeContextMenuState | null>(null);
+  const [tagFilter, setTagFilter] = useState("");
+  const [showMigration, setShowMigration] = useState(false);
+  const [selected, setSelected] = useState<any>(null);
+  const [showNodeForm, setShowNodeForm] = useState(false);
+  const [editingNode, setEditingNode] = useState<any>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; nodeId: string } | null>(null);
+  const [edgeContextMenu, setEdgeContextMenu] = useState<{ x: number; y: number; edgeId: string } | null>(null);
   const [editingEdge, setEditingEdge] = useState<{ id: string; note: string } | null>(null);
-  const [showEdgeForm, setShowEdgeForm] = useState<boolean>(false);
-  const [hoverEdge, setHoverEdge] = useState<HoverEdgeState | null>(null);
-  const [mousePos, setMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [showWorldMap, setShowWorldMap] = useState<boolean>(false);
+  const [showEdgeForm, setShowEdgeForm] = useState(false);
+  const [hoverEdge, setHoverEdge] = useState<{ id: string; src: string; tgt: string; note: string; weight?: number } | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [showWorldMap, setShowWorldMap] = useState(false);
 
   // Custom hooks
   const {
@@ -176,13 +156,14 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     cy.style(styles);
   }, [tagColorMap, tagFilter]);
 
-  // Sync nodes with Cytoscape
+  // Sync graph elements with Cytoscape
   useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
 
     cy.batch(() => {
       const desiredNodes = new Map(elements.nodes.map((node) => [node.data.id, node]));
+      const desiredEdges = new Map(elements.edges.map((edge) => [edge.data.id, edge]));
 
       // Update or remove existing nodes
       cy.nodes().forEach((node) => {
@@ -214,16 +195,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
           position: node.position,
         });
       });
-    });
-  }, [elements.nodes]);
-
-  // Sync edges with Cytoscape
-  useEffect(() => {
-    const cy = cyRef.current;
-    if (!cy) return;
-
-    cy.batch(() => {
-      const desiredEdges = new Map(elements.edges.map((edge) => [edge.data.id, edge]));
 
       // Update or remove existing edges
       cy.edges().forEach((edge) => {
@@ -248,13 +219,8 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
         });
       });
     });
-  }, [elements.edges]);
 
-  // Restore edge creation preview after graph updates
-  useEffect(() => {
-    const cy = cyRef.current;
-    if (!cy) return;
-
+    // Restore edge creation preview if needed
     if (edgeCreationRef.current.active && edgeCreationRef.current.sourceId) {
       const source = cy.getElementById(edgeCreationRef.current.sourceId);
       if (!source || source.empty()) {
@@ -271,10 +237,20 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     if (!cy) return;
 
     cy.nodes().removeClass("dimmed");
+    const trimmed = query.trim().toLowerCase();
 
     cy.nodes().forEach((node) => {
-      const searchMatch = nodeMatchesSearch(node, query);
-      const tagMatch = nodeMatchesTag(node, tagFilter);
+      // Search across title, tags, and author
+      const title = (node.data("title") || node.id()).toLowerCase();
+      const tags = (node.data("tags") || []).map((t: string) => t.toLowerCase());
+      const author = (node.data("author") || "").toLowerCase();
+
+      const searchMatch = !trimmed ||
+        title.includes(trimmed) ||
+        tags.some((tag: string) => tag.includes(trimmed)) ||
+        author.includes(trimmed);
+
+      const tagMatch = !tagFilter || (node.data("tags") || []).includes(tagFilter);
 
       if (!(searchMatch && tagMatch)) {
         node.addClass("dimmed");
@@ -349,6 +325,8 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
 
     if (edgeCreation.active) {
       exitEdgeMode();
+
+      
     } else {
       enterEdgeMode();
     }
@@ -439,7 +417,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const handleNodeSubmit = useCallback(
     async (nodeData: any) => {
       if (editingNode) {
-        // Update existing node
         const updatedNode = await updateNode(editingNode.id, nodeData);
         setGraph((prev) => ({
           ...prev,
@@ -448,7 +425,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
           ),
         }));
       } else {
-        // Create new node with non-overlapping position
         const courseName = nodeData.tags[0];
         const position = NodePositionManager.findNonOverlappingPosition(
           graph.nodes.map((node) => ({ ...node, pos: node.pos })),
@@ -461,7 +437,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
         }));
       }
 
-      // Close form and clear editing state
       setShowNodeForm(false);
       setEditingNode(null);
     },
@@ -525,6 +500,12 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
             }`}
           >
             {nodeDeletionMode ? "Cancel Delete" : "Delete Node"}
+          </button>
+          <button
+            onClick={() => setShowMigration(!showMigration)}
+            className="px-4 py-2 rounded-lg border border-slate-700 hover:border-slate-600"
+          >
+            Migrate JSON
           </button>
           <button
             onClick={() => setShowWorldMap(!showWorldMap)}
