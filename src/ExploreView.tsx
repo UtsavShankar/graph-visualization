@@ -31,6 +31,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   // Refs
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cyRef = useRef<cytoscape.Core | null>(null);
+  const mapImageRef = useRef<HTMLImageElement | null>(null);
   const tagFilterRef = useRef<string>("");
   const tagColorMapRef = useRef<Map<string, string>>(new Map());
   const graphRef = useRef(graph);
@@ -126,6 +127,21 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     setHoverEdge(null);
   }, []);
 
+  // Synchronize world map with Cytoscape viewport
+  const syncMapWithViewport = useCallback(() => {
+    const cy = cyRef.current;
+    const mapImg = mapImageRef.current;
+
+    if (!cy || !mapImg || !showWorldMap) return;
+
+    const zoom = cy.zoom();
+    const pan = cy.pan();
+
+    // Simple direct mapping
+    // The key is matching the transform origin
+    mapImg.style.transform = `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`;
+  }, [showWorldMap]);
+
   // Initialize Cytoscape graph
   useCytoscapeGraph({
     containerRef,
@@ -155,6 +171,32 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     const styles = getCytoscapeStyles(tagFilterRef, tagColorMapRef);
     cy.style(styles);
   }, [tagColorMap, tagFilter]);
+
+  // Sync map with Cytoscape viewport changes
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy || !showWorldMap) return;
+
+    // Initial synchronization when map is toggled on
+    syncMapWithViewport();
+
+    // Listen for viewport changes and sync map
+    const handleViewportChange = () => {
+      requestAnimationFrame(syncMapWithViewport);
+    };
+
+    // Attach listeners for zoom and pan events
+    cy.on('viewport', handleViewportChange);
+    cy.on('zoom', handleViewportChange);
+    cy.on('pan', handleViewportChange);
+
+    // Cleanup on unmount or when dependencies change
+    return () => {
+      cy.off('viewport', handleViewportChange);
+      cy.off('zoom', handleViewportChange);
+      cy.off('pan', handleViewportChange);
+    };
+  }, [showWorldMap, syncMapWithViewport]);
 
   // Sync graph elements with Cytoscape
   useEffect(() => {
@@ -546,16 +588,44 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
         )}
 
         {/* Cytoscape container */}
-        <div
-          ref={containerRef}
-          className="h-[calc(100vh-8rem)] relative"
-          style={showWorldMap ? {
-            backgroundImage: `url("${import.meta.env.BASE_URL}black-white-map.jpg")`,
-            backgroundSize: 'contain',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          } : {}}
-        />
+        <div className="h-[calc(100vh-8rem)] relative overflow-hidden">
+          {/* Map background image - positioned to match Cytoscape coordinate space */}
+          {showWorldMap && (
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none',
+                overflow: 'hidden',
+              }}
+            >
+              <img
+                ref={mapImageRef}
+                src={`${import.meta.env.BASE_URL}world-map.svg`}
+                alt="World map background"
+                style={{
+                  position: 'absolute',
+  
+                  top: 0,
+                  left: '0',
+                  width: '500%', // Make map extremely large
+                  height: 'auto',
+                  maxWidth: 'none',
+                  maxHeight: 'none',
+                  opacity: 0.3,
+                  transformOrigin: '0 0', // MUST be top-left
+                  willChange: 'transform',
+                }}
+                onLoad={syncMapWithViewport}
+              />
+            </div>
+          )}
+          {/* Cytoscape canvas */}
+          <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }} />
+        </div>
 
         {/* Edge hover tooltip */}
         {hoverEdge && (

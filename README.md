@@ -7,21 +7,26 @@ A modern web application for visualizing and managing academic book collections 
 ### Graph Visualization
 - **Interactive Network Graph**: Visualize books and their relationships using Cytoscape.js
 - **Tag-based Organization**: Books are organized in circular clusters by academic tags
-- **Dynamic Filtering**: Filter books by tags or search by title
+- **Dynamic Filtering**: Filter books by tags or search by title, tags, and authors
 - **Hover Interactions**: Hover over edges to see connection details
-- **Node Selection**: Click nodes to view detailed book information
+- **Node Selection**: Click nodes to view detailed book information in an enhanced sidebar
+- **World Map Background**: Optional world map overlay that pans and zooms with the graph
 
 ### Book Management
-- **Add New Books**: Complete form for adding books with metadata
+- **Add New Books**: Complete form for adding books with metadata including multiple URL fields
+- **Publisher Information**: Track publisher details and related websites
 - **Connection Management**: Create relationships between books with custom labels and weights
+- **Flexible URL Fields**: Separate fields for publisher site, companion website, and relevant media
 - **Import/Export**: JSON import/export functionality for data portability
 - **Book Deletion**: Remove books and their connections
 
 ### User Interface
 - **Dual View System**: Separate Explore and Edit views
 - **Responsive Design**: Modern dark theme with Tailwind CSS
-- **Real-time Search**: Instant filtering as you type
+- **Enhanced Search**: Search across titles, tags, and authors simultaneously
 - **Tag Filtering**: Quick access to specific academic categories
+- **Improved Details Sidebar**: Larger fonts and better metadata display formatting
+- **Optional Tags**: Flexible tag system with no validation requirements
 
 ## 🛠️ Technology Stack
 
@@ -58,12 +63,14 @@ src/
 ### ExploreView.tsx
 - **Graph Visualization**: Renders interactive Cytoscape.js graph
 - **Layout Management**: Organizes books in circular clusters by academic tags
-- **Interactive Features**: 
+- **Interactive Features**:
   - Node selection and neighborhood highlighting
   - Edge hover tooltips with connection details
-  - Search and tag filtering
+  - Multi-field search (titles, tags, authors)
   - Smooth animations for layout changes
+  - Optional world map background with synchronized pan and zoom
 - **Visual Styling**: Custom node and edge styles with hover effects
+- **Enhanced Details**: Improved sidebar with better metadata formatting
 
 ### EditView.tsx
 - **Book Management Interface**: Form for adding new books
@@ -76,15 +83,18 @@ src/
 ### Node (Book) Properties
 ```typescript
 {
-  id: string;           // Unique identifier (slugified title)
-  title: string;        // Book title
-  author?: string;      // Author name
-  year?: number;        // Publication year
-  tags?: string[];      // Academic categories (e.g., "AN1101", "SC2209")
-  abstract?: string;    // Book description
-  url?: string;         // External link
-  notes?: string;       // Personal notes
-  color?: string;       // Custom node color
+  id: string;                    // Unique identifier (slugified title)
+  title: string;                 // Book title
+  author?: string;               // Author name
+  year?: number;                 // Publication year
+  tags?: string[];               // Academic categories (e.g., "AN1101", "SC2209") - optional
+  abstract?: string;             // Book description
+  publisher?: string;            // Publisher name
+  publisher_site?: string;       // Publisher website URL
+  companion_website?: string;    // Companion website URL
+  relevant_media?: string;       // Related media URL
+  notes?: string;                // Personal notes
+  color?: string;                // Custom node color
 }
 ```
 
@@ -178,25 +188,32 @@ npm run lint     # Run ESLint
 
 ### Exploring the Graph
 1. **Navigate**: Use the "Explore" tab to view the graph
-2. **Search**: Use the search bar to filter books by title
+2. **Search**: Use the search bar to filter books by title, tags, or author
 3. **Filter by Tag**: Select a tag from the dropdown to focus on specific categories
-4. **Interact**: 
-   - Click nodes to see book details in the sidebar
+4. **Toggle World Map**: Click "Show World Map" to display a geographic background
+5. **Interact**:
+   - Click nodes to see detailed book information in the sidebar
    - Hover over edges to see connection information
    - Use mouse wheel to zoom, drag to pan
+   - World map pans and zooms synchronously with the graph
 
 ### Managing Books
 1. **Add Books**: Switch to "Edit" tab and fill out the book form
+   - Add title, author, year, publisher, and abstract
+   - Include URLs for publisher site, companion website, and relevant media
+   - Tags are optional - add them only if relevant
 2. **Create Connections**: Select existing books to connect with the new book
 3. **Set Relationships**: Define the type of relationship and connection strength
 4. **Import/Export**: Use JSON import/export for data backup and sharing
 
 ### Academic Categories
-The system includes predefined academic tags:
-- **AN1101**: Cultural Anthropology
-- **AN2203**: Southeast Asian Studies  
+The system supports flexible academic tags including:
+- **AN1101**: Cultural Anthropology (filtered from tag options)
+- **AN2203**: Southeast Asian Studies
 - **SC2209**: Economic Anthropology
 - **SC3204**: Gender Studies
+
+Note: Tags are completely optional and you can add custom tags as needed.
 
 ## 🔧 Configuration
 
