@@ -68,7 +68,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     nodeDeletionModeRef,
     updateNodeDeletionMode,
     handleNodeDeletion,
-  } = useNodeDeletion({ setGraph, setSelected });
+  } = useNodeDeletion({ cyRef, setGraph, setSelected });
 
   // Sync refs with state
   useEffect(() => {
@@ -237,8 +237,8 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
           position: node.position,
         });
 
-        // If in edge creation mode, make new nodes ungrabify
-        if (edgeCreationRef.current.active) {
+        // If in edge creation or deletion mode, make new nodes ungrabify
+        if (edgeCreationRef.current.active || nodeDeletionModeRef.current) {
           newNode.ungrabify();
         }
       });
@@ -638,7 +638,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
               width: '100%',
               height: '100%',
               zIndex: 1,
-              cursor: edgeCreation.active ? 'crosshair' : 'default'
+              cursor: edgeCreation.active ? 'crosshair' : nodeDeletionMode ? 'not-allowed' : 'default'
             }}
           />
         </div>

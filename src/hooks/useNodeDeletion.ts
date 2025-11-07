@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { deleteNode } from "../lib/database";
 
 interface UseNodeDeletionProps {
+  cyRef: React.RefObject<cytoscape.Core | null>;
   setGraph: React.Dispatch<React.SetStateAction<{ nodes: any[]; edges: any[] }>>;
   setSelected: React.Dispatch<React.SetStateAction<any>>;
 }
@@ -10,7 +11,7 @@ interface UseNodeDeletionProps {
  * Custom hook for managing node deletion mode
  * Handles deletion mode state and node removal with confirmation
  */
-export function useNodeDeletion({ setGraph, setSelected }: UseNodeDeletionProps) {
+export function useNodeDeletion({ cyRef, setGraph, setSelected }: UseNodeDeletionProps) {
   const [nodeDeletionMode, setNodeDeletionMode] = useState(false);
   const nodeDeletionModeRef = useRef(false);
 
@@ -18,7 +19,27 @@ export function useNodeDeletion({ setGraph, setSelected }: UseNodeDeletionProps)
   const updateNodeDeletionMode = useCallback((mode: boolean) => {
     setNodeDeletionMode(mode);
     nodeDeletionModeRef.current = mode;
-  }, []);
+
+    const cy = cyRef.current;
+    if (cy) {
+      if (mode) {
+        // Disable node dragging during deletion mode
+        cy.nodes().forEach((node) => {
+          if (!node.id().startsWith("__")) {
+            node.grabify();
+            node.ungrabify(); // Make nodes not grabbable
+          }
+        });
+      } else {
+        // Re-enable node dragging when exiting deletion mode
+        cy.nodes().forEach((node) => {
+          if (!node.id().startsWith("__")) {
+            node.grabify(); // Make nodes grabbable again
+          }
+        });
+      }
+    }
+  }, [cyRef]);
 
   /** Handle node deletion with confirmation */
   const handleNodeDeletion = useCallback(

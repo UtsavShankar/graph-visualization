@@ -85,6 +85,14 @@ export function getCytoscapeStyles(
       },
     },
     {
+      selector: "node.node-deletion-target",
+      style: {
+        "border-color": "#ef4444",
+        "border-width": 3,
+        "border-opacity": 0.8,
+      },
+    },
+    {
       selector: "node.edge-preview-node",
       style: {
         opacity: 0,
