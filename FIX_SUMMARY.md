@@ -2,10 +2,11 @@
 
 ## Problems Identified
 
-The "Add Edge" and "Delete Edge" buttons were not working due to **two separate issues**:
+The "Add Edge", "Delete Edge", and "Delete Node" buttons were not working due to **three separate issues**:
 
 1. **Stale closure problem** in the Cytoscape event handlers
 2. **Node dragging interfering with click events** during edge creation mode
+3. **Node dragging interfering with click events** during node deletion mode
 
 ### Root Cause
 
@@ -100,11 +101,44 @@ By disabling node dragging during edge creation mode:
 - Users can click to select source and target nodes
 - Dragging is prevented during the edge creation workflow (as requested)
 
+### Solution 3: Make Nodes Clickable During Delete Node Mode (Commit bbb06c9)
+
+After fixing edge creation, the same issue existed for delete node mode. Nodes weren't clickable because drag events were interfering.
+
+#### Root Cause
+Same as Solution 2 - when nodes are grabbable during delete node mode, drag events consume click events before they can trigger the deletion handler.
+
+#### Changes Made
+
+1. **Added cyRef to useNodeDeletion hook** (`src/hooks/useNodeDeletion.ts`):
+   - Updated interface to accept `cyRef`
+   - Modified `updateNodeDeletionMode()` to disable/enable dragging
+
+2. **Disabled node dragging during delete mode** (`src/hooks/useNodeDeletion.ts`):
+   - When entering delete mode: Call `ungrabify()` on all real nodes
+   - When exiting delete mode: Call `grabify()` to re-enable dragging
+
+3. **Handle newly added nodes** (`src/ExploreView.tsx`):
+   - When nodes are added during delete mode, automatically ungrabify them
+   - Pass `cyRef` to `useNodeDeletion` hook
+
+4. **Visual feedback** (`src/ExploreView.tsx` & `src/lib/cytoscape-styles.ts`):
+   - Added `cursor: 'not-allowed'` to the container during delete mode
+   - Added `node-deletion-target` style with red border for visual feedback
+
+#### How This Fixes The Issue
+By disabling node dragging during delete node mode:
+- Drag events no longer consume mousedown/click events
+- Tap events fire correctly when clicking nodes to delete them
+- Users can click to select nodes for deletion
+- Dragging is prevented during the deletion workflow (as requested)
+
 ## Files Modified
 
 - `src/hooks/useCytoscapeGraph.ts` - Ref-based solution for stale closures
-- `src/hooks/useEdgeCreation.ts` - Disable/enable node dragging based on mode
-- `src/ExploreView.tsx` - Handle new nodes during edge creation, add cursor feedback
+- `src/hooks/useEdgeCreation.ts` - Disable/enable node dragging during edge creation mode
+- `src/hooks/useNodeDeletion.ts` - Disable/enable node dragging during delete node mode
+- `src/ExploreView.tsx` - Handle new nodes during special modes, add cursor feedback
 - `src/lib/cytoscape-styles.ts` - Ensure event handling and add visual styles
 
 ## Testing
@@ -113,13 +147,32 @@ By disabling node dragging during edge creation mode:
 - ✅ All event handlers now use ref-based callbacks
 - ✅ Nodes are clickable during edge creation mode
 - ✅ Node dragging is disabled during edge creation mode
+- ✅ Nodes are clickable during delete node mode
+- ✅ Node dragging is disabled during delete node mode
 - ✅ No breaking changes to API or behavior
 
 ## Next Steps
 
 Test the following interactions in the running application:
-1. Click "Add Edge" button → select source node → select target node (nodes should be clickable, not draggable)
-2. Right-click an edge → click "Delete edge"
-3. Right-click a node → click "Add Edge"
+
+**Add Edge Mode:**
+1. Click "Add Edge" button → select source node → select target node
+2. Verify nodes are clickable but not draggable
+3. Verify crosshair cursor appears
 4. Exit edge creation mode and verify nodes are draggable again
-5. All node and edge interactions should now work correctly
+
+**Delete Node Mode:**
+5. Click "Delete Node" button → click a node to delete it
+6. Verify nodes are clickable but not draggable
+7. Verify 'not-allowed' cursor appears
+8. Exit delete mode and verify nodes are draggable again
+
+**Delete Edge:**
+9. Right-click an edge → click "Delete edge"
+10. Verify the edge is deleted successfully
+
+**Context Menu:**
+11. Right-click a node → click "Add Edge" from context menu
+12. Verify edge creation mode starts with that node as source
+
+All node and edge interactions should now work correctly!
