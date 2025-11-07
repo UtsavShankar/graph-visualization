@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import cytoscape from "cytoscape";
 import { getCytoscapeStyles } from "../lib/cytoscape-styles";
 import { updateNodePosition } from "../lib/database";
@@ -50,6 +50,34 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
     updatePreviewPosition,
   } = props;
 
+  // Create refs for all callbacks to avoid stale closures in event handlers
+  const handleEdgeNodeSelectionRef = useRef(handleEdgeNodeSelection);
+  const handleNodeDeletionRef = useRef(handleNodeDeletion);
+  const exitEdgeModeRef = useRef(exitEdgeMode);
+  const closeEdgeContextMenuRef = useRef(closeEdgeContextMenu);
+  const updatePreviewPositionRef = useRef(updatePreviewPosition);
+  const updateNodeDeletionModeRef = useRef(updateNodeDeletionMode);
+  const setSelectedRef = useRef(setSelected);
+  const setContextMenuRef = useRef(setContextMenu);
+  const setEdgeContextMenuRef = useRef(setEdgeContextMenu);
+  const setHoverEdgeRef = useRef(setHoverEdge);
+  const setGraphRef = useRef(setGraph);
+
+  // Keep refs up-to-date with latest callback versions
+  useEffect(() => {
+    handleEdgeNodeSelectionRef.current = handleEdgeNodeSelection;
+    handleNodeDeletionRef.current = handleNodeDeletion;
+    exitEdgeModeRef.current = exitEdgeMode;
+    closeEdgeContextMenuRef.current = closeEdgeContextMenu;
+    updatePreviewPositionRef.current = updatePreviewPosition;
+    updateNodeDeletionModeRef.current = updateNodeDeletionMode;
+    setSelectedRef.current = setSelected;
+    setContextMenuRef.current = setContextMenu;
+    setEdgeContextMenuRef.current = setEdgeContextMenu;
+    setHoverEdgeRef.current = setHoverEdge;
+    setGraphRef.current = setGraph;
+  });
+
   useEffect(() => {
     if (!containerRef.current || cyRef.current) return;
 
@@ -68,16 +96,16 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
 
     const clearFocus = () => {
       cy.elements().removeClass("faded hovered");
-      setSelected(null);
+      setSelectedRef.current(null);
     };
 
     // Background tap - clear modes and selection
     cy.on("tap", (event) => {
       if (event.target === cy) {
         if (edgeCreationRef.current?.active) {
-          exitEdgeMode();
+          exitEdgeModeRef.current();
         } else if (nodeDeletionModeRef.current) {
-          updateNodeDeletionMode(false);
+          updateNodeDeletionModeRef.current(false);
         } else {
           clearFocus();
         }
@@ -93,13 +121,13 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
 
       if (nodeDeletionModeRef.current) {
         event.preventDefault();
-        void handleNodeDeletion(nodeId);
+        void handleNodeDeletionRef.current(nodeId);
         return;
       }
 
       if (edgeCreationRef.current?.active) {
         event.preventDefault();
-        void handleEdgeNodeSelection(nodeId);
+        void handleEdgeNodeSelectionRef.current(nodeId);
         return;
       }
 
@@ -107,7 +135,7 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
       const neighborhood = node.closedNeighborhood();
       cy.elements().addClass("faded");
       neighborhood.removeClass("faded");
-      setSelected(node.data());
+      setSelectedRef.current(node.data());
     });
 
     // Node right-click - show context menu
@@ -121,12 +149,12 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
 
       if (!rect) return;
 
-      setContextMenu({
+      setContextMenuRef.current({
         x: rect.left + rendered.x,
         y: rect.top + rendered.y,
         nodeId: node.id(),
       });
-      closeEdgeContextMenu();
+      closeEdgeContextMenuRef.current();
     });
 
     // Edge right-click - show edge context menu
@@ -141,17 +169,17 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
 
       if (!rect) return;
 
-      setEdgeContextMenu({
+      setEdgeContextMenuRef.current({
         x: rect.left + rendered.x,
         y: rect.top + rendered.y,
         edgeId: edge.id(),
       });
-      setContextMenu(null);
+      setContextMenuRef.current(null);
     });
 
     // Node drag - maintain selection
     cy.on("grab", "node", () => {
-      setSelected((prev: any) => prev);
+      setSelectedRef.current((prev: any) => prev);
     });
 
     // Node drop - update position in database
@@ -165,7 +193,7 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
 
       try {
         await updateNodePosition(nodeId, { x: position.x, y: position.y });
-        setGraph((prev) => ({
+        setGraphRef.current((prev) => ({
           ...prev,
           nodes: prev.nodes.map((n) =>
             n.id === nodeId ? { ...n, pos: { x: position.x, y: position.y } } : n
@@ -190,17 +218,17 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
       const weight = edge.data("weight");
 
       if (!note) {
-        setHoverEdge(null);
+        setHoverEdgeRef.current(null);
         return;
       }
 
-      setHoverEdge({ id: edge.id(), src, tgt, note, weight });
+      setHoverEdgeRef.current({ id: edge.id(), src, tgt, note, weight });
     });
 
     // Edge mouse out - hide tooltip
     cy.on("mouseout", "edge", (event) => {
       event.target.removeClass("hovered");
-      setHoverEdge(null);
+      setHoverEdgeRef.current(null);
     });
 
     // Mouse move - update preview node position during edge creation
@@ -208,7 +236,7 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
       if (!edgeCreationRef.current?.active || !edgeCreationRef.current.sourceId) return;
 
       if (event.position) {
-        updatePreviewPosition(event.position);
+        updatePreviewPositionRef.current(event.position);
       }
     });
 
@@ -217,7 +245,7 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
       const removedId = event.target.id();
       if (removedId === PREVIEW_EDGE_ID) return;
 
-      setHoverEdge((current) => (current?.id === removedId ? null : current));
+      setHoverEdgeRef.current((current) => (current?.id === removedId ? null : current));
     });
 
     // Initial fit and zoom
