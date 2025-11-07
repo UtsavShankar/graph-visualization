@@ -49,6 +49,7 @@ export function getCytoscapeStyles(
         shape: "ellipse",
         "transition-property": "background-color opacity width height border-width",
         "transition-duration": 150,
+        events: "yes", // Ensure nodes can receive events
       },
     },
     {
@@ -73,6 +74,14 @@ export function getCytoscapeStyles(
         "border-opacity": 0.9,
         "shadow-blur": 12,
         "shadow-color": "#f97316",
+      },
+    },
+    {
+      selector: "node.edge-creation-target",
+      style: {
+        "border-color": "#10b981",
+        "border-width": 3,
+        "border-opacity": 0.7,
       },
     },
     {

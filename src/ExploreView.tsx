@@ -231,11 +231,16 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
 
       // Add new nodes
       desiredNodes.forEach((node) => {
-        cy.add({
+        const newNode = cy.add({
           group: "nodes",
           data: { ...node.data },
           position: node.position,
         });
+
+        // If in edge creation mode, make new nodes ungrabify
+        if (edgeCreationRef.current.active) {
+          newNode.ungrabify();
+        }
       });
 
       // Update or remove existing edges
@@ -624,7 +629,18 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
             </div>
           )}
           {/* Cytoscape canvas */}
-          <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1 }} />
+          <div
+            ref={containerRef}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: 1,
+              cursor: edgeCreation.active ? 'crosshair' : 'default'
+            }}
+          />
         </div>
 
         {/* Edge hover tooltip */}

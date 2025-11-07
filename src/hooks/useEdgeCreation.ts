@@ -110,7 +110,17 @@ export function useEdgeCreation({ cyRef, graphRef, setGraph }: UseEdgeCreationPr
     updateEdgeCreation({ active: false, sourceId: null });
     setEdgeError("");
     removePreview();
-  }, [removePreview, updateEdgeCreation]);
+
+    const cy = cyRef.current;
+    if (cy) {
+      // Re-enable node dragging when exiting edge creation mode
+      cy.nodes().forEach((node) => {
+        if (!node.id().startsWith("__")) {
+          node.grabify(); // Make nodes grabbable again
+        }
+      });
+    }
+  }, [removePreview, updateEdgeCreation, cyRef]);
 
   /** Enter edge creation mode */
   const enterEdgeMode = useCallback(
@@ -118,13 +128,24 @@ export function useEdgeCreation({ cyRef, graphRef, setGraph }: UseEdgeCreationPr
       updateEdgeCreation({ active: true, sourceId });
       setEdgeError("");
 
+      const cy = cyRef.current;
+      if (cy) {
+        // Disable node dragging during edge creation mode
+        cy.nodes().forEach((node) => {
+          if (!node.id().startsWith("__")) {
+            node.grabify();
+            node.ungrabify(); // Make nodes not grabbable
+          }
+        });
+      }
+
       if (sourceId) {
         ensurePreview(sourceId);
       } else {
         removePreview();
       }
     },
-    [ensurePreview, removePreview, updateEdgeCreation]
+    [ensurePreview, removePreview, updateEdgeCreation, cyRef]
   );
 
   /** Check if an edge already exists between two nodes */

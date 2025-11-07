@@ -1,8 +1,11 @@
 # Fix Summary: Node Interaction Issues
 
-## Problem Identified
+## Problems Identified
 
-The "Add Edge" and "Delete Edge" buttons were not working due to a **stale closure problem** in the Cytoscape event handlers.
+The "Add Edge" and "Delete Edge" buttons were not working due to **two separate issues**:
+
+1. **Stale closure problem** in the Cytoscape event handlers
+2. **Node dragging interfering with click events** during edge creation mode
 
 ### Root Cause
 
@@ -27,7 +30,9 @@ useEffect(() => {
 }, []); // Empty dependency array
 ```
 
-## Solution Implemented
+## Solutions Implemented
+
+### Solution 1: Fix Stale Closures (Commit 83bcafc)
 
 Updated `src/hooks/useCytoscapeGraph.ts` to use the **ref pattern** to maintain up-to-date callback references:
 
@@ -65,20 +70,56 @@ Now when users interact with the graph:
 - Refs always point to the latest callback versions
 - Users get current, working functionality instead of stale closures
 
+### Solution 2: Make Nodes Clickable During Edge Creation (Commit be454cf)
+
+After fixing the stale closures, nodes still weren't clickable during edge creation mode. This was because **drag events were interfering with click events**.
+
+#### Root Cause
+When nodes are grabbable (draggable), Cytoscape prioritizes grab/drag events over tap/click events. During edge creation mode, mousedown events were being consumed by the drag handler before tap events could fire.
+
+#### Changes Made
+
+1. **Disabled node dragging during edge creation** (`src/hooks/useEdgeCreation.ts`):
+   - In `enterEdgeMode()`: Call `ungrabify()` on all real nodes to disable dragging
+   - In `exitEdgeMode()`: Call `grabify()` to re-enable dragging
+
+2. **Handle newly added nodes** (`src/ExploreView.tsx`):
+   - When nodes are added during edge creation mode, automatically ungrabify them
+
+3. **Visual feedback** (`src/ExploreView.tsx`):
+   - Added `cursor: 'crosshair'` to the container during edge creation mode
+
+4. **Ensure event handling** (`src/lib/cytoscape-styles.ts`):
+   - Added explicit `events: "yes"` to node styles
+   - Added `edge-creation-target` style for visual feedback
+
+#### How This Fixes The Issue
+By disabling node dragging during edge creation mode:
+- Drag events no longer consume mousedown/click events
+- Tap events fire correctly when clicking nodes
+- Users can click to select source and target nodes
+- Dragging is prevented during the edge creation workflow (as requested)
+
 ## Files Modified
 
-- `src/hooks/useCytoscapeGraph.ts` - Complete ref-based solution implemented
+- `src/hooks/useCytoscapeGraph.ts` - Ref-based solution for stale closures
+- `src/hooks/useEdgeCreation.ts` - Disable/enable node dragging based on mode
+- `src/ExploreView.tsx` - Handle new nodes during edge creation, add cursor feedback
+- `src/lib/cytoscape-styles.ts` - Ensure event handling and add visual styles
 
 ## Testing
 
 - ✅ Project builds successfully with no TypeScript errors
 - ✅ All event handlers now use ref-based callbacks
+- ✅ Nodes are clickable during edge creation mode
+- ✅ Node dragging is disabled during edge creation mode
 - ✅ No breaking changes to API or behavior
 
 ## Next Steps
 
 Test the following interactions in the running application:
-1. Click "Add Edge" button → select source node → select target node
+1. Click "Add Edge" button → select source node → select target node (nodes should be clickable, not draggable)
 2. Right-click an edge → click "Delete edge"
 3. Right-click a node → click "Add Edge"
-4. All node and edge interactions should now work correctly
+4. Exit edge creation mode and verify nodes are draggable again
+5. All node and edge interactions should now work correctly
