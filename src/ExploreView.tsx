@@ -38,7 +38,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
 
   // State
   const [tagFilter, setTagFilter] = useState("");
-  const [showMigration, setShowMigration] = useState(false);
   const [selected, setSelected] = useState<any>(null);
   const [showNodeForm, setShowNodeForm] = useState(false);
   const [editingNode, setEditingNode] = useState<any>(null);
@@ -547,12 +546,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
             }`}
           >
             {nodeDeletionMode ? "Cancel Delete" : "Delete Node"}
-          </button>
-          <button
-            onClick={() => setShowMigration(!showMigration)}
-            className="px-4 py-2 rounded-lg border border-slate-700 hover:border-slate-600"
-          >
-            Migrate JSON
           </button>
           <button
             onClick={() => setShowWorldMap(!showWorldMap)}
