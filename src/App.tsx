@@ -81,10 +81,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full bg-slate-950 text-slate-100">
-      <header className="flex items-center justify-between px-5 py-3 border-b border-slate-800 sticky top-0 bg-slate-950/80 backdrop-blur z-10">
-        <h1 className="text-xl font-semibold tracking-tight">BookGraph – V2 (Supabase)</h1>
-      </header>
-
       <ExploreView 
         graph={graph} 
         setGraph={setGraph}
