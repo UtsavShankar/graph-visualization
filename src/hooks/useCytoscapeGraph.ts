@@ -15,7 +15,7 @@ interface UseCytoscapeGraphProps {
   setSelected: (data: any) => void;
   setContextMenu: (menu: { x: number; y: number; nodeId: string } | null) => void;
   setEdgeContextMenu: (menu: { x: number; y: number; edgeId: string } | null) => void;
-  setHoverEdge: React.Dispatch<React.SetStateAction<{ id: string; src: string; tgt: string; note: string; weight?: number } | null>>;
+  setHoverEdge: React.Dispatch<React.SetStateAction<{ id: string; src: string; tgt: string; srcAuthor?: string | null; tgtAuthor?: string | null; note: string; weight?: number } | null>>;
   setGraph: React.Dispatch<React.SetStateAction<{ nodes: any[]; edges: any[] }>>;
   handleEdgeNodeSelection: (nodeId: string) => Promise<void>;
   handleNodeDeletion: (nodeId: string) => Promise<void>;
@@ -214,15 +214,12 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
 
       const src = edge.source().data("title") || edge.source().id();
       const tgt = edge.target().data("title") || edge.target().id();
+      const srcAuthor = edge.source().data("author");
+      const tgtAuthor = edge.target().data("author");
       const note = normalizeNote(edge.data("note") ?? edge.data("relation"));
       const weight = edge.data("weight");
 
-      if (!note) {
-        setHoverEdgeRef.current(null);
-        return;
-      }
-
-      setHoverEdgeRef.current({ id: edge.id(), src, tgt, note, weight });
+      setHoverEdgeRef.current({ id: edge.id(), src, tgt, srcAuthor, tgtAuthor, note, weight });
     });
 
     // Edge mouse out - hide tooltip

@@ -1,4 +1,5 @@
 import cytoscape from "cytoscape";
+import { formatNodeLabel } from "./utils";
 
 /**
  * Cytoscape.js graph stylesheet configuration
@@ -34,7 +35,12 @@ export function getCytoscapeStyles(
           const first = tags[0];
           return first ? colorMap?.get(first) || "#93c5fd" : "#93c5fd";
         },
-        label: (ele: cytoscape.NodeSingular) => ele.data("title") || ele.id(),
+        label: (ele: cytoscape.NodeSingular) => {
+          const title = ele.data("title");
+          const author = ele.data("author");
+          const formattedLabel = formatNodeLabel(title, author);
+          return formattedLabel || ele.id();
+        },
         "font-size": 11,
         "text-wrap": "wrap",
         "text-max-width": 140,

@@ -70,3 +70,48 @@ export function nodeMatchesTag(node: any, tagFilter: string): boolean {
   const tags = node.data("tags") || [];
   return tags.includes(tagFilter);
 }
+
+/**
+ * Extracts the last name from an author string
+ * Handles various formats: "First Last", "Last, First", "First Middle Last", etc.
+ */
+export function getAuthorLastName(author?: string | null): string | null {
+  if (!author || !author.trim()) return null;
+
+  const trimmed = author.trim();
+
+  // Handle "Last, First" format
+  if (trimmed.includes(",")) {
+    const parts = trimmed.split(",");
+    return parts[0].trim();
+  }
+
+  // Handle "First Last" or "First Middle Last" format
+  const parts = trimmed.split(/\s+/);
+  if (parts.length === 0) return null;
+
+  // Get the last part, but skip common suffixes
+  const suffixes = ["jr", "sr", "ii", "iii", "iv", "phd", "md"];
+  let lastName = parts[parts.length - 1];
+
+  // If the last part is a suffix, take the one before it
+  if (suffixes.includes(lastName.toLowerCase().replace(/\./g, ""))) {
+    lastName = parts.length > 1 ? parts[parts.length - 2] : parts[parts.length - 1];
+  }
+
+  return lastName;
+}
+
+/**
+ * Formats a node label as "Last name, Title" or just "Title" if no author
+ */
+export function formatNodeLabel(title?: string | null, author?: string | null): string {
+  const titleText = title || "";
+  const lastName = getAuthorLastName(author);
+
+  if (lastName) {
+    return `${lastName}, ${titleText}`;
+  }
+
+  return titleText;
+}

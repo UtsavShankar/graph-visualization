@@ -3,7 +3,7 @@ import cytoscape from "cytoscape";
 import fcose from "cytoscape-fcose";
 import { updateEdge, updateNode, createNode, deleteEdge } from "./lib/database";
 import { NodePositionManager } from "./lib/positioning";
-import { getNormalizedEdgeNote, getNodeDisplayName, nodeMatchesSearch, nodeMatchesTag } from "./lib/utils";
+import { getNormalizedEdgeNote, getNodeDisplayName, nodeMatchesSearch, nodeMatchesTag, formatNodeLabel } from "./lib/utils";
 import { getCytoscapeStyles } from "./lib/cytoscape-styles";
 import { PREVIEW_EDGE_ID, EXCLUDED_TAG_FILTER } from "./lib/constants";
 import type { Node, Edge, Course } from "./lib/supabase";
@@ -45,7 +45,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const [edgeContextMenu, setEdgeContextMenu] = useState<{ x: number; y: number; edgeId: string } | null>(null);
   const [editingEdge, setEditingEdge] = useState<{ id: string; note: string } | null>(null);
   const [showEdgeForm, setShowEdgeForm] = useState(false);
-  const [hoverEdge, setHoverEdge] = useState<{ id: string; src: string; tgt: string; note: string; weight?: number } | null>(null);
+  const [hoverEdge, setHoverEdge] = useState<{ id: string; src: string; tgt: string; srcAuthor?: string | null; tgtAuthor?: string | null; note: string; weight?: number } | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [showWorldMap, setShowWorldMap] = useState(false);
 
@@ -642,14 +642,13 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
             style={{ position: "fixed", left: mousePos.x, top: mousePos.y }}
             className="max-w-xs rounded-xl border border-sky-600/40 bg-slate-900/95 p-3 text-sm shadow-xl"
           >
-            <div className="mb-1 font-medium text-slate-300">Connection</div>
             <div>
-              <strong>{hoverEdge.src}</strong> → <strong>{hoverEdge.tgt}</strong>
+              <strong>{formatNodeLabel(hoverEdge.src, hoverEdge.srcAuthor)}</strong>
+            </div>
+            <div className="mt-1">
+              <strong>{formatNodeLabel(hoverEdge.tgt, hoverEdge.tgtAuthor)}</strong>
             </div>
             {hoverEdge.note && <div className="mt-1 italic text-slate-300">{hoverEdge.note}</div>}
-            {hoverEdge.weight != null && (
-              <div className="mt-1 text-slate-400">Weight: {hoverEdge.weight}</div>
-            )}
           </div>
         )}
       </div>

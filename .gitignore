@@ -28,6 +28,11 @@ add-*.sql
 migrate-*.sql
 detect-*.sql
 
+# Database backups
+backups/
+*.sql.backup
+*.dump
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
