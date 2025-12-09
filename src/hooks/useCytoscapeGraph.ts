@@ -245,11 +245,39 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
       setHoverEdgeRef.current((current) => (current?.id === removedId ? null : current));
     });
 
-    // Initial fit and zoom
+    // Initial center and zoom to fit map
     const timeoutId = setTimeout(() => {
       if (!cy.destroyed()) {
-        cy.fit(undefined, 150);
-        cy.zoom(0.185);
+        // 1. Get viewport size
+        const container = containerRef.current;
+        if (!container) return;
+        
+        const viewportWidth = container.clientWidth;
+        const viewportHeight = container.clientHeight;
+        
+        // 2. Map image dimensions from ExploreView.tsx
+        // Map width: 7100px, aspect ratio: 2000:857 (from SVG viewBox)
+        const mapWidth = 7100;
+        const mapHeight = 7100 * (857 / 2000); // Calculate height from aspect ratio
+        
+        // 3. Calculate zoom to fit map on screen
+        // Consider both width and height, use the smaller zoom to ensure full fit
+        const zoomWidth = viewportWidth / mapWidth;
+        const zoomHeight = viewportHeight / mapHeight;
+        const fitZoom = Math.min(zoomWidth, zoomHeight) * 0.95; // 0.95 for small padding
+        
+        // 4. Set zoom first
+        cy.zoom(fitZoom);
+        
+        // 5. Center at specified coordinates (3784, 1373)
+        // Calculate pan to center viewport on this point
+        const centerX = 3784;
+        const centerY = 1373;
+        const zoom = cy.zoom();
+        const panX = (viewportWidth / 2) - (centerX * zoom);
+        const panY = (viewportHeight / 2) - (centerY * zoom);
+        
+        cy.pan({ x: panX, y: panY });
       }
     }, 100);
 
