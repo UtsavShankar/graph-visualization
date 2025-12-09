@@ -47,7 +47,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const [showEdgeForm, setShowEdgeForm] = useState(false);
   const [hoverEdge, setHoverEdge] = useState<{ id: string; src: string; tgt: string; srcAuthor?: string | null; tgtAuthor?: string | null; note: string; weight?: number } | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [showWorldMap, setShowWorldMap] = useState(false);
+  const [showWorldMap, setShowWorldMap] = useState(true);
 
   // Custom hooks
   const {
@@ -609,7 +609,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   
                   top: 0,
                   left: '0',
-                  width: '500%', // Make map extremely large
+                  width: '7100px', // Make map extremely large
                   height: 'auto',
                   maxWidth: 'none',
                   maxHeight: 'none',

@@ -248,8 +248,8 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
     // Initial fit and zoom
     const timeoutId = setTimeout(() => {
       if (!cy.destroyed()) {
-        cy.fit(undefined, 40);
-        cy.zoom(1.2);
+        cy.fit(undefined, 150);
+        cy.zoom(0.185);
       }
     }, 100);
 
