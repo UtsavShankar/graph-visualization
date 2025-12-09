@@ -547,16 +547,6 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
           >
             {nodeDeletionMode ? "Cancel Delete" : "Delete Node"}
           </button>
-          <button
-            onClick={() => setShowWorldMap(!showWorldMap)}
-            className={`px-4 py-2 rounded-lg border ${
-              showWorldMap
-                ? "border-emerald-500/60 bg-emerald-500/20 text-emerald-100"
-                : "border-slate-700 hover:border-emerald-500/60"
-            }`}
-          >
-            {showWorldMap ? "Hide Map" : "Show Map"}
-          </button>
           <span className="text-xs text-slate-400 ml-2">Right-click nodes to edit | Drag to move</span>
         </div>
 
