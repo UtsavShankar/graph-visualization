@@ -266,11 +266,9 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
         const zoomHeight = viewportHeight / mapHeight;
         const fitZoom = Math.min(zoomWidth, zoomHeight) * 0.95; // 0.95 for small padding
         
-        // 4. Set zoom first
+
         cy.zoom(fitZoom);
         
-        // 5. Center at specified coordinates (3784, 1373)
-        // Calculate pan to center viewport on this point
         const centerX = 3784;
         const centerY = 1373;
         const zoom = cy.zoom();

@@ -46,3 +46,6 @@ backups/
 
 # Claude Code configuration
 .claude/
+
+# Code outline documentation
+CODE_OUTLINE.md

@@ -3,7 +3,7 @@ import cytoscape from "cytoscape";
 import fcose from "cytoscape-fcose";
 import { updateEdge, updateNode, createNode, deleteEdge } from "./lib/database";
 import { NodePositionManager } from "./lib/positioning";
-import { getNormalizedEdgeNote, getNodeDisplayName, nodeMatchesSearch, nodeMatchesTag, formatNodeLabel } from "./lib/utils";
+import { getNormalizedEdgeNote, getNodeDisplayName, nodeMatchesSearch, nodeMatchesTag, formatNodeLabel, formatEdgeLabelParts } from "./lib/utils";
 import { getCytoscapeStyles } from "./lib/cytoscape-styles";
 import { PREVIEW_EDGE_ID, EXCLUDED_TAG_FILTER } from "./lib/constants";
 import type { Node, Edge, Course } from "./lib/supabase";
@@ -628,17 +628,39 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
 
         {/* Edge hover tooltip */}
         {hoverEdge && (
-          <div
-            style={{ position: "fixed", left: mousePos.x, top: mousePos.y }}
-            className="max-w-xs rounded-xl border border-sky-600/40 bg-slate-900/95 p-3 text-sm shadow-xl"
-          >
-            <div>
-              <strong>{formatNodeLabel(hoverEdge.src, hoverEdge.srcAuthor)}</strong>
-            </div>
-            <div className="mt-1">
-              <strong>{formatNodeLabel(hoverEdge.tgt, hoverEdge.tgtAuthor)}</strong>
-            </div>
+          <div style={{ backgroundColor: '#0f172a' }}>
+            <div
+              style={{ position: "fixed", left: mousePos.x, top: mousePos.y, opacity: 1, backgroundColor: '#0f172a', zIndex: 15 }}
+              className="max-w-xs rounded-xl border border-sky-100 p-3 text-sm shadow-xl"
+            >
+            {(() => {
+              const srcParts = formatEdgeLabelParts(hoverEdge.src, hoverEdge.srcAuthor);
+              const tgtParts = formatEdgeLabelParts(hoverEdge.tgt, hoverEdge.tgtAuthor);
+              return (
+                <>
+                  <div style={{ backgroundColor: '#0f172a' }}>
+                    {srcParts.author ? (
+                      <>
+                        <strong>{srcParts.author}</strong>, {srcParts.title}
+                      </>
+                    ) : (
+                      srcParts.title
+                    )}
+                  </div>
+                  <div className="mt-1">
+                    → {tgtParts.author ? (
+                      <>
+                        <strong>{tgtParts.author} </strong>, {tgtParts.title}
+                      </>
+                    ) : (
+                      tgtParts.title
+                    )}
+                  </div>
+                </>
+              );
+            })()}
             {hoverEdge.note && <div className="mt-1 italic text-slate-300">{hoverEdge.note}</div>}
+          </div>
           </div>
         )}
       </div>

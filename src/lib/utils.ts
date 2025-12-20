@@ -115,3 +115,24 @@ export function formatNodeLabel(title?: string | null, author?: string | null): 
 
   return titleText;
 }
+
+/**
+ * Formats an edge label with author name capitalized and returns parts for display
+ * Returns { author: string, title: string } where author should be bold
+ */
+export function formatEdgeLabelParts(title?: string | null, author?: string | null): { author: string; title: string } {
+  const titleText = title || "";
+  const lastName = getAuthorLastName(author);
+
+  if (lastName) {
+    // Capitalize the author name (first letter uppercase, rest lowercase)
+    // Handle multi-word last names (e.g., "van der Berg" -> "Van Der Berg")
+    const capitalizedAuthor = lastName
+      .split(/\s+/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+    return { author: capitalizedAuthor, title: titleText };
+  }
+
+  return { author: "", title: titleText };
+}

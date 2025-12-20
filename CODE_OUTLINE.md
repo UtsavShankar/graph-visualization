@@ -1,6 +1,6 @@
 # BookGraph - Comprehensive Code Outline
 
-**Last Updated:** After git pull (878fef2)  
+**Last Updated:** After edge tooltip and viewport initialization updates  
 **Purpose:** Reference document for understanding codebase structure and architecture
 
 ---
@@ -37,7 +37,7 @@
 - Search and filter by tags/authors/titles
 - Node (book) management: add, edit, delete
 - Edge (connection) management: create, edit, delete
-- World map background (optional)
+- World map background (always visible)
 - Context menus for quick actions
 - Real-time database sync
 
@@ -167,8 +167,8 @@ bookgraph/
   - `edgeContextMenu`: { x, y, edgeId } | null
   - `editingEdge`: { id, note } | null
   - `showEdgeForm`: boolean
-  - `hoverEdge`: Edge hover data | null
-  - `showWorldMap`: boolean
+  - `hoverEdge`: Edge hover data with author info | null
+  - `showWorldMap`: boolean (defaults to true - map always visible)
 
 **Custom Hooks Used:**
 - `useEdgeCreation()`: Edge creation mode
@@ -178,8 +178,14 @@ bookgraph/
 **Key Effects:**
 1. **Graph Element Sync:** Syncs React state with Cytoscape elements
 2. **Search/Filter:** Applies search query and tag filter
-3. **World Map Sync:** Synchronizes map with graph viewport
+3. **World Map Sync:** Synchronizes map with graph pan/zoom (not viewport resize)
 4. **Keyboard Shortcuts:** Escape key handling
+
+**Map Configuration:**
+- Map is always visible (`showWorldMap` defaults to `true`)
+- Map toggle button removed from UI
+- Map image: 7100px width, fixed pixel size (doesn't resize with viewport)
+- Map syncs with Cytoscape pan/zoom to keep nodes aligned with geographic locations
 
 **Event Handlers:**
 - `handleAddNode()`: Opens node form
@@ -211,14 +217,23 @@ bookgraph/
 - **Edge right-click:** Show edge context menu
 - **Node drag (grab):** Maintain selection
 - **Node drop (free):** Update position in database
-- **Edge hover:** Show tooltip
+- **Edge hover:** Show tooltip with formatted author/title pairs
+  - Extracts source and target titles and authors
+  - Formats using `formatEdgeLabelParts()` for display
 - **Mouse move:** Update preview position during edge creation
 
 **Initialization:**
 - Creates Cytoscape instance with preset layout
 - Applies styles
 - Sets up all event listeners
-- Initial fit and zoom
+- Calculates initial viewport (in setTimeout after 100ms):
+  1. Gets viewport dimensions from container (clientWidth, clientHeight)
+  2. Calculates zoom to fit map image (7100px width, aspect ratio 2000:857) on screen
+     - Uses `Math.min(zoomWidth, zoomHeight) * 0.95` for padding
+  3. Sets zoom level first
+  4. Centers viewport at coordinates (3784, 1373)
+     - Calculates pan position: `(viewportWidth/2) - (centerX * zoom)`
+     - Applies pan to center the specified coordinates
 
 **Cleanup:**
 - Destroys Cytoscape instance on unmount
@@ -371,6 +386,17 @@ interface Edge {
 - `getNodeDisplayName(node)`: Gets display name (title or id)
 - `nodeMatchesSearch(node, query)`: Checks if node matches search query
 - `nodeMatchesTag(node, tagFilter)`: Checks if node matches tag filter
+- `getAuthorLastName(author)`: Extracts last name from author string
+  - Handles "First Last", "Last, First", and multi-word formats
+  - Skips common suffixes (Jr., Sr., II, III, etc.)
+- `formatNodeLabel(title, author)`: Formats node label as "Last name, Title"
+  - Used for node labels in graph visualization
+  - Returns just title if no author
+- `formatEdgeLabelParts(title, author)`: Formats edge label parts for tooltip
+  - Returns { author: string, title: string } with capitalized author
+  - Author names are capitalized (first letter uppercase, rest lowercase)
+  - Handles multi-word last names (e.g., "van der Berg" -> "Van Der Berg")
+  - Used in edge hover tooltips to separate author (bold) from title (not bold)
 
 ---
 
@@ -407,6 +433,7 @@ interface Edge {
 - **Core:** Selection box color, background
 - **Node:**
   - Base: Color, size, border, label
+  - Label: Uses `formatNodeLabel()` to display "Last name, Title" format
   - Hovered: Larger size
   - Dimmed: Low opacity (for filtering)
   - Edge creation source: Orange border
@@ -423,6 +450,7 @@ interface Edge {
 - Node colors based on course/tag
 - Filtered nodes shown in gray
 - Edge width based on weight
+- Node labels show author last name before title (via `formatNodeLabel()`)
 
 ---
 
@@ -448,8 +476,12 @@ interface Edge {
 3. Calls `getGraphData()` and `getCourses()`
 4. Updates state with fetched data
 5. `ExploreView` receives data as props
-6. `useCytoscapeGraph` initializes graph
+6. `useCytoscapeGraph` initializes graph:
+   - Gets viewport dimensions
+   - Centers viewport at (3784, 1373)
+   - Calculates zoom to fit map (7100px width) on screen
 7. Elements synced to Cytoscape
+8. Map background visible by default
 
 ### Adding a Node
 1. User clicks "Add Node" button
@@ -491,6 +523,18 @@ interface Edge {
 2. Cytoscape "free" event fires
 3. `updateNodePosition()` saves to database
 4. Graph state updated with new position
+
+### Edge Hover Tooltip
+1. User hovers over edge
+2. `mouseover` event fires on edge in `useCytoscapeGraph.ts`
+3. Extracts source/target titles and authors from node data
+4. `formatEdgeLabelParts()` formats each with capitalized author name
+5. Tooltip displays with:
+   - **Styling:** Solid background (#0f172a), z-index: 15, fully opaque
+   - **First line:** **Author**, Title (author bold and capitalized, title not bold)
+   - **Second line:** → **Author**, Title (arrow inline with second title, author bold and capitalized)
+   - **Third line:** Edge note (if exists, italic, text-slate-300)
+6. Tooltip positioned at mouse cursor (mousePos.x, mousePos.y)
 
 ---
 
@@ -625,7 +669,27 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 9. **Search:** Searches across title, tags, and author fields simultaneously
 
-10. **World Map:** Optional feature, synchronized with graph viewport
+10. **World Map:** Always visible by default, synchronized with graph viewport (pan/zoom only, not viewport resize)
+11. **Node Labels:** Display as "Last name, Title" format using `formatNodeLabel()`
+12. **Edge Tooltips:** Display source and target with:
+    - Author names in bold and capitalized
+    - Titles not bold
+    - Arrow (→) inline with second title
+    - Format: "**Author**, Title" → "**Author**, Title"
+    - Solid background (#0f172a), fully opaque (opacity: 1)
+    - High z-index (15) to appear above all other elements
+    - Positioned at mouse cursor location
+13. **Initial Viewport:** Centers at (3784, 1373) and zooms to fit map image (7100px width) on screen
+    - Gets viewport dimensions dynamically from container
+    - Calculates zoom: `Math.min(viewportWidth/mapWidth, viewportHeight/mapHeight) * 0.95`
+    - Sets zoom first, then calculates pan to center at (3784, 1373)
+    - Ensures map fits on screen regardless of window size
+14. **Map Configuration:**
+    - Always visible by default (`showWorldMap` defaults to `true`)
+    - Toggle button removed from UI
+    - Map image: 7100px width, fixed pixel size (doesn't resize with viewport)
+    - Map syncs with Cytoscape pan/zoom only (not viewport resize events)
+    - Map positioned at (0, 0) in Cytoscape coordinate space
 
 ---
 
