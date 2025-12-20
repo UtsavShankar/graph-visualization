@@ -46,6 +46,8 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const [editingEdge, setEditingEdge] = useState<{ id: string; note: string } | null>(null);
   const [showEdgeForm, setShowEdgeForm] = useState(false);
   const [hoverEdge, setHoverEdge] = useState<{ id: string; src: string; tgt: string; srcAuthor?: string | null; tgtAuthor?: string | null; note: string; weight?: number } | null>(null);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [showWorldMap, setShowWorldMap] = useState(true);
 
@@ -77,6 +79,35 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   useEffect(() => {
     graphRef.current = graph;
   }, [graph]);
+
+  // Handle tooltip delay - show tooltip 500ms after hover starts
+  useEffect(() => {
+    // Clear any existing timeout
+    if (tooltipTimeoutRef.current) {
+      clearTimeout(tooltipTimeoutRef.current);
+      tooltipTimeoutRef.current = null;
+    }
+
+    if (hoverEdge) {
+      // Set tooltip to hidden initially
+      setShowTooltip(false);
+      // Start timeout to show tooltip after 500ms
+      tooltipTimeoutRef.current = setTimeout(() => {
+        setShowTooltip(true);
+      }, 500);
+    } else {
+      // Clear tooltip immediately when hoverEdge is null
+      setShowTooltip(false);
+    }
+
+    // Cleanup timeout on unmount or when hoverEdge changes
+    return () => {
+      if (tooltipTimeoutRef.current) {
+        clearTimeout(tooltipTimeoutRef.current);
+        tooltipTimeoutRef.current = null;
+      }
+    };
+  }, [hoverEdge]);
 
   // Build tag color map
   const tagColorMap = useMemo(() => {
@@ -627,7 +658,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
         </div>
 
         {/* Edge hover tooltip */}
-        {hoverEdge && (
+        {hoverEdge && showTooltip && (
           <div style={{ backgroundColor: '#0f172a' }}>
             <div
               style={{ position: "fixed", left: mousePos.x, top: mousePos.y, opacity: 1, backgroundColor: '#0f172a', zIndex: 15 }}
