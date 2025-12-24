@@ -11,6 +11,7 @@ import { ContextMenu } from "./components/ContextMenu";
 import { EdgeContextMenu } from "./components/EdgeContextMenu";
 import { EdgeNoteForm } from "./components/EdgeNoteForm";
 import { NodeForm } from "./components/NodeForm";
+import { MapMagnifier } from "./components/MapMagnifier";
 import { useEdgeCreation } from "./hooks/useEdgeCreation";
 import { useNodeDeletion } from "./hooks/useNodeDeletion";
 import { useCytoscapeGraph } from "./hooks/useCytoscapeGraph";
@@ -655,6 +656,18 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
               cursor: edgeCreation.active ? 'crosshair' : nodeDeletionMode ? 'not-allowed' : 'default'
             }}
           />
+          {/* Map Magnifier */}
+          {cyRef.current && (
+            <MapMagnifier
+              cyMain={cyRef.current}
+              containerRef={containerRef}
+              tagFilterRef={tagFilterRef}
+              tagColorMapRef={tagColorMapRef}
+              magnificationFactor={5}
+              width={300}
+              height={200}
+            />
+          )}
         </div>
 
         {/* Edge hover tooltip */}

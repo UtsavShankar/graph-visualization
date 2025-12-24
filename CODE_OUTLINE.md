@@ -1,6 +1,6 @@
 # BookGraph - Comprehensive Code Outline
 
-**Last Updated:** After edge tooltip and viewport initialization updates  
+**Last Updated:** After MapMagnifier feature implementation  
 **Purpose:** Reference document for understanding codebase structure and architecture
 
 ---
@@ -38,6 +38,7 @@
 - Node (book) management: add, edit, delete
 - Edge (connection) management: create, edit, delete
 - World map background (always visible)
+- Map magnifier: zoomed view that follows cursor (bottom-right corner)
 - Context menus for quick actions
 - Real-time database sync
 
@@ -54,6 +55,7 @@ main.tsx
             ├─> useCytoscapeGraph (initializes graph)
             ├─> useEdgeCreation (edge creation mode)
             ├─> useNodeDeletion (node deletion mode)
+            ├─> MapMagnifier (zoomed view component)
             └─> Components (forms, menus)
 ```
 
@@ -77,7 +79,8 @@ bookgraph/
 │   │   ├── ContextMenu.tsx         # Node right-click menu
 │   │   ├── EdgeContextMenu.tsx     # Edge right-click menu
 │   │   ├── NodeForm.tsx            # Add/edit node form
-│   │   └── EdgeNoteForm.tsx        # Edit edge note form
+│   │   ├── EdgeNoteForm.tsx        # Edit edge note form
+│   │   └── MapMagnifier.tsx        # Zoomed view magnifier component
 │   ├── hooks/
 │   │   ├── useCytoscapeGraph.ts    # Graph initialization & events
 │   │   ├── useEdgeCreation.ts       # Edge creation mode logic
@@ -196,6 +199,78 @@ bookgraph/
 - `handleEditEdge()`: Opens edge note form
 - `handleNodeSubmit()`: Creates/updates node
 - `handleEdgeNoteSubmit()`: Updates edge note
+
+**MapMagnifier Integration:**
+- Rendered conditionally when `cyRef.current` exists
+- Positioned at bottom-right of Cytoscape container
+- Receives main Cytoscape instance, container ref, tag filter ref, and color map ref
+- Default magnification: 5x
+- Default size: 300px × 200px
+
+---
+
+### 4. `MapMagnifier.tsx`
+**Purpose:** Displays a zoomed-in view of the graph that follows the cursor position
+
+**Key Features:**
+- Creates a second Cytoscape instance (`cyZoom`) for the magnified view
+- Non-interactive (no user panning, zooming, or selection)
+- Positioned at bottom-right corner of the main graph container
+- Shows world map background synchronized with zoom view
+- White crosshair indicator showing the center point
+
+**Props:**
+- `cyMain`: Main Cytoscape instance
+- `containerRef`: Reference to main graph container
+- `tagFilterRef`: Reference to current tag filter
+- `tagColorMapRef`: Reference to course color mapping
+- `magnificationFactor`: Zoom multiplier (default: 3, currently set to 5)
+- `width`: Component width in pixels (default: 300)
+- `height`: Component height in pixels (default: 200)
+
+**Core Functionality:**
+
+1. **Coordinate Conversion:**
+   - Converts rendered cursor coordinates to model coordinates
+   - Formula: `model = (rendered - pan) / zoom`
+   - Uses `renderedToModel()` function
+
+2. **Mouse Tracking:**
+   - Tracks mouse movement on main graph container
+   - Updates zoom view in real-time to follow cursor
+   - Stores mouse position in `mousePositionRef`
+
+3. **Element Synchronization:**
+   - Syncs node positions between main and zoom instances
+   - Syncs element additions, removals, and data updates
+   - Skips preview nodes/edges (IDs starting with `__`)
+   - Uses Cytoscape event listeners (`add`, `remove`, `data`, `position`)
+
+4. **Viewport Synchronization:**
+   - Updates zoom view when main graph pan/zoom changes
+   - Maintains magnification factor relative to main graph
+   - Centers zoom view on cursor position in model coordinates
+
+5. **Map Background:**
+   - Displays world map background (same as main graph)
+   - Map dimensions: 7100px width, auto height
+   - Opacity: 0.3
+   - Synchronized with zoom instance pan/zoom via `syncZoomMapWithViewport()`
+   - Uses transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`
+   - Transform origin: `0 0`
+
+**Layering (z-index):**
+- Map background: 0 (bottom)
+- Cytoscape canvas: 1 (middle)
+- Header label: 11 (top)
+- Crosshair indicator: 12 (topmost)
+
+**Implementation Details:**
+- Uses `useCallback` for `updateZoomView` and `syncZoomMapWithViewport` to prevent unnecessary re-renders
+- Uses refs to avoid stale closures (`cyMainRef`, `cyZoomRef`, `mousePositionRef`, `zoomMapImageRef`)
+- Listens to main graph events: `pan`, `zoom`, `viewport`
+- Listens to zoom instance events: `pan`, `zoom`, `viewport`
+- Initializes zoom instance with elements from main graph using `cyMain.json().elements`
 
 ---
 
@@ -610,6 +685,27 @@ interface Edge {
 
 ---
 
+### 6. Dual Cytoscape Instances (MapMagnifier)
+**Problem:** Display a synchronized zoomed view that follows the cursor
+
+**Solution:** Second Cytoscape instance with coordinate conversion
+- Create `cyZoom` instance with same elements and styles as `cyMain`
+- Disable user interaction on zoom instance (no panning, zooming, selection)
+- Convert rendered cursor coordinates to model coordinates: `model = (rendered - pan) / zoom`
+- Center zoom view on cursor position with magnification factor
+- Sync elements between instances using Cytoscape event listeners
+- Sync map background with zoom instance pan/zoom transforms
+
+**Key Components:**
+- `renderedToModel()`: Converts screen coordinates to graph model coordinates
+- `updateZoomView()`: Updates zoom instance pan/zoom to center on cursor
+- `syncZoomMapWithViewport()`: Synchronizes map background with zoom view
+- Event listeners on both instances for element and viewport synchronization
+
+**Location:** `components/MapMagnifier.tsx`
+
+---
+
 ## Configuration
 
 ### Environment Variables (`.env`)
@@ -691,6 +787,14 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
     - Map image: 7100px width, fixed pixel size (doesn't resize with viewport)
     - Map syncs with Cytoscape pan/zoom only (not viewport resize events)
     - Map positioned at (0, 0) in Cytoscape coordinate space
+15. **MapMagnifier:**
+    - Displays zoomed view (5x magnification) at bottom-right corner
+    - Follows cursor position on main graph in real-time
+    - Shows world map background synchronized with zoom view
+    - Non-interactive (read-only view)
+    - White crosshair indicates center point
+    - Syncs all elements (nodes, edges) with main graph
+    - Header label: "Zoomed view (follows cursor)"
 
 ---
 
@@ -700,6 +804,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 - **Graph Initialization:** `useCytoscapeGraph.ts`
 - **Edge Creation:** `useEdgeCreation.ts`
 - **Node Deletion:** `useNodeDeletion.ts`
+- **Map Magnifier:** `components/MapMagnifier.tsx`
 - **Database Operations:** `lib/database.ts`
 - **Graph Styling:** `lib/cytoscape-styles.ts`
 - **Node Positioning:** `lib/positioning.ts`
