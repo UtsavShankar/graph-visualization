@@ -1,1 +1,25 @@
 @import "tailwindcss";
+
+/* HTML labels for Cytoscape nodes */
+/* The extension injects a DOM overlay; make sure it can't steal mouse input */
+.cy-html-label {
+  pointer-events: none;
+  user-select: none;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.cy-html-label__main {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.cy-html-label__sub {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+/* Optional: smaller in magnifier */
+.cy-html-label--zoom .cy-html-label__main { font-size: 0.95rem; }
+.cy-html-label--zoom .cy-html-label__sub  { font-size: 0.85rem; }

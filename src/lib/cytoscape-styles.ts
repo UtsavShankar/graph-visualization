@@ -35,12 +35,7 @@ export function getCytoscapeStyles(
           const first = tags[0];
           return first ? colorMap?.get(first) || "#93c5fd" : "#93c5fd";
         },
-        label: (ele: cytoscape.NodeSingular) => {
-          const title = ele.data("title");
-          const author = ele.data("author");
-          const formattedLabel = formatNodeLabel(title, author);
-          return formattedLabel || ele.id();
-        },
+        label: "", // IMPORTANT: HTML labels are handled by cytoscape-node-html-label plugin
         "font-size": 11,
         "text-wrap": "wrap",
         "text-max-width": 140,

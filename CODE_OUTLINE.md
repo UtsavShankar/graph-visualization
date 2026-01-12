@@ -403,6 +403,8 @@ interface Node {
   publisher_site?: string
   companion_website?: string
   relevant_media?: string
+  main_text?: string | null  // Main text portion of title (format: "main_text:subtext")
+  subtext?: string | null     // Subtext portion of title (format: "main_text:subtext")
   created_at: string
   updated_at: string
 }
@@ -526,6 +528,9 @@ interface Edge {
 - Filtered nodes shown in gray
 - Edge width based on weight
 - Node labels show author last name before title (via `formatNodeLabel()`)
+- Nodes with `main_text` and `subtext` fields display formatted HTML labels with different font sizes
+  - Main text (author, main_text): 1.1em font size
+  - Subtext: 1.1em font size (initially same as main text, can be customized via CSS)
 
 ---
 

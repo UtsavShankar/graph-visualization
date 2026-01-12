@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import cytoscape from "cytoscape";
 import { getCytoscapeStyles } from "../lib/cytoscape-styles";
+import { registerHtmlLabels, applyHtmlLabels } from "../lib/html-labels";
 
 interface MapMagnifierProps {
   cyMain: cytoscape.Core | null;
@@ -128,6 +129,10 @@ export function MapMagnifier({
       autoungrabify: true,
       wheelSensitivity: 0,
     });
+
+    // Register and apply HTML labels
+    registerHtmlLabels();
+    applyHtmlLabels(cyZoom, { variant: "zoom" });
 
     // Apply same styles as main graph
     const styles = getCytoscapeStyles(tagFilterRef, tagColorMapRef);

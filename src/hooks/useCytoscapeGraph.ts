@@ -4,6 +4,7 @@ import { getCytoscapeStyles } from "../lib/cytoscape-styles";
 import { updateNodePosition } from "../lib/database";
 import { normalizeNote } from "../lib/utils";
 import { PREVIEW_EDGE_ID, PREVIEW_NODE_ID } from "../lib/constants";
+import { registerHtmlLabels, applyHtmlLabels } from "../lib/html-labels";
 
 interface UseCytoscapeGraphProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -85,10 +86,14 @@ export function useCytoscapeGraph(props: UseCytoscapeGraphProps) {
       container: containerRef.current,
       elements: [],
       layout: { name: "preset", fit: true, animate: false },
-      wheelSensitivity: 0.32,
+      wheelSensitivity: 0.5,
     });
 
     cyRef.current = cy;
+
+    // Register and apply HTML labels
+    registerHtmlLabels();
+    applyHtmlLabels(cy, { variant: "main" });
 
     // Apply styles
     const styles = getCytoscapeStyles(tagFilterRef, tagColorMapRef);
