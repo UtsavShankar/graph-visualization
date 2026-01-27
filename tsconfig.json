@@ -11,6 +11,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "resolveJsonModule": true,
     "isolatedModules": true,
+    /* Allow JavaScript files to be imported */
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
