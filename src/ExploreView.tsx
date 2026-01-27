@@ -15,6 +15,7 @@ import { MapMagnifier } from "./components/MapMagnifier";
 import { useEdgeCreation } from "./hooks/useEdgeCreation";
 import { useNodeDeletion } from "./hooks/useNodeDeletion";
 import { useCytoscapeGraph } from "./hooks/useCytoscapeGraph";
+import { useFisheyeMagnifier } from "./hooks/useFisheyeMagnifier";
 
 cytoscape.use(fcose);
 
@@ -36,6 +37,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const tagFilterRef = useRef<string>("");
   const tagColorMapRef = useRef<Map<string, string>>(new Map());
   const graphRef = useRef(graph);
+  const fisheyeEnabledRef = useRef(true);
 
   // State
   const [tagFilter, setTagFilter] = useState("");
@@ -51,6 +53,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [showWorldMap, setShowWorldMap] = useState(true);
+  const [showMagnifier, setShowMagnifier] = useState(false);
 
   // Custom hooks
   const {
@@ -80,6 +83,10 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   useEffect(() => {
     graphRef.current = graph;
   }, [graph]);
+
+  useEffect(() => {
+    fisheyeEnabledRef.current = !(edgeCreation.active || nodeDeletionMode);
+  }, [edgeCreation.active, nodeDeletionMode]);
 
   // Handle tooltip delay - show tooltip 500ms after hover starts
   useEffect(() => {
@@ -192,6 +199,12 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     exitEdgeMode,
     closeEdgeContextMenu,
     updatePreviewPosition,
+  });
+
+  useFisheyeMagnifier({
+    cyRef,
+    containerRef,
+    enabledRef: fisheyeEnabledRef,
   });
 
   // Apply styles when tag filter or color map changes
@@ -579,6 +592,16 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
           >
             {nodeDeletionMode ? "Cancel Delete" : "Delete Node"}
           </button>
+          <button
+            onClick={() => setShowMagnifier((prev) => !prev)}
+            className={`px-4 py-2 rounded-lg border ${
+              showMagnifier
+                ? "border-slate-700 hover:border-slate-500"
+                : "border-slate-700 bg-slate-800/60 text-slate-200"
+            }`}
+          >
+            {showMagnifier ? "Hide Magnifier" : "Show Magnifier"}
+          </button>
           <span className="text-xs text-slate-400 ml-2">Right-click nodes to edit | Drag to move</span>
         </div>
 
@@ -657,7 +680,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
             }}
           />
           {/* Map Magnifier */}
-          {cyRef.current && (
+          {cyRef.current && showMagnifier && (
             <MapMagnifier
               cyMain={cyRef.current}
               containerRef={containerRef}

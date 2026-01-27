@@ -42,6 +42,9 @@ export function applyHtmlLabels(cy: Core, opts: ApplyOpts = {}) {
       halignBox: "center",
       valignBox: "center",
       tpl: (data: any) => {
+        const nodeId = data.id ?? "";
+        const safeId = escapeHtml(String(nodeId));
+        const variantAttr = escapeHtml(variant);
         // For nodes with main_text/subtext, use HTML labels
         if (data.main_text || data.subtext) {
           const lastName = getAuthorLastName(data.author);
@@ -52,9 +55,11 @@ export function applyHtmlLabels(cy: Core, opts: ApplyOpts = {}) {
           const sub = data.subtext ? escapeHtml(data.subtext) : "";
 
           return `
-            <div class="cy-html-label ${variant === "zoom" ? "cy-html-label--zoom" : ""}">
+            <div class="cy-html-label ${variant === "zoom" ? "cy-html-label--zoom" : ""}" data-node-id="${safeId}" data-label-variant="${variantAttr}">
+              <div class="cy-html-label__inner">
               <div class="cy-html-label__main">${main}</div>
               ${sub ? `<div class="cy-html-label__sub">${sub}</div>` : ""}
+              </div>
             </div>
           `;
         }
@@ -66,8 +71,10 @@ export function applyHtmlLabels(cy: Core, opts: ApplyOpts = {}) {
         
         if (label) {
           return `
-            <div class="cy-html-label ${variant === "zoom" ? "cy-html-label--zoom" : ""}">
+            <div class="cy-html-label ${variant === "zoom" ? "cy-html-label--zoom" : ""}" data-node-id="${safeId}" data-label-variant="${variantAttr}">
+              <div class="cy-html-label__inner">
               <div class="cy-html-label__main">${label}</div>
+              </div>
             </div>
           `;
         }

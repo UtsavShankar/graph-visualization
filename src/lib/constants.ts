@@ -28,3 +28,10 @@ export const CYTOSCAPE_INIT_DELAY_MS = 100;
  * would show most nodes, making the filter less useful
  */
 export const EXCLUDED_TAG_FILTER = "AN1101";
+
+// Fisheye magnifier tuning constants
+export const FISHEYE_RADIUS_PX = 130;
+/** Baseline label font size (rem) when cursor is away */
+export const FISHEYE_BASE_LABEL_FONT_REM = 1.05;
+/** Maximum label font size (rem) when cursor is directly over the node */
+export const FISHEYE_MAX_LABEL_FONT_REM = 1.80;

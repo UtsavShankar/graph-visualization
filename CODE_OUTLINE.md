@@ -84,7 +84,8 @@ bookgraph/
 │   ├── hooks/
 │   │   ├── useCytoscapeGraph.ts    # Graph initialization & events
 │   │   ├── useEdgeCreation.ts       # Edge creation mode logic
-│   │   └── useNodeDeletion.ts       # Node deletion mode logic
+│   │   ├── useNodeDeletion.ts       # Node deletion mode logic
+│   │   └── useFisheyeMagnifier.ts   # Pointer-driven fisheye zoom effect
 │   ├── lib/
 │   │   ├── supabase.ts             # Supabase client & types
 │   │   ├── database.ts             # Database operations (CRUD)
@@ -151,6 +152,7 @@ bookgraph/
 - Manages search and filtering
 - Handles node/edge interactions
 - Coordinates UI components (forms, menus, sidebar)
+- Applies fisheye magnification around the pointer (delegates to `useFisheyeMagnifier()`)
 
 **State Management:**
 - **Refs:**
@@ -172,11 +174,13 @@ bookgraph/
   - `showEdgeForm`: boolean
   - `hoverEdge`: Edge hover data with author info | null
   - `showWorldMap`: boolean (defaults to true - map always visible)
+- `showMagnifier`: boolean (defaults to false, toggled via toolbar button)
 
 **Custom Hooks Used:**
 - `useEdgeCreation()`: Edge creation mode
 - `useNodeDeletion()`: Node deletion mode
 - `useCytoscapeGraph()`: Graph initialization
+- `useFisheyeMagnifier()`: Pointer fisheye interaction for nodes + labels
 
 **Key Effects:**
 1. **Graph Element Sync:** Syncs React state with Cytoscape elements
@@ -206,6 +210,7 @@ bookgraph/
 - Receives main Cytoscape instance, container ref, tag filter ref, and color map ref
 - Default magnification: 5x
 - Default size: 300px × 200px
+- Toggle button in toolbar hides/shows magnifier (`showMagnifier` state)
 
 ---
 
@@ -357,6 +362,29 @@ bookgraph/
   - Clears selection if deleted
 
 **Important:** Disables node dragging during deletion mode to prevent drag events from interfering with click events.
+
+---
+
+### 4. `useFisheyeMagnifier.ts`
+**Purpose:** Adds pointer-driven fisheye magnification to nodes and their HTML labels
+**Inputs:**
+- `cyRef`: Cytoscape instance ref
+- `containerRef`: Graph container ref for mouse tracking
+- `enabledRef`: Optional ref to disable effect (used during edge creation/deletion modes)
+
+**Key Behaviour:**
+- Tracks pointer in rendered coordinates (mousemove + mouseleave)
+- Runs an animation loop with `requestAnimationFrame` (no React state)
+- Computes smooth falloff (`smoothstep`) using `FISHEYE_RADIUS_PX`
+- Scales node width/height based on per-node baseline (`numericStyle`)
+- Scales HTML label font sizes via DOM access up to `FISHEYE_MAX_LABEL_FONT_REM` (converted to px at runtime)
+- Resets nodes and labels when pointer exits, feature disabled, or hook unmounts
+- Skips preview nodes (IDs starting with `__`)
+
+**Implementation Notes:**
+- Caches label baselines (fonts + transforms) to restore styles accurately
+- Uses `scratch('_fisheyeScale')` to avoid redundant style writes
+- Removes inline styles on reset so stylesheet-driven states (hover, etc.) continue working
 
 ---
 
@@ -545,6 +573,9 @@ interface Edge {
 - `CYTOSCAPE_WHEEL_SENSITIVITY = 0.32`
 - `CYTOSCAPE_INIT_DELAY_MS = 100`
 - `EXCLUDED_TAG_FILTER = "AN1101"`
+- `FISHEYE_RADIUS_PX = 160`
+- `FISHEYE_BASE_LABEL_FONT_REM = 1.05`
+- `FISHEYE_MAX_LABEL_FONT_REM = 2.05` (tunable peak for fisheye scaling)
 
 ---
 
@@ -709,6 +740,18 @@ interface Edge {
 
 **Location:** `components/MapMagnifier.tsx`
 
+### 7. Fisheye Magnifier
+**Problem:** Enlarge nearby nodes and labels smoothly without mutating React state or database positions
+
+**Solution:** Animation loop driven by `requestAnimationFrame`
+- Tracks pointer in container pixels (`mousemove` / `mouseleave`)
+- Uses smoothstep falloff within `FISHEYE_RADIUS_PX`
+- Scales node width/height via direct style (baseline captured from `numericStyle`)
+- Scales HTML label fonts up to `FISHEYE_MAX_LABEL_FONT_REM`
+- Resets inline styles when pointer leaves or feature disabled
+
+**Location:** `hooks/useFisheyeMagnifier.ts`
+
 ---
 
 ## Configuration
@@ -800,6 +843,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
     - White crosshair indicates center point
     - Syncs all elements (nodes, edges) with main graph
     - Header label: "Zoomed view (follows cursor)"
+16. **Fisheye Magnifier:** Pointer proximity enlarges nodes + HTML labels within `FISHEYE_RADIUS_PX`, capped by `FISHEYE_MAX_LABEL_FONT_REM`, disabled automatically during edge creation/deletion
 
 ---
 
