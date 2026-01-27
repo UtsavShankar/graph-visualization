@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import cytoscape from "cytoscape";
 import { deleteNode } from "../lib/database";
 
 interface UseNodeDeletionProps {

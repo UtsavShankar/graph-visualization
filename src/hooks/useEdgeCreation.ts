@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { EdgeSingular, NodeSingular } from "cytoscape";
+import cytoscape from "cytoscape";
+import type { EdgeSingular, NodeSingular } from "cytoscape";
 import { createEdge } from "../lib/database";
 import { normalizeNote } from "../lib/utils";
 import { PREVIEW_EDGE_ID, PREVIEW_NODE_ID } from "../lib/constants";
