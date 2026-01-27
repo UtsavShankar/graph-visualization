@@ -23,6 +23,7 @@ interface UseCytoscapeGraphProps {
   updateNodeDeletionMode: (mode: boolean) => void;
   exitEdgeMode: () => void;
   closeEdgeContextMenu: () => void;
+  //@ts-ignore
   updatePreviewPosition: (position: cytoscape.Position) => void;
 }
 

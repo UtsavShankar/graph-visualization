@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type cytoscape from "cytoscape";
+import cytoscape from "cytoscape";
 import {
   FISHEYE_BASE_LABEL_FONT_REM,
   FISHEYE_MAX_LABEL_FONT_REM,
