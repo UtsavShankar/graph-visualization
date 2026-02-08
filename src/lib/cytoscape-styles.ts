@@ -64,7 +64,7 @@ export function getCytoscapeStyles(
     {
       selector: "node.dimmed",
       style: {
-        opacity: 0.15,
+        opacity: 0.8,
       },
     },
     {

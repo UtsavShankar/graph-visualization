@@ -38,6 +38,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
   const tagColorMapRef = useRef<Map<string, string>>(new Map());
   const graphRef = useRef(graph);
   const fisheyeEnabledRef = useRef(true);
+  const searchHitIdsRef = useRef<Set<string>>(new Set());
 
   // State
   const [tagFilter, setTagFilter] = useState("");
@@ -144,7 +145,11 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
 
       const fallbackColor = tagColorMap.get(courseName);
       return {
-        data: { ...node, color: node.color ?? fallbackColor ?? undefined },
+        data: {
+          ...node,
+          color: node.color ?? fallbackColor ?? undefined,
+          baseSize: 26,
+        },
         position,
       };
     });
@@ -205,6 +210,7 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     cyRef,
     containerRef,
     enabledRef: fisheyeEnabledRef,
+    searchHitIdsRef,
   });
 
   // Apply styles when tag filter or color map changes
@@ -322,7 +328,33 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     }
   }, [elements, ensurePreview, exitEdgeMode, edgeCreationRef]);
 
-  // Apply search and tag filters
+  // Update search hit IDs (fisheye uses this to compose scale; no styling here)
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy) return;
+
+    const q = query.trim().toLowerCase();
+    const hits = new Set<string>();
+
+    if (q) {
+      cy.nodes().forEach((n) => {
+        const d = n.data();
+        const text = `${d.title ?? ""} ${d.author ?? ""} ${(d.tags ?? []).join(" ")}`.toLowerCase();
+        if (text.includes(q)) hits.add(n.id());
+      });
+    }
+
+    searchHitIdsRef.current = hits;
+
+    cy.batch(() => {
+      cy.nodes().forEach((n) => {
+        if (hits.has(n.id())) n.addClass("search-hit");
+        else n.removeClass("search-hit");
+      });
+    });
+  }, [query]);
+
+  // Apply search and tag filters (dimmed)
   useEffect(() => {
     const cy = cyRef.current;
     if (!cy) return;
@@ -331,15 +363,11 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     const trimmed = query.trim().toLowerCase();
 
     cy.nodes().forEach((node) => {
-      // Search across title, tags, and author
-      const title = (node.data("title") || node.id()).toLowerCase();
-      const tags = (node.data("tags") || []).map((t: string) => t.toLowerCase());
-      const author = (node.data("author") || "").toLowerCase();
-
-      const searchMatch = !trimmed ||
-        title.includes(trimmed) ||
-        tags.some((tag: string) => tag.includes(trimmed)) ||
-        author.includes(trimmed);
+      const searchMatch =
+        !trimmed ||
+        (node.data("title") || node.id()).toLowerCase().includes(trimmed) ||
+        (node.data("tags") || []).some((t: string) => t.toLowerCase().includes(trimmed)) ||
+        (node.data("author") || "").toLowerCase().includes(trimmed);
 
       const tagMatch = !tagFilter || (node.data("tags") || []).includes(tagFilter);
 

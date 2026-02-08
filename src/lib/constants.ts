@@ -29,6 +29,12 @@ export const CYTOSCAPE_INIT_DELAY_MS = 100;
  */
 export const EXCLUDED_TAG_FILTER = "AN1101";
 
+// Search hit (query match) constants
+/** Node size multiplier when node matches search query */
+export const SEARCH_HIT_NODE_SCALE = 1.6;
+/** Font size (rem) for search-hit label text */
+export const SEARCH_HIT_FONT_REM = 3.0;
+
 // Fisheye magnifier tuning constants
 export const FISHEYE_RADIUS_PX = 130;
 /** Baseline label font size (rem) when cursor is away */

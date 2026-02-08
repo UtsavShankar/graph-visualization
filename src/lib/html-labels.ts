@@ -57,8 +57,10 @@ export function applyHtmlLabels(cy: Core, opts: ApplyOpts = {}) {
           return `
             <div class="cy-html-label ${variant === "zoom" ? "cy-html-label--zoom" : ""}" data-node-id="${safeId}" data-label-variant="${variantAttr}">
               <div class="cy-html-label__inner">
-              <div class="cy-html-label__main">${main}</div>
-              ${sub ? `<div class="cy-html-label__sub">${sub}</div>` : ""}
+                <div class="cy-html-label__scale">
+                  <div class="cy-html-label__main">${main}</div>
+                  ${sub ? `<div class="cy-html-label__sub">${sub}</div>` : ""}
+                </div>
               </div>
             </div>
           `;
@@ -73,7 +75,9 @@ export function applyHtmlLabels(cy: Core, opts: ApplyOpts = {}) {
           return `
             <div class="cy-html-label ${variant === "zoom" ? "cy-html-label--zoom" : ""}" data-node-id="${safeId}" data-label-variant="${variantAttr}">
               <div class="cy-html-label__inner">
-              <div class="cy-html-label__main">${label}</div>
+                <div class="cy-html-label__scale">
+                  <div class="cy-html-label__main">${label}</div>
+                </div>
               </div>
             </div>
           `;

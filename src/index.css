@@ -17,8 +17,13 @@
   transform-origin: center center;
 }
 
+.cy-html-label__scale {
+  transform: scale(var(--bg-scale, 1));
+  transform-origin: center center;
+}
+
 .cy-html-label__main {
-  font-size: var(--fe-font-rem, 0.85rem);
+  font-size: var(--bg-font-rem, 0.85rem);
   font-weight: 600;
 }
 
