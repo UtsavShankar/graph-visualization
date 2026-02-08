@@ -21,19 +21,14 @@ export const CYTOSCAPE_WHEEL_SENSITIVITY = 0.32;
 /** Delay before initializing Cytoscape instance (allows DOM to settle) */
 export const CYTOSCAPE_INIT_DELAY_MS = 100;
 
-// Tag Filter Constants
-/**
- * Tag excluded from tag filter dropdown
- * AN1101 is excluded because it's used as the default/base tag and filtering by it
- * would show most nodes, making the filter less useful
- */
+
 export const EXCLUDED_TAG_FILTER = "AN1101";
 
 // Search hit (query match) constants
 /** Node size multiplier when node matches search query */
 export const SEARCH_HIT_NODE_SCALE = 1.6;
 /** Font size (rem) for search-hit label text */
-export const SEARCH_HIT_FONT_REM = 3.0;
+export const SEARCH_HIT_FONT_REM = 2.0;
 
 // Fisheye magnifier tuning constants
 export const FISHEYE_RADIUS_PX = 130;
