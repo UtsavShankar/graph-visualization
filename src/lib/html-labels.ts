@@ -53,9 +53,10 @@ export function applyHtmlLabels(cy: Core, opts: ApplyOpts = {}) {
             ? `${escapeHtml(lastName)}, ${mainText}`
             : mainText || escapeHtml(data.title ?? "");
           const sub = data.subtext ? escapeHtml(data.subtext) : "";
+          const dimmedClass = data._searchDimmed ? " cy-html-label--search-dimmed" : "";
 
           return `
-            <div class="cy-html-label ${variant === "zoom" ? "cy-html-label--zoom" : ""}" data-node-id="${safeId}" data-label-variant="${variantAttr}">
+            <div class="cy-html-label${dimmedClass} ${variant === "zoom" ? "cy-html-label--zoom" : ""}" data-node-id="${safeId}" data-label-variant="${variantAttr}">
               <div class="cy-html-label__inner">
                 <div class="cy-html-label__scale">
                   <div class="cy-html-label__main">${main}</div>
@@ -70,10 +71,11 @@ export function applyHtmlLabels(cy: Core, opts: ApplyOpts = {}) {
         const lastName = getAuthorLastName(data.author);
         const title = escapeHtml(data.title ?? "");
         const label = lastName ? `${escapeHtml(lastName)}, ${title}` : title;
-        
+        const dimmedClass = data._searchDimmed ? " cy-html-label--search-dimmed" : "";
+
         if (label) {
           return `
-            <div class="cy-html-label ${variant === "zoom" ? "cy-html-label--zoom" : ""}" data-node-id="${safeId}" data-label-variant="${variantAttr}">
+            <div class="cy-html-label${dimmedClass} ${variant === "zoom" ? "cy-html-label--zoom" : ""}" data-node-id="${safeId}" data-label-variant="${variantAttr}">
               <div class="cy-html-label__inner">
                 <div class="cy-html-label__scale">
                   <div class="cy-html-label__main">${label}</div>

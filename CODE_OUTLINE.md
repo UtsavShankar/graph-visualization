@@ -1,6 +1,6 @@
 # BookGraph - Comprehensive Code Outline
 
-**Last Updated:** After MapMagnifier feature implementation  
+**Last Updated:** After search-dimming feature implementation  
 **Purpose:** Reference document for understanding codebase structure and architecture
 
 ---
@@ -55,7 +55,9 @@ main.tsx
             ├─> useCytoscapeGraph (initializes graph)
             ├─> useEdgeCreation (edge creation mode)
             ├─> useNodeDeletion (node deletion mode)
-            ├─> MapMagnifier (zoomed view component)
+            ├─> useFisheyeMagnifier (pointer proximity zoom, reads searchHitIdsRef)
+            ├─> useSearchHighlight (search dimming, writes searchHitIdsRef)
+            ├─> MapMagnifier (zoomed view, syncs search state)
             └─> Components (forms, menus)
 ```
 
@@ -75,6 +77,7 @@ bookgraph/
 │   ├── main.tsx                    # Entry point
 │   ├── App.tsx                     # Main app component
 │   ├── ExploreView.tsx             # Graph visualization view
+│   ├── index.css                   # Global CSS (Tailwind + HTML label styles)
 │   ├── components/
 │   │   ├── ContextMenu.tsx         # Node right-click menu
 │   │   ├── EdgeContextMenu.tsx     # Edge right-click menu
@@ -85,13 +88,15 @@ bookgraph/
 │   │   ├── useCytoscapeGraph.ts    # Graph initialization & events
 │   │   ├── useEdgeCreation.ts       # Edge creation mode logic
 │   │   ├── useNodeDeletion.ts       # Node deletion mode logic
-│   │   └── useFisheyeMagnifier.ts   # Pointer-driven fisheye zoom effect
+│   │   ├── useFisheyeMagnifier.ts   # Pointer-driven fisheye zoom effect
+│   │   └── useSearchHighlight.ts    # Search dimming (match/dim nodes & edges)
 │   ├── lib/
 │   │   ├── supabase.ts             # Supabase client & types
 │   │   ├── database.ts             # Database operations (CRUD)
 │   │   ├── utils.ts                # Utility functions
 │   │   ├── positioning.ts          # Node position management
 │   │   ├── cytoscape-styles.ts     # Graph styling
+│   │   ├── html-labels.ts          # cytoscape-node-html-label setup & templates
 │   │   └── constants.ts            # App constants
 │   └── seed/
 │       └── book-graph-120.json      # Sample data
@@ -161,6 +166,7 @@ bookgraph/
   - `mapImageRef`: World map image element
   - `tagFilterRef`: Current tag filter (for event handlers)
   - `tagColorMapRef`: Course color mapping
+  - `searchHitIdsRef`: Set of node IDs matching current search (used by fisheye + MapMagnifier)
   - `graphRef`: Current graph data (for event handlers)
 
 - **State:**
@@ -181,10 +187,11 @@ bookgraph/
 - `useNodeDeletion()`: Node deletion mode
 - `useCytoscapeGraph()`: Graph initialization
 - `useFisheyeMagnifier()`: Pointer fisheye interaction for nodes + labels
+- `useSearchHighlight()`: Search-only dimming (matching nodes colourful, non-matching grey)
 
 **Key Effects:**
 1. **Graph Element Sync:** Syncs React state with Cytoscape elements
-2. **Search/Filter:** Applies search query and tag filter
+2. **Search Highlight:** `useSearchHighlight` applies search-dimmed class and edge styles when query non-empty
 3. **World Map Sync:** Synchronizes map with graph pan/zoom (not viewport resize)
 4. **Keyboard Shortcuts:** Escape key handling
 
@@ -207,7 +214,7 @@ bookgraph/
 **MapMagnifier Integration:**
 - Rendered conditionally when `cyRef.current` exists
 - Positioned at bottom-right of Cytoscape container
-- Receives main Cytoscape instance, container ref, tag filter ref, and color map ref
+- Receives main Cytoscape instance, container ref, tag filter ref, color map ref, query, and `searchHitIdsRef` for search dimming sync
 - Default magnification: 5x
 - Default size: 300px × 200px
 - Toggle button in toolbar hides/shows magnifier (`showMagnifier` state)
@@ -229,6 +236,8 @@ bookgraph/
 - `containerRef`: Reference to main graph container
 - `tagFilterRef`: Reference to current tag filter
 - `tagColorMapRef`: Reference to course color mapping
+- `query`: Current search query string (for search dimming sync)
+- `searchHitIdsRef`: Ref to Set of matching node IDs (for search dimming sync)
 - `magnificationFactor`: Zoom multiplier (default: 3, currently set to 5)
 - `width`: Component width in pixels (default: 300)
 - `height`: Component height in pixels (default: 200)
@@ -250,6 +259,13 @@ bookgraph/
    - Syncs element additions, removals, and data updates
    - Skips preview nodes/edges (IDs starting with `__`)
    - Uses Cytoscape event listeners (`add`, `remove`, `data`, `position`)
+
+4. **Search Dimming Sync:**
+   - Mirrors `search-hit` / `search-dimmed` classes and `_searchDimmed` data from main to zoom
+   - `syncSearchHighlight()` runs when effect re-fires (deps: `[cyMain, query]`)
+   - New nodes/edges added to zoom inherit correct search state immediately
+   - `handleData` listener syncs `_searchDimmed` data changes in real time
+   - Edge `search-dimmed` class toggled via `toggleClass()` based on endpoint hit state
 
 4. **Viewport Synchronization:**
    - Updates zoom view when main graph pan/zoom changes
@@ -371,13 +387,15 @@ bookgraph/
 - `cyRef`: Cytoscape instance ref
 - `containerRef`: Graph container ref for mouse tracking
 - `enabledRef`: Optional ref to disable effect (used during edge creation/deletion modes)
+- `searchHitIdsRef`: Ref to Set of node IDs that match the current search query
 
 **Key Behaviour:**
 - Tracks pointer in rendered coordinates (mousemove + mouseleave)
 - Runs an animation loop with `requestAnimationFrame` (no React state)
 - Computes smooth falloff (`smoothstep`) using `FISHEYE_RADIUS_PX`
-- Scales node width/height based on per-node baseline (`numericStyle`)
+- Scales node width/height via direct `node.style("width", size)` and `node.style("height", size)`
 - Scales HTML label font sizes via DOM access up to `FISHEYE_MAX_LABEL_FONT_REM` (converted to px at runtime)
+- Composes with search hit scale: nodes in `searchHitIdsRef` get `SEARCH_HIT_NODE_SCALE` multiplier
 - Resets nodes and labels when pointer exits, feature disabled, or hook unmounts
 - Skips preview nodes (IDs starting with `__`)
 
@@ -385,6 +403,42 @@ bookgraph/
 - Caches label baselines (fonts + transforms) to restore styles accurately
 - Uses `scratch('_fisheyeScale')` to avoid redundant style writes
 - Removes inline styles on reset so stylesheet-driven states (hover, etc.) continue working
+
+---
+
+### 5. `useSearchHighlight.ts`
+**Purpose:** Search-only highlight: when query is non-empty, matching nodes stay colourful and non-matching nodes are greyed
+**Inputs:**
+- `cyRef`: Cytoscape instance ref
+- `query`: Current search query string
+- `searchHitIdsRef`: Ref updated with Set of matching node IDs (used by useFisheyeMagnifier + MapMagnifier)
+- `elements`: Graph elements (triggers re-run when nodes/edges change)
+
+**Key Behaviour:**
+- When query is empty: all nodes colourful, no dimming; classes and `_searchDimmed` data cleared
+- When query is non-empty: matching nodes get `search-hit` class, non-matching get `search-dimmed` class
+- Edges where source OR target is dimmed get `search-dimmed` class (styled via stylesheet)
+- Sets `node.data("_searchDimmed", boolean)` so HTML label template can apply CSS dimming class
+- Node dimming uses stylesheet `node.search-dimmed` selector (grey bg, low opacity)
+- Edge dimming uses stylesheet `edge.search-dimmed` selector (low opacity, grey line)
+- All changes happen inside `cy.batch()` for performance
+
+**Matching Rules:**
+- Case-insensitive match against: title, author, tags (any tag)
+- Preview nodes (IDs starting with `__`) are always skipped
+
+**Flow:**
+1. Computes matching node IDs from title, author, tags
+2. Updates `searchHitIdsRef.current` with the Set of hits
+3. In a `cy.batch()`:
+   - Clears all `search-hit`, `search-dimmed` classes from nodes and edges
+   - If searching: applies `search-hit` / `search-dimmed` classes to nodes; sets `_searchDimmed` data; applies `search-dimmed` class to edges with a dimmed endpoint
+   - If not searching: resets `_searchDimmed` to `false` on all nodes
+
+**Three-layer dimming:**
+1. **Cytoscape node style:** `node.search-dimmed` stylesheet selector → grey background, low opacity
+2. **HTML label DOM:** `_searchDimmed` data → template adds `cy-html-label--search-dimmed` CSS class → opacity 0.3 + grayscale
+3. **Cytoscape edge style:** `edge.search-dimmed` stylesheet selector → opacity 0.1, grey line
 
 ---
 
@@ -537,28 +591,54 @@ interface Edge {
 **Styles Defined:**
 - **Core:** Selection box color, background
 - **Node:**
-  - Base: Color, size, border, label
-  - Label: Uses `formatNodeLabel()` to display "Last name, Title" format
-  - Hovered: Larger size
-  - Dimmed: Low opacity (for filtering)
+  - Base: Color (function-based, per course/tag), size 26px, border, label (empty — HTML labels used instead)
+  - Hovered: Larger size (34px)
+  - Search-dimmed: Compound selector covers all override scenarios:
+    `node.search-dimmed, node.search-dimmed:selected, node.search-dimmed.hovered, node[course_id].search-dimmed`
+    → Grey (#94a3b8), border (#64748b), opacity 0.25, text-opacity 0.3
+  - Search-hit: Scaled up via useFisheyeMagnifier using `searchHitIdsRef`
   - Edge creation source: Orange border
   - Edge creation target: Green border
   - Node deletion target: Red border
-  - Preview node: Invisible
+  - Preview node: Invisible (opacity 0, events no)
 - **Edge:**
-  - Base: Width (based on weight), color, opacity
+  - Base: Width (based on weight), color (#94a3b8), opacity 0.7
+  - Search-dimmed (`edge.search-dimmed`): Grey line, opacity 0.1, text-opacity 0
   - Preview edge: Dashed, blue
-  - Hovered: Brighter, thicker
-- **Faded:** Low opacity for non-selected elements
+  - Hovered: Brighter (#0ea5e9), thicker (width 5)
+- **Faded:** Low opacity (0.12) for non-selected elements
 
 **Dynamic Styling:**
-- Node colors based on course/tag
-- Filtered nodes shown in gray
+- Node colors based on course/tag (function mapper in base `node` selector)
+- Search dimming: `useSearchHighlight` adds `search-dimmed` class; stylesheet provides grey styling; HTML labels dimmed via `_searchDimmed` data + CSS class
 - Edge width based on weight
-- Node labels show author last name before title (via `formatNodeLabel()`)
+- Node labels rendered as HTML via `cytoscape-node-html-label` plugin (see `html-labels.ts`)
 - Nodes with `main_text` and `subtext` fields display formatted HTML labels with different font sizes
-  - Main text (author, main_text): 1.1em font size
-  - Subtext: 1.1em font size (initially same as main text, can be customized via CSS)
+
+---
+
+### `lib/html-labels.ts`
+**Purpose:** Registers and applies `cytoscape-node-html-label` plugin for DOM-based node labels
+
+**Exports:**
+- `registerHtmlLabels()`: Registers the plugin with Cytoscape (idempotent)
+- `applyHtmlLabels(cy, opts)`: Applies HTML label template to a Cytoscape instance
+  - `opts.variant`: `"main"` (default) or `"zoom"` (smaller fonts for MapMagnifier)
+
+**Template Logic:**
+- Skips preview node (`__edge-preview-node`)
+- For each node, renders a `<div class="cy-html-label">` with `data-node-id` and `data-label-variant` attributes
+- Displays "Author Last Name, Title" format (or just title if no author)
+- Nodes with `main_text`/`subtext` use two-line layout
+- **Search dimming:** If `data._searchDimmed` is truthy, adds `cy-html-label--search-dimmed` CSS class to the root label div
+- Zoom variant adds `cy-html-label--zoom` class for smaller font sizes
+
+**CSS Structure (in `index.css`):**
+- `.cy-html-label`: pointer-events none, centered text
+- `.cy-html-label__scale`: scaled by `--bg-scale` CSS variable (set by fisheye)
+- `.cy-html-label__main`: font-size from `--bg-font-rem` CSS variable
+- `.cy-html-label--search-dimmed`: opacity 0.3, grayscale(1) filter
+- `.cy-html-label--zoom`: smaller font sizes for magnifier view
 
 ---
 
@@ -573,9 +653,11 @@ interface Edge {
 - `CYTOSCAPE_WHEEL_SENSITIVITY = 0.32`
 - `CYTOSCAPE_INIT_DELAY_MS = 100`
 - `EXCLUDED_TAG_FILTER = "AN1101"`
-- `FISHEYE_RADIUS_PX = 160`
+- `SEARCH_HIT_NODE_SCALE = 1.6` (multiplier for nodes matching search)
+- `SEARCH_HIT_FONT_REM = 2.0` (label font size for search-hit nodes)
+- `FISHEYE_RADIUS_PX = 130`
 - `FISHEYE_BASE_LABEL_FONT_REM = 1.05`
-- `FISHEYE_MAX_LABEL_FONT_REM = 2.05` (tunable peak for fisheye scaling)
+- `FISHEYE_MAX_LABEL_FONT_REM = 1.80` (tunable peak for fisheye scaling)
 
 ---
 
@@ -812,7 +894,12 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 
 8. **Context Menus:** Right-click on nodes/edges shows context menus with actions
 
-9. **Search:** Searches across title, tags, and author fields simultaneously
+9. **Search Dimming (3-layer approach):** When query is non-empty, three layers cooperate to dim non-matching elements:
+    - *Layer 1 — Cytoscape node style:* `search-dimmed` class → stylesheet forces grey bg + low opacity (compound selector beats all other node states)
+    - *Layer 2 — HTML label DOM:* `_searchDimmed` data → template adds `cy-html-label--search-dimmed` CSS class → opacity 0.3 + grayscale filter
+    - *Layer 3 — Cytoscape edge style:* `search-dimmed` class on edges → stylesheet forces low opacity + grey line
+    - When query is empty, all classes and data cleared — everything reverts to normal
+    - See `useSearchHighlight.ts`, `cytoscape-styles.ts`, `html-labels.ts`, `index.css`
 
 10. **World Map:** Always visible by default, synchronized with graph viewport (pan/zoom only, not viewport resize)
 11. **Node Labels:** Display as "Last name, Title" format using `formatNodeLabel()`
@@ -842,6 +929,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
     - Non-interactive (read-only view)
     - White crosshair indicates center point
     - Syncs all elements (nodes, edges) with main graph
+    - Syncs search dimming state (classes + `_searchDimmed` data) from main graph
     - Header label: "Zoomed view (follows cursor)"
 16. **Fisheye Magnifier:** Pointer proximity enlarges nodes + HTML labels within `FISHEYE_RADIUS_PX`, capped by `FISHEYE_MAX_LABEL_FONT_REM`, disabled automatically during edge creation/deletion
 
@@ -853,6 +941,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 - **Graph Initialization:** `useCytoscapeGraph.ts`
 - **Edge Creation:** `useEdgeCreation.ts`
 - **Node Deletion:** `useNodeDeletion.ts`
+- **Search Highlight (dimming):** `useSearchHighlight.ts`
 - **Map Magnifier:** `components/MapMagnifier.tsx`
 - **Database Operations:** `lib/database.ts`
 - **Graph Styling:** `lib/cytoscape-styles.ts`
@@ -866,6 +955,12 @@ VITE_SUPABASE_ANON_KEY=your-anon-key
 - **State sync:** Keep React state and Cytoscape in sync
 - **Error handling:** Try-catch around database operations
 - **Confirmation dialogs:** Use `window.confirm()` for destructive actions
+
+---
+
+## Gotchas
+
+1. **No `.js` files in `src/`:** Vite resolves `.js` before `.ts`. If stale compiled `.js` files exist alongside `.ts` sources, Vite will serve the `.js` versions and ignore `.ts` edits. Always delete any `.js` files from `src/` — the TypeScript sources are the single source of truth.
 
 ---
 

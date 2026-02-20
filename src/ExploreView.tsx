@@ -16,6 +16,7 @@ import { useEdgeCreation } from "./hooks/useEdgeCreation";
 import { useNodeDeletion } from "./hooks/useNodeDeletion";
 import { useCytoscapeGraph } from "./hooks/useCytoscapeGraph";
 import { useFisheyeMagnifier } from "./hooks/useFisheyeMagnifier";
+import { useSearchHighlight } from "./hooks/useSearchHighlight";
 
 cytoscape.use(fcose);
 
@@ -328,54 +329,8 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
     }
   }, [elements, ensurePreview, exitEdgeMode, edgeCreationRef]);
 
-  // Update search hit IDs (fisheye uses this to compose scale; no styling here)
-  useEffect(() => {
-    const cy = cyRef.current;
-    if (!cy) return;
-
-    const q = query.trim().toLowerCase();
-    const hits = new Set<string>();
-
-    if (q) {
-      cy.nodes().forEach((n) => {
-        const d = n.data();
-        const text = `${d.title ?? ""} ${d.author ?? ""} ${(d.tags ?? []).join(" ")}`.toLowerCase();
-        if (text.includes(q)) hits.add(n.id());
-      });
-    }
-
-    searchHitIdsRef.current = hits;
-
-    cy.batch(() => {
-      cy.nodes().forEach((n) => {
-        if (hits.has(n.id())) n.addClass("search-hit");
-        else n.removeClass("search-hit");
-      });
-    });
-  }, [query]);
-
-  // Apply search and tag filters (dimmed)
-  useEffect(() => {
-    const cy = cyRef.current;
-    if (!cy) return;
-
-    cy.nodes().removeClass("dimmed");
-    const trimmed = query.trim().toLowerCase();
-
-    cy.nodes().forEach((node) => {
-      const searchMatch =
-        !trimmed ||
-        (node.data("title") || node.id()).toLowerCase().includes(trimmed) ||
-        (node.data("tags") || []).some((t: string) => t.toLowerCase().includes(trimmed)) ||
-        (node.data("author") || "").toLowerCase().includes(trimmed);
-
-      const tagMatch = !tagFilter || (node.data("tags") || []).includes(tagFilter);
-
-      if (!(searchMatch && tagMatch)) {
-        node.addClass("dimmed");
-      }
-    });
-  }, [query, tagFilter]);
+  // Search-only highlight: matching nodes colourful, non-matching grey (only when searching)
+  useSearchHighlight({ cyRef, query, searchHitIdsRef, elements });
 
   // Keyboard shortcuts for edge creation
   useEffect(() => {
@@ -714,6 +669,8 @@ export function ExploreView({ graph, setGraph, query, setQuery, courses }: Explo
               containerRef={containerRef}
               tagFilterRef={tagFilterRef}
               tagColorMapRef={tagColorMapRef}
+              query={query}
+              searchHitIdsRef={searchHitIdsRef}
               magnificationFactor={5}
               width={300}
               height={200}

@@ -62,9 +62,13 @@ export function getCytoscapeStyles(
       },
     },
     {
-      selector: "node.dimmed",
+      selector: "node.search-dimmed, node.search-dimmed:selected, node.search-dimmed.hovered, node[course_id].search-dimmed",
       style: {
-        opacity: 0.8,
+        opacity: 0.25,
+        "background-color": "#94a3b8",
+        "border-color": "#64748b",
+        color: "#475569",
+        "text-opacity": 0.3,
       },
     },
     {
@@ -135,6 +139,15 @@ export function getCytoscapeStyles(
         opacity: 1,
         width: 5,
         "target-arrow-color": "#0ea5e9",
+      },
+    },
+    {
+      selector: "edge.search-dimmed",
+      style: {
+        opacity: 0.1,
+        "line-color": "#94a3b8",
+        "target-arrow-color": "#94a3b8",
+        "text-opacity": 0,
       },
     },
     {

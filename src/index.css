@@ -36,3 +36,9 @@
 /* Optional: smaller in magnifier */
 .cy-html-label--zoom .cy-html-label__main { font-size: 0.95rem; }
 .cy-html-label--zoom .cy-html-label__sub  { font-size: 0.85rem; }
+
+/* Search-dimmed labels (non-matching nodes when searching) */
+.cy-html-label--search-dimmed {
+  opacity: 0.3;
+  filter: grayscale(1);
+}

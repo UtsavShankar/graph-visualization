@@ -13,6 +13,7 @@ interface UseFisheyeMagnifierProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   enabledRef?: React.RefObject<boolean>;
   searchHitIdsRef: React.RefObject<Set<string>>;
+  searchQueryRef?: React.RefObject<string>;
 }
 
 type MouseState = {
@@ -155,7 +156,7 @@ export function useFisheyeMagnifier({
       container.removeEventListener("mousemove", handleMouseMove);
       container.removeEventListener("mouseleave", handleMouseLeave);
 
-      // Reset all nodes to base scale (search-hit only)
+      // Reset all nodes to base scale and clear dimmed styles
       const hits = searchHitIdsRef.current;
       cy.nodes(":visible").forEach((node) => {
         const id = node.id();

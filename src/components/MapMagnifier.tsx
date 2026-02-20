@@ -8,6 +8,8 @@ interface MapMagnifierProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   tagFilterRef: React.RefObject<string>;
   tagColorMapRef: React.RefObject<Map<string, string>>;
+  query?: string;
+  searchHitIdsRef?: React.RefObject<Set<string>>;
   magnificationFactor?: number;
   width?: number;
   height?: number;
@@ -22,6 +24,8 @@ export function MapMagnifier({
   containerRef,
   tagFilterRef,
   tagColorMapRef,
+  query = "",
+  searchHitIdsRef,
   magnificationFactor = 3,
   width = 300,
   height = 200,
@@ -191,6 +195,30 @@ export function MapMagnifier({
 
     const cyZoom = cyZoomRef.current;
 
+    const syncSearchHighlight = () => {
+      const hits = searchHitIdsRef?.current ?? new Set<string>();
+      const hasSearch = query.trim().length > 0;
+      cyMain.nodes().forEach((node) => {
+        if (node.id().startsWith("__")) return;
+        const zoomNode = cyZoom.getElementById(node.id());
+        if (zoomNode.nonempty()) {
+          const isHit = hits.has(node.id());
+          zoomNode.toggleClass("search-hit", isHit);
+          zoomNode.toggleClass("search-dimmed", hasSearch && !isHit);
+          zoomNode.data("_searchDimmed", hasSearch && !isHit);
+        }
+      });
+      cyMain.edges().forEach((edge) => {
+        if (edge.id().startsWith("__")) return;
+        const zoomEdge = cyZoom.getElementById(edge.id());
+        if (zoomEdge.nonempty()) {
+          const sDim = hasSearch && !hits.has(edge.source().id());
+          const tDim = hasSearch && !hits.has(edge.target().id());
+          zoomEdge.toggleClass("search-dimmed", sDim || tDim);
+        }
+      });
+    };
+
     // Handle node addition
     const handleNodeAdd = (event: cytoscape.EventObject) => {
       const node = event.target;
@@ -198,11 +226,16 @@ export function MapMagnifier({
 
       const existing = cyZoom.getElementById(node.id());
       if (existing.empty()) {
-        cyZoom.add({
+        const hits = searchHitIdsRef?.current ?? new Set<string>();
+        const hasSearch = query.trim().length > 0;
+        const added = cyZoom.add({
           group: "nodes",
           data: node.data(),
           position: node.position(),
         });
+        const isHit = hits.has(node.id());
+        if (isHit) added.addClass("search-hit");
+        if (hasSearch && !isHit) added.addClass("search-dimmed");
       }
     };
 
@@ -213,10 +246,15 @@ export function MapMagnifier({
 
       const existing = cyZoom.getElementById(edge.id());
       if (existing.empty()) {
-        cyZoom.add({
+        const hits = searchHitIdsRef?.current ?? new Set<string>();
+        const hasSearch = query.trim().length > 0;
+        const added = cyZoom.add({
           group: "edges",
           data: edge.data(),
         });
+        const sDim = hasSearch && !hits.has(edge.source().id());
+        const tDim = hasSearch && !hits.has(edge.target().id());
+        if (sDim || tDim) added.addClass("search-dimmed");
       }
     };
 
@@ -229,12 +267,19 @@ export function MapMagnifier({
       }
     };
 
-    // Handle data updates
+    // Handle data updates (includes _searchDimmed for labels)
     const handleData = (event: cytoscape.EventObject) => {
       const element = event.target;
       const zoomElement = cyZoom.getElementById(element.id());
       if (zoomElement.nonempty()) {
         zoomElement.data(element.data());
+        if (element.isNode()) {
+          const hits = searchHitIdsRef?.current ?? new Set<string>();
+          const hasSearch = query.trim().length > 0;
+          const isHit = hits.has(element.id());
+          zoomElement.toggleClass("search-hit", isHit);
+          zoomElement.toggleClass("search-dimmed", hasSearch && !isHit);
+        }
       }
     };
 
@@ -244,16 +289,22 @@ export function MapMagnifier({
     cyMain.on("remove", handleRemove);
     cyMain.on("data", handleData);
 
+    const hits = searchHitIdsRef?.current ?? new Set<string>();
+    const hasSearch = query.trim().length > 0;
+
     // Initial sync - add all existing elements
     cyMain.nodes().forEach((node) => {
       if (node.id().startsWith("__")) return;
       const existing = cyZoom.getElementById(node.id());
       if (existing.empty()) {
-        cyZoom.add({
+        const added = cyZoom.add({
           group: "nodes",
           data: node.data(),
           position: node.position(),
         });
+        const isHit = hits.has(node.id());
+        if (isHit) added.addClass("search-hit");
+        if (hasSearch && !isHit) added.addClass("search-dimmed");
       }
     });
 
@@ -261,12 +312,17 @@ export function MapMagnifier({
       if (edge.id().startsWith("__")) return;
       const existing = cyZoom.getElementById(edge.id());
       if (existing.empty()) {
-        cyZoom.add({
+        const added = cyZoom.add({
           group: "edges",
           data: edge.data(),
         });
+        const sDim = hasSearch && !hits.has(edge.source().id());
+        const tDim = hasSearch && !hits.has(edge.target().id());
+        if (sDim || tDim) added.addClass("search-dimmed");
       }
     });
+
+    syncSearchHighlight();
 
     return () => {
       cyMain.off("add", "node", handleNodeAdd);
@@ -274,7 +330,7 @@ export function MapMagnifier({
       cyMain.off("remove", handleRemove);
       cyMain.off("data", handleData);
     };
-  }, [cyMain]);
+  }, [cyMain, query]);
 
   // Track mouse movement on main graph container
   useEffect(() => {
